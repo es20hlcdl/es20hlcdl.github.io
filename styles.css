@@ -767,7 +767,7 @@ main section {
     gap: 0.35rem;
     padding: 1rem 1rem 1.1rem;
     background: linear-gradient(180deg, rgba(10, 10, 10, 0.08) 0%, rgba(10, 10, 10, 0.22) 40%, rgba(10, 10, 10, 0.88) 100%);
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s ease;
 }
 
