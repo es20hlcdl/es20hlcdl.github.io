@@ -51,13 +51,18 @@ function initMobileNav() {
 
     toggle.addEventListener('click', () => {
         navLinks.classList.toggle('open');
-        toggle.textContent = navLinks.classList.contains('open') ? '✕' : '☰';
+        const isOpen = navLinks.classList.contains('open');
+        toggle.textContent = isOpen ? '✕' : '☰';
+        toggle.setAttribute('aria-expanded', String(isOpen));
+        toggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
     });
 
     navLinks.querySelectorAll('a').forEach((link) => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('open');
             toggle.textContent = '☰';
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.setAttribute('aria-label', 'Abrir menú');
         });
     });
 }
