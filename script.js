@@ -2,6 +2,7 @@
     initReveal();
     initSmoothScroll();
     initMobileNav();
+    initScrollSpy();
     initCounters();
     initHeroGlobe();
     initCareerMap();
@@ -65,6 +66,101 @@ function initMobileNav() {
             toggle.setAttribute('aria-label', 'Abrir menú');
         });
     });
+}
+
+function initScrollSpy() {
+    const nav = document.querySelector('.site-nav');
+    const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+
+    if (!nav || !navLinks.length) {
+        return;
+    }
+
+    const navItems = navLinks
+        .map((link) => {
+            const targetId = link.getAttribute('href');
+
+            if (!targetId) {
+                return null;
+            }
+
+            return { link, targetId };
+        })
+        .filter(Boolean);
+
+    const trackedSections = [
+        { section: document.querySelector('.hero'), targetId: '#top' },
+        { section: document.querySelector('#profile'), targetId: '#profile' },
+        { section: document.querySelector('#trajectory'), targetId: '#profile' },
+        { section: document.querySelector('#recognition'), targetId: '#profile' },
+        { section: document.querySelector('#projects'), targetId: '#projects' },
+        { section: document.querySelector('#gallery'), targetId: '#projects' },
+        { section: document.querySelector('#map'), targetId: '#projects' },
+        { section: document.querySelector('#research-teaching'), targetId: '#research-teaching' },
+        { section: document.querySelector('#university-teaching'), targetId: '#research-teaching' },
+        { section: document.querySelector('#students'), targetId: '#research-teaching' },
+        { section: document.querySelector('#contact'), targetId: '#contact' }
+    ].filter(({ section }) => section);
+
+    if (!navItems.length || !trackedSections.length) {
+        return;
+    }
+
+    const setActiveLink = (activeId) => {
+        navItems.forEach(({ link, targetId }) => {
+            const isActive = targetId === activeId;
+            link.classList.toggle('is-active', isActive);
+
+            if (isActive) {
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        });
+    };
+
+    const updateActiveSection = () => {
+        const navOffset = nav.offsetHeight + 28;
+        let activeId = trackedSections[0].targetId;
+
+        trackedSections.forEach(({ targetId, section }) => {
+            const rect = section.getBoundingClientRect();
+
+            if (rect.top <= navOffset && rect.bottom > navOffset) {
+                activeId = targetId;
+            }
+        });
+
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+            activeId = trackedSections[trackedSections.length - 1].targetId;
+        }
+
+        setActiveLink(activeId);
+    };
+
+    let ticking = false;
+    const requestUpdate = () => {
+        if (ticking) {
+            return;
+        }
+
+        ticking = true;
+        window.requestAnimationFrame(() => {
+            updateActiveSection();
+            ticking = false;
+        });
+    };
+
+    navLinks.forEach((link) => {
+        link.addEventListener('click', () => {
+            setActiveLink(link.getAttribute('href'));
+            window.setTimeout(requestUpdate, 180);
+        });
+    });
+
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+    requestUpdate();
 }
 
 function initCounters() {

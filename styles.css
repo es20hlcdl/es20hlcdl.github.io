@@ -162,8 +162,14 @@ button {
 }
 
 .nav-links a:hover::after,
-.nav-links a:focus-visible::after {
+.nav-links a:focus-visible::after,
+.nav-links a.is-active::after {
     transform: scaleX(1);
+}
+
+.nav-links a.is-active,
+.nav-links a[aria-current='page'] {
+    color: var(--surface-strong);
 }
 
 .nav-toggle {
@@ -1470,6 +1476,12 @@ main section,
 
     .nav-links li {
         gap: 0;
+    }
+
+    .nav-links a {
+        display: inline-flex;
+        width: fit-content;
+        padding-bottom: 0.2rem;
     }
 
     .nav-links li + li::before {
