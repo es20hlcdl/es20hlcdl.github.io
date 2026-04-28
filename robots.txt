@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://es20hlcdl.github.io/gustavo-caceres-martinez/sitemap.xml
+Sitemap: https://gustavocaceresmartinez.com/sitemap.xml
