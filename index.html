@@ -95,9 +95,29 @@
         <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-controls="primary-navigation" aria-expanded="false">☰</button>
         <ul class="nav-links" id="primary-navigation">
             <li><a href="#top">Inicio</a></li>
-            <li><a href="#profile">Sobre mí</a></li>
-            <li><a href="#projects">Proyectos</a></li>
-            <li><a href="#research-teaching">Investigación y docencia</a></li>
+            <li class="nav-item-has-submenu">
+                <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="about-submenu" data-target="#profile">Sobre mí</button>
+                <ul class="nav-submenu" id="about-submenu">
+                    <li><a href="#trajectory">Trayectoria</a></li>
+                    <li><a href="#recognition">Reconocimientos y afiliaciones</a></li>
+                </ul>
+            </li>
+            <li class="nav-item-has-submenu">
+                <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="projects-submenu" data-target="#projects">Proyectos</button>
+                <ul class="nav-submenu" id="projects-submenu">
+                    <li><a href="#geoportfolio">Geoportafolio</a></li>
+                    <li><a href="#gallery">Galeria</a></li>
+                    <li><a href="#map">Alcance territorial</a></li>
+                </ul>
+            </li>
+            <li class="nav-item-has-submenu">
+                <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="research-submenu" data-target="#research-teaching">Investigación y docencia</button>
+                <ul class="nav-submenu" id="research-submenu">
+                    <li><a href="#research-teaching">Líneas de investigación</a></li>
+                    <li><a href="#university-teaching">Docencia universitaria</a></li>
+                    <li><a href="#students">Alcance formativo</a></li>
+                </ul>
+            </li>
             <li><a href="#contact">Contacto</a></li>
         </ul>
     </nav>
@@ -112,7 +132,7 @@
                     Me interesa que la información territorial deje de ser un producto estático y se convierta en un sistema vivo: útil para planificar, decidir y actuar.
                 </p>
                 <div class="hero-actions" aria-label="Accesos principales">
-                    <a class="hero-action hero-action-primary" href="#projects">Ver proyectos</a>
+                    <a class="hero-action hero-action-primary" href="#geoportfolio">Ver geoportafolio</a>
                     <a class="hero-action" href="#profile">Sobre mí</a>
                     <a class="hero-action" href="#contact">Contacto</a>
                 </div>
@@ -169,7 +189,7 @@
 
         <section class="trajectory-section" id="trajectory">
             <div class="section-heading reveal">
-                <span class="section-index">02</span>
+                <span class="section-index">01-02</span>
                 <div>
                     <p class="section-kicker">Trayectoria</p>
                     <h2>Trayectoria</h2>
@@ -289,7 +309,7 @@
 
         <section class="recognition-section" id="recognition">
             <div class="section-heading reveal">
-                <span class="section-index">03</span>
+                <span class="section-index">01-03</span>
                 <div>
                     <p class="section-kicker">Reconocimiento e institucionalidad</p>
                     <h2>Reconocimientos y afiliaciones</h2>
@@ -319,7 +339,7 @@
 
         <section class="expertise-section" id="projects">
             <div class="section-heading reveal">
-                <span class="section-index">04</span>
+                <span class="section-index">02</span>
                 <div>
                     <p class="section-kicker">Proyectos</p>
                     <h2>Proyectos</h2>
@@ -408,11 +428,48 @@
             </div>
         </section>
 
+        <section class="gallery-section geoportfolio-section" id="geoportfolio">
+            <div class="section-heading reveal">
+                <span class="section-index">02-01</span>
+                <div>
+                    <p class="section-kicker">Mapas web y StoryMaps</p>
+                    <h2>Geoportafolio</h2>
+                </div>
+            </div>
+
+            <div class="gallery-layout">
+                <figure class="gallery-card gallery-card-feature reveal">
+                    <img src="assets/levantamiento-datos.jpg" alt="Mapa web de diagnóstico territorial para proyectos de energía solar en San Miguel de Velasco">
+                    <figcaption>
+                        <strong>Mapa interactivo de electricidad</strong>
+                        <span>Comunidades, viviendas sin energía eléctrica y evidencia de campo para proyectos de energía solar.</span>
+                        <a class="gallery-link" href="https://es20hlcdl.github.io/electricidad/#10/-16.5684/-61.5179" target="_blank" rel="noreferrer">Ver mapa interactivo</a>
+                    </figcaption>
+                </figure>
+                <figure class="gallery-card reveal">
+                    <img src="assets/portada.png" alt="StoryMap de la Reserva Forestal El Choré con datos de MapBiomas Bolivia">
+                    <figcaption>
+                        <strong>StoryMap El Choré</strong>
+                        <span>Reserva Forestal El Choré: 40 años de transformación visualizados con datos de cobertura y uso del suelo.</span>
+                        <a class="gallery-link" href="https://es20hlcdl.github.io/elChore/" target="_blank" rel="noreferrer">Visitar StoryMap</a>
+                    </figcaption>
+                </figure>
+                <figure class="gallery-card reveal">
+                    <img src="assets/planificacion-urbana.png" alt="Mapa 3D de población en el área metropolitana de Santa Cruz">
+                    <figcaption>
+                        <strong>Mapa 3D de población en Santa Cruz</strong>
+                        <span>Mapa 3D sobre población en Santa Cruz y lectura territorial del crecimiento metropolitano.</span>
+                        <a class="gallery-link" href="https://gustavocaceresmartinez.com/metropoli/" target="_blank" rel="noreferrer">Ver mapa 3D</a>
+                    </figcaption>
+                </figure>
+            </div>
+        </section>
+
         <section class="gallery-section" id="gallery">
             <div class="section-heading reveal">
-                <span class="section-index">05</span>
+                <span class="section-index">02-02</span>
                 <div>
-                    <p class="section-kicker">StoryMaps y mapas</p>
+                    <p class="section-kicker">Registro visual</p>
                     <h2>Galeria</h2>
                 </div>
             </div>
@@ -454,14 +511,6 @@
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/levantamiento-datos.jpg" alt="Mapa web de diagnóstico territorial para proyectos de energía solar en San Miguel de Velasco">
-                    <figcaption>
-                        <strong>Sistemas de información geográfica</strong>
-                        <span>Diagnóstico territorial en comunidades, viviendas sin energía eléctrica y evidencia de campo para proyectos de energía solar.</span>
-                        <a class="gallery-link" href="https://es20hlcdl.github.io/electricidad/#10/-16.5684/-61.5179" target="_blank" rel="noreferrer">Ver mapa interactivo</a>
-                    </figcaption>
-                </figure>
-                <figure class="gallery-card reveal">
                     <img src="assets/levantamiento-datos-com.jpg" alt="Levantamiento de datos con equipo GNSS en campo">
                     <figcaption>
                         <strong>Geodesia y topografía</strong>
@@ -482,20 +531,12 @@
                         <span>Levantamiento y control topográfico en obra.</span>
                     </figcaption>
                 </figure>
-                <figure class="gallery-card reveal">
-                    <img src="assets/portada.png" alt="Plataforma elChore - Sistema de gestión de tareas">
-                    <figcaption>
-                        <strong>Reserva Forestal El Choré</strong>
-                        <span>40 años de transformación. Una exploración visual con datos de MapBiomas Bolivia (1985–2023) </span>
-                        <a class="gallery-link" href="https://es20hlcdl.github.io/elChore/" target="_blank" rel="noreferrer">Visitar Storymaps</a>
-                    </figcaption>
-                </figure>
             </div>
         </section>
 
         <section class="map-section" id="map">
             <div class="section-heading reveal">
-                <span class="section-index">06</span>
+                <span class="section-index">02-03</span>
                 <div>
                     <p class="section-kicker">Alcance territorial</p>
                     <h2>Alcance territorial</h2>
@@ -527,7 +568,7 @@
 
         <section class="research-section" id="research-teaching">
             <div class="section-heading reveal">
-                <span class="section-index">07</span>
+                <span class="section-index">03</span>
                 <div>
                     <p class="section-kicker">Investigación y docencia</p>
                     <h2>Líneas de investigación</h2>
@@ -556,7 +597,7 @@
 
         <section class="research-section teaching-section" id="university-teaching">
             <div class="section-heading reveal">
-                <span class="section-index">08</span>
+                <span class="section-index">03-01</span>
                 <div>
                     <p class="section-kicker">Docencia universitaria</p>
                     <h2>Docencia universitaria</h2>
@@ -584,7 +625,7 @@
 
         <section class="students-section" id="students">
             <div class="section-heading reveal">
-                <span class="section-index">09</span>
+                <span class="section-index">03-02</span>
                 <div>
                     <p class="section-kicker">Alcance formativo</p>
                     <h2>Alcance formativo</h2>

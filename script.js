@@ -1,6 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
     initReveal();
     initSmoothScroll();
+    initNavDropdown();
     initMobileNav();
     initScrollSpy();
     initCounters();
@@ -42,9 +43,75 @@ function initSmoothScroll() {
     });
 }
 
+function initNavDropdown() {
+    const dropdowns = Array.from(document.querySelectorAll('.nav-item-has-submenu'));
+
+    if (!dropdowns.length) {
+        return;
+    }
+
+    const setOpen = (dropdown, isOpen) => {
+        const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+
+        dropdown.classList.toggle('open', isOpen);
+        dropdown.classList.toggle('is-suppressed', false);
+        toggle?.setAttribute('aria-expanded', String(isOpen));
+    };
+
+    dropdowns.forEach((dropdown) => {
+        const toggle = dropdown.querySelector('.nav-dropdown-toggle');
+        const submenuLinks = dropdown.querySelectorAll('.nav-submenu a');
+
+        toggle?.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const targetSelector = toggle.dataset.target;
+            const target = targetSelector ? document.querySelector(targetSelector) : null;
+            const nextOpenState = !dropdown.classList.contains('open');
+
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+
+            dropdowns.forEach((item) => {
+                setOpen(item, false);
+                item.classList.toggle('is-suppressed', item !== dropdown);
+            });
+            setOpen(dropdown, nextOpenState);
+        });
+
+        dropdown.addEventListener('pointerenter', () => {
+            dropdown.classList.remove('is-suppressed');
+        });
+
+        submenuLinks.forEach((link) => {
+            link.addEventListener('click', () => setOpen(dropdown, false));
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        dropdowns.forEach((dropdown) => {
+            if (!dropdown.contains(event.target)) {
+                setOpen(dropdown, false);
+                dropdown.classList.remove('is-suppressed');
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            dropdowns.forEach((dropdown) => {
+                setOpen(dropdown, false);
+                dropdown.classList.remove('is-suppressed');
+            });
+            document.activeElement?.blur();
+        }
+    });
+}
+
 function initMobileNav() {
     const toggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
+    const dropdowns = document.querySelectorAll('.nav-item-has-submenu');
 
     if (!toggle || !navLinks) {
         return;
@@ -61,6 +128,10 @@ function initMobileNav() {
     navLinks.querySelectorAll('a').forEach((link) => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('open');
+            dropdowns.forEach((dropdown) => {
+                dropdown.classList.remove('open');
+                dropdown.querySelector('.nav-dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+            });
             toggle.textContent = '☰';
             toggle.setAttribute('aria-expanded', 'false');
             toggle.setAttribute('aria-label', 'Abrir menú');
@@ -71,6 +142,9 @@ function initMobileNav() {
 function initScrollSpy() {
     const nav = document.querySelector('.site-nav');
     const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+    const aboutToggle = document.querySelector('[aria-controls="about-submenu"]');
+    const projectToggle = document.querySelector('[aria-controls="projects-submenu"]');
+    const researchToggle = document.querySelector('[aria-controls="research-submenu"]');
 
     if (!nav || !navLinks.length) {
         return;
@@ -91,14 +165,15 @@ function initScrollSpy() {
     const trackedSections = [
         { section: document.querySelector('.hero'), targetId: '#top' },
         { section: document.querySelector('#profile'), targetId: '#profile' },
-        { section: document.querySelector('#trajectory'), targetId: '#profile' },
-        { section: document.querySelector('#recognition'), targetId: '#profile' },
+        { section: document.querySelector('#trajectory'), targetId: '#trajectory' },
+        { section: document.querySelector('#recognition'), targetId: '#recognition' },
         { section: document.querySelector('#projects'), targetId: '#projects' },
-        { section: document.querySelector('#gallery'), targetId: '#projects' },
-        { section: document.querySelector('#map'), targetId: '#projects' },
+        { section: document.querySelector('#geoportfolio'), targetId: '#geoportfolio' },
+        { section: document.querySelector('#gallery'), targetId: '#gallery' },
+        { section: document.querySelector('#map'), targetId: '#map' },
         { section: document.querySelector('#research-teaching'), targetId: '#research-teaching' },
-        { section: document.querySelector('#university-teaching'), targetId: '#research-teaching' },
-        { section: document.querySelector('#students'), targetId: '#research-teaching' },
+        { section: document.querySelector('#university-teaching'), targetId: '#university-teaching' },
+        { section: document.querySelector('#students'), targetId: '#students' },
         { section: document.querySelector('#contact'), targetId: '#contact' }
     ].filter(({ section }) => section);
 
@@ -117,6 +192,15 @@ function initScrollSpy() {
                 link.removeAttribute('aria-current');
             }
         });
+
+        const isProjectActive = ['#projects', '#geoportfolio', '#gallery', '#map'].includes(activeId);
+        projectToggle?.classList.toggle('is-active', isProjectActive);
+
+        const isAboutActive = ['#profile', '#trajectory', '#recognition'].includes(activeId);
+        aboutToggle?.classList.toggle('is-active', isAboutActive);
+
+        const isResearchActive = ['#research-teaching', '#university-teaching', '#students'].includes(activeId);
+        researchToggle?.classList.toggle('is-active', isResearchActive);
     };
 
     const updateActiveSection = () => {
