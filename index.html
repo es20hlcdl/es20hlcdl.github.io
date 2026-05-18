@@ -10,10 +10,15 @@
 
     <meta name="robots" content="index, follow">
     <meta name="author" content="Gustavo Abel Cáceres Martínez">
+    <meta name="keywords" content="Gustavo Cáceres, Gustavo Abel Cáceres Martínez, Ingeniero Agrimensor Bolivia, SIG Bolivia, catastro multifinalitario, geodesia, GNSS, cartografía, planificación territorial, Santa Cruz Bolivia">
+    <meta name="theme-color" content="#162028">
+    <meta name="geo.region" content="BO-S">
+    <meta name="geo.placename" content="Santa Cruz de la Sierra, Bolivia">
 
     <link rel="canonical" href="https://gustavocaceresmartinez.com/">
 
     <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <link rel="preload" as="image" href="assets/foto-yo.jpg" fetchpriority="high">
 
     <!-- Open Graph -->
     <meta property="og:title" content="Gustavo Abel Cáceres Martínez | Ingeniero Agrimensor, SIG, Catastro y Geodesia">
@@ -33,34 +38,107 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Gustavo Abel Cáceres Martínez",
-      "alternateName": [
-        "Gustavo Cáceres",
-        "Gustavo Cáceres Martínez",
-        "Gustavo Abel Caceres Martinez"
-      ],
-      "jobTitle": "Ingeniero Agrimensor",
-      "description": "Ingeniero Agrimensor especializado en SIG, catastro, geodesia, cartografía, GNSS, planificación territorial y análisis geoespacial.",
-      "url": "https://gustavocaceresmartinez.com/",
-      "image": "https://gustavocaceresmartinez.com/assets/foto-yo.jpg",
-      "knowsAbout": [
-        "Geodesia",
-        "Catastro",
-        "Sistemas de Información Geográfica",
-        "GNSS",
-        "Cartografía",
-        "Planificación territorial",
-        "Teledetección",
-        "Ordenamiento territorial"
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Santa Cruz",
-        "addressCountry": "Bolivia"
-      },
-      "sameAs": [
-        "https://gustavocaceresmartinez.com/"
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://gustavocaceresmartinez.com/#person",
+          "name": "Gustavo Abel Cáceres Martínez",
+          "alternateName": [
+            "Gustavo Cáceres",
+            "Gustavo Cáceres Martínez",
+            "Gustavo Abel Caceres Martinez"
+          ],
+          "jobTitle": "Ingeniero Agrimensor",
+          "description": "Ingeniero Agrimensor especializado en SIG, catastro multifinalitario, geodesia, cartografía, GNSS, planificación territorial, teledetección y análisis geoespacial en Bolivia.",
+          "url": "https://gustavocaceresmartinez.com/",
+          "image": "https://gustavocaceresmartinez.com/assets/foto-yo.jpg",
+          "email": "mailto:es20.hlcdl@gmail.com",
+          "telephone": "+59171340964",
+          "knowsLanguage": ["es"],
+          "knowsAbout": [
+            "Geodesia",
+            "Catastro multifinalitario",
+            "Sistemas de Información Geográfica",
+            "GNSS",
+            "Cartografía temática",
+            "Planificación territorial",
+            "Teledetección",
+            "Fotogrametría aérea",
+            "Ordenamiento territorial",
+            "GAMIT/GLOBK",
+            "QGIS",
+            "ArcGIS Pro"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Santa Cruz de la Sierra",
+            "addressRegion": "Santa Cruz",
+            "addressCountry": "BO"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/in/gustavo-c%C3%A1ceres-sig/",
+            "https://www.spatialnode.net/es20hlcdl"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://gustavocaceresmartinez.com/#website",
+          "url": "https://gustavocaceresmartinez.com/",
+          "name": "Gustavo Abel Cáceres Martínez",
+          "description": "Portafolio profesional sobre SIG, catastro, geodesia, cartografía, GNSS y planificación territorial en Bolivia.",
+          "inLanguage": "es-BO",
+          "publisher": {
+            "@id": "https://gustavocaceresmartinez.com/#person"
+          }
+        },
+        {
+          "@type": "ProfilePage",
+          "@id": "https://gustavocaceresmartinez.com/#webpage",
+          "url": "https://gustavocaceresmartinez.com/",
+          "name": "Gustavo Abel Cáceres Martínez | Ingeniero Agrimensor, SIG, Catastro y Geodesia",
+          "description": "Perfil profesional, trayectoria, geoportafolio, docencia e investigación aplicada de Gustavo Abel Cáceres Martínez en Santa Cruz, Bolivia.",
+          "inLanguage": "es-BO",
+          "isPartOf": {
+            "@id": "https://gustavocaceresmartinez.com/#website"
+          },
+          "about": {
+            "@id": "https://gustavocaceresmartinez.com/#person"
+          },
+          "mainEntity": {
+            "@id": "https://gustavocaceresmartinez.com/#person"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://gustavocaceresmartinez.com/#faq",
+          "inLanguage": "es-BO",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "¿Quién es Gustavo Abel Cáceres Martínez?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Gustavo Abel Cáceres Martínez es Ingeniero Agrimensor en Bolivia, con experiencia en SIG, catastro multifinalitario, geodesia, cartografía, GNSS, planificación territorial y análisis geoespacial."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿En qué áreas trabaja Gustavo Cáceres?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Trabaja en catastro y gestión municipal, geodesia y GNSS, cartografía temática, SIG, teledetección, fotogrametría aérea, planificación urbana-rural, docencia e investigación aplicada."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Dónde se concentra su experiencia territorial?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Su experiencia se concentra principalmente en Santa Cruz, Bolivia, con proyectos municipales, monitoreo ambiental, gestión de incendios forestales, cartografía urbana y redes geodésicas."
+              }
+            }
+          ]
+        }
       ]
     }
     </script>
@@ -89,7 +167,7 @@
 
     <nav class="site-nav" aria-label="Navegación principal">
         <a class="brand" href="#top">
-            <img class="brand-logo" src="assets/logo.svg" alt="Logo de Gustavo Cáceres">
+            <img class="brand-logo" src="assets/logo.svg" alt="Logo de Gustavo Cáceres" decoding="async">
             <span class="brand-text">Gustavo Cáceres</span>
         </a>
         <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-controls="primary-navigation" aria-expanded="false">☰</button>
@@ -106,7 +184,7 @@
                 <button class="nav-dropdown-toggle" type="button" aria-expanded="false" aria-controls="projects-submenu" data-target="#projects">Proyectos</button>
                 <ul class="nav-submenu" id="projects-submenu">
                     <li><a href="#geoportfolio">Geoportafolio</a></li>
-                    <li><a href="#gallery">Galeria</a></li>
+                    <li><a href="#gallery">Galería</a></li>
                     <li><a href="#map">Alcance territorial</a></li>
                 </ul>
             </li>
@@ -118,6 +196,7 @@
                     <li><a href="#students">Alcance formativo</a></li>
                 </ul>
             </li>
+            <li><a href="#faq">Preguntas clave</a></li>
             <li><a href="#contact">Contacto</a></li>
         </ul>
     </nav>
@@ -151,7 +230,7 @@
                 <div class="hero-panel-image">
                     <div class="hero-globe-wrap" aria-hidden="true">
                         <canvas id="hero-globe"></canvas>
-                        <img class="hero-globe-logo" src="assets/logo.svg" alt="Logo institucional">
+                        <img class="hero-globe-logo" src="assets/logo.svg" alt="Logo institucional" decoding="async">
                         <div class="hero-globe-caption">Santa Cruz de la Sierra – Bolivia</div>
                     </div>
                 </div>                
@@ -170,7 +249,7 @@
             <div class="about-layout">
                 <div class="about-photo reveal">
                     <div class="about-photo-frame"></div>
-                    <img class="about-portrait" src="assets/foto-yo.jpg" alt="Retrato profesional de Gustavo Abel Cáceres Martínez">
+                    <img class="about-portrait" src="assets/foto-yo.jpg" alt="Retrato profesional de Gustavo Abel Cáceres Martínez" fetchpriority="high" decoding="async">
                 </div>
                 <div class="about-text reveal">
                     <p>
@@ -348,7 +427,7 @@
 
             <div class="expertise-grid">
                 <article class="expertise-card reveal">
-                    <img class="expertise-image" src="assets/catastro.jpg" alt="Gestión catastral y registro territorial">
+                    <img class="expertise-image" src="assets/catastro.jpg" alt="Gestión catastral y registro territorial" loading="lazy" decoding="async">
                     <div class="expertise-content">
                         <span class="expertise-tag">Catastro y gestión municipal</span>
                         <p>Registro, actualización y organización parcelaria para la gestión territorial y municipal.</p>
@@ -361,7 +440,7 @@
                     </div>
                 </article>
                 <article class="expertise-card reveal">
-                    <img class="expertise-image" src="assets/geodesia-topografia.jpg" alt="Trabajos de geodesia y topografía de precisión">
+                    <img class="expertise-image" src="assets/geodesia-topografia.jpg" alt="Trabajos de geodesia y topografía de precisión" loading="lazy" decoding="async">
                     <div class="expertise-content">
                         <span class="expertise-tag">Geodesia y GNSS</span>
                         <p>Levantamientos, redes GNSS y control técnico con enfoque en precisión y referencia espacial.</p>
@@ -374,7 +453,7 @@
                     </div>
                 </article>
                 <article class="expertise-card reveal">
-                    <img class="expertise-image" src="assets/sig-mapa.jpg" alt="Sistema de informacion geografica y analisis geoespacial">
+                    <img class="expertise-image" src="assets/sig-mapa-optimized.jpg" alt="Sistema de información geográfica y análisis geoespacial" loading="lazy" decoding="async">
                     <div class="expertise-content">
                         <span class="expertise-tag">SIG y análisis territorial</span>
                         <p>Visualización, modelado y análisis territorial para apoyar decisiones basadas en datos.</p>
@@ -387,7 +466,7 @@
                     </div>
                 </article>
                 <article class="expertise-card reveal">
-                    <img class="expertise-image" src="assets/cartografia-tematica.jpeg" alt="Cartografía temática y análisis espacial">
+                    <img class="expertise-image" src="assets/cartografia-tematica.jpeg" alt="Cartografía temática y análisis espacial" loading="lazy" decoding="async">
                     <div class="expertise-content">
                         <span class="expertise-tag">Cartografía temática</span>
                         <p>Mapas temáticos orientados al análisis espacial y la lectura precisa del territorio.</p>
@@ -400,7 +479,7 @@
                     </div>
                 </article>
                 <article class="expertise-card reveal">
-                    <img class="expertise-image" src="assets/teledeteccion.jpeg" alt="Teledetección y fotogrametría aérea">
+                    <img class="expertise-image" src="assets/teledeteccion.jpeg" alt="Teledetección y fotogrametría aérea" loading="lazy" decoding="async">
                     <div class="expertise-content">
                         <span class="expertise-tag">Teledetección y fotogrametría aérea</span>
                         <p>Interpretación de imágenes y productos fotogramétricos para monitoreo y análisis territorial.</p>
@@ -413,7 +492,7 @@
                     </div>
                 </article>
                 <article class="expertise-card reveal">
-                    <img class="expertise-image" src="assets/planificacion-urbana.png" alt="Planificación y ordenamiento territorial">
+                    <img class="expertise-image" src="assets/planificacion-urbana-optimized.jpg" alt="Planificación y ordenamiento territorial" loading="lazy" decoding="async">
                     <div class="expertise-content">
                         <span class="expertise-tag">Planificación y ordenamiento territorial</span>
                         <p>Diseño de propuestas territoriales para orientar el crecimiento urbano y rural.</p>
@@ -439,7 +518,7 @@
 
             <div class="gallery-layout">
                 <figure class="gallery-card gallery-card-feature reveal">
-                    <img src="assets/levantamiento-datos.jpg" alt="Mapa web de diagnóstico territorial para proyectos de energía solar en San Miguel de Velasco">
+                    <img src="assets/levantamiento-datos.jpg" alt="Mapa web de diagnóstico territorial para proyectos de energía solar en San Miguel de Velasco" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Mapa interactivo de electricidad</strong>
                         <span>Comunidades, viviendas sin energía eléctrica y evidencia de campo para proyectos de energía solar.</span>
@@ -447,7 +526,7 @@
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/portada.png" alt="StoryMap de la Reserva Forestal El Choré con datos de MapBiomas Bolivia">
+                    <img src="assets/portada.png" alt="StoryMap de la Reserva Forestal El Choré con datos de MapBiomas Bolivia" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>StoryMap El Choré</strong>
                         <span>Reserva Forestal El Choré: 40 años de transformación visualizados con datos de cobertura y uso del suelo.</span>
@@ -455,7 +534,7 @@
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/planificacion-urbana.png" alt="Mapa 3D de población en el área metropolitana de Santa Cruz">
+                    <img src="assets/planificacion-urbana-optimized.jpg" alt="Mapa 3D de población en el área metropolitana de Santa Cruz" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Mapa 3D de población en Santa Cruz</strong>
                         <span>Mapa 3D sobre población en Santa Cruz y lectura territorial del crecimiento metropolitano.</span>
@@ -463,7 +542,7 @@
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/sig-mapa.jpg" alt="Mapa digital interactivo de Santa Cruz">
+                    <img src="assets/sig-mapa-optimized.jpg" alt="Mapa digital interactivo de Santa Cruz" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Mapas Digitales</strong>
                         <span>Visor web de cartografía digital para explorar información territorial de Santa Cruz.</span>
@@ -478,62 +557,62 @@
                 <span class="section-index">02-02</span>
                 <div>
                     <p class="section-kicker">Registro visual</p>
-                    <h2>Galeria</h2>
+                    <h2>Galería</h2>
                 </div>
             </div>
 
             <div class="gallery-layout">
                 <figure class="gallery-card gallery-card-feature reveal">
-                    <img src="assets/yo-geodesia-onu.jpg" alt="Participación profesional en espacio de geodesia e institucionalidad técnica">
+                    <img src="assets/yo-geodesia-onu-optimized.jpg" alt="Participación profesional en espacio de geodesia e institucionalidad técnica" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Geodesia y topografía</strong>
                         <span>Participación en talleres regionales sobre sistemas de referencia geodésicos modernos.</span>
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/iglesia-san-miguel-dron.jpg" alt="Vista aérea de trabajo territorial en San Miguel de Velasco">
+                    <img src="assets/iglesia-san-miguel-dron.jpg" alt="Vista aérea de trabajo territorial en San Miguel de Velasco" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Teledetección y fotogrametría aérea</strong>
                         <span>Análisis del territorio a partir de información aérea en contextos urbano-rurales.</span>
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/comunidades.jpg" alt="Trabajo territorial con comunidades">
+                    <img src="assets/comunidades.jpg" alt="Trabajo territorial con comunidades" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Planificación y ordenamiento territorial</strong>
                         <span>Mi trabajo territorial también se vincula con actores locales, lectura social y realidad comunitaria.</span>
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/santa-rosita-niños.jpg" alt="Actividad con niños en Santa Rosita">
+                    <img src="assets/santa-rosita-ninos-optimized.jpg" alt="Actividad con niños en Santa Rosita" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Planificación y ordenamiento territorial</strong>
                         <span>Proyectos de planificación en comunidades rurales vulnerables.</span>
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/igm-portada-gravimetro.jpg" alt="Portada de gravímetro del IGM">
+                    <img src="assets/igm-portada-gravimetro.jpg" alt="Trabajo técnico con gravímetro para marco vertical de referencia nacional" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Gravimetría</strong>
-                        <span>Trabajos técnicos de gravimetría para el calculo de números geopotenciales con el fin de definir el marco vertical de referencia nacional (MARGEV).</span>
+                        <span>Trabajos técnicos de gravimetría para el cálculo de números geopotenciales con el fin de definir el marco vertical de referencia nacional (MARGEV).</span>
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/levantamiento-datos-com.jpg" alt="Levantamiento de datos con equipo GNSS en campo">
+                    <img src="assets/levantamiento-datos-com.jpg" alt="Levantamiento de datos con equipo GNSS en campo" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Geodesia y topografía</strong>
                         <span>Levantamiento topográfico para determinar volúmenes de materiales en bancos de tierra.</span>
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/levantamiento-datos2.jpg" alt="Levantamiento técnico en obra con equipo GNSS">
+                    <img src="assets/levantamiento-datos2.jpg" alt="Levantamiento técnico en obra con equipo GNSS" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Geodesia y topografía</strong>
-                        <span>Levantamiento catastrales de bienes inmuebles en áreas urbanas.</span>
+                        <span>Levantamientos catastrales de bienes inmuebles en áreas urbanas.</span>
                     </figcaption>
                 </figure>
                 <figure class="gallery-card reveal">
-                    <img src="assets/levantamiento-datos3.jpg" alt="Levantamiento y control topográfico en obra">
+                    <img src="assets/levantamiento-datos3.jpg" alt="Levantamiento y control topográfico en obra" loading="lazy" decoding="async">
                     <figcaption>
                         <strong>Geodesia y topografía</strong>
                         <span>Levantamiento y control topográfico en obra.</span>
@@ -666,6 +745,35 @@
                 </div>
                 <div id="students-map" class="reveal" aria-label="Mapa de estudiantes de postgrado"></div>
 
+            </div>
+        </section>
+
+        <section class="faq-section" id="faq" aria-labelledby="faq-title">
+            <div class="section-heading reveal">
+                <span class="section-index">04</span>
+                <div>
+                    <p class="section-kicker">Preguntas clave</p>
+                    <h2 id="faq-title">Preguntas clave</h2>
+                </div>
+            </div>
+
+            <div class="faq-layout">
+                <article class="faq-card reveal">
+                    <h3>¿Quién es Gustavo Abel Cáceres Martínez?</h3>
+                    <p>Gustavo Abel Cáceres Martínez es Ingeniero Agrimensor en Bolivia, con experiencia en SIG, catastro multifinalitario, geodesia, cartografía, GNSS, planificación territorial y análisis geoespacial.</p>
+                </article>
+                <article class="faq-card reveal">
+                    <h3>¿En qué áreas trabaja Gustavo Cáceres?</h3>
+                    <p>Trabaja en catastro y gestión municipal, geodesia y GNSS, cartografía temática, SIG, teledetección, fotogrametría aérea, planificación urbana-rural, docencia e investigación aplicada.</p>
+                </article>
+                <article class="faq-card reveal">
+                    <h3>¿Dónde se concentra su experiencia territorial?</h3>
+                    <p>Su experiencia se concentra principalmente en Santa Cruz, Bolivia, con proyectos municipales, monitoreo ambiental, gestión de incendios forestales, cartografía urbana y redes geodésicas.</p>
+                </article>
+                <article class="faq-card reveal">
+                    <h3>¿Qué tipo de geoportafolio presenta?</h3>
+                    <p>El geoportafolio incluye mapas web, StoryMaps y visores interactivos sobre electricidad rural, transformación de cobertura del suelo, población metropolitana y cartografía digital de Santa Cruz.</p>
+                </article>
             </div>
         </section>
     </main>

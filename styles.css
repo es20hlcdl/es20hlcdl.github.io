@@ -596,7 +596,7 @@ main section,
 .section-heading h2 {
     font-size: clamp(2.45rem, 5vw, 4rem);
     line-height: 0.98;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
     color: var(--surface-strong);
     margin: 0;
     white-space: nowrap;
@@ -810,7 +810,7 @@ main section,
     font-family: 'Manrope', sans-serif;
     font-size: clamp(1.2rem, 2vw, 1.5rem);
     font-weight: 800;
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
     line-height: 1.12;
     color: var(--surface-strong);
     margin: 0 0 0.85rem;
@@ -1138,6 +1138,41 @@ main section,
     background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(18, 27, 33, 0.12)),
         radial-gradient(circle at top left, rgba(118, 165, 160, 0.12), transparent 30%);
+}
+
+.faq-section {
+    background:
+        linear-gradient(180deg, rgba(31, 42, 49, 0.35), rgba(18, 27, 33, 0.08)),
+        radial-gradient(circle at 80% 10%, rgba(240, 195, 106, 0.09), transparent 28%);
+}
+
+.faq-layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+}
+
+.faq-card {
+    padding: 1.6rem;
+    background: linear-gradient(180deg, rgba(39, 52, 60, 0.96), rgba(33, 45, 52, 0.92));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: var(--shadow);
+}
+
+.faq-card h3 {
+    margin: 0 0 0.8rem;
+    color: var(--surface-strong);
+    font-family: 'Manrope', sans-serif;
+    font-size: clamp(1.15rem, 2vw, 1.35rem);
+    font-weight: 800;
+    line-height: 1.2;
+    text-wrap: balance;
+}
+
+.faq-card p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.85;
 }
 
 .students-layout {
@@ -1618,6 +1653,10 @@ main section,
     }
 
     .students-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .faq-layout {
         grid-template-columns: 1fr;
     }
 
