@@ -1,4 +1,4 @@
-﻿document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     initReveal();
     initSmoothScroll();
     initNavDropdown();
@@ -8,6 +8,11 @@
     initHeroGlobe();
     initCareerMap();
     initStudentsMap();
+    initThemeToggle();
+    initLanguageToggle();
+    initPortfolioFilters();
+    initLightbox();
+    initContactForm();
 });
 
 function initReveal() {
@@ -269,6 +274,7 @@ function initCounters() {
     });
 }
 
+
 function initHeroGlobe() {
     const canvas = document.getElementById('hero-globe');
     if (!canvas) {
@@ -388,6 +394,7 @@ function initHeroGlobe() {
         }
     }
     function createGridPattern() {
+        const isLight = document.documentElement.classList.contains('light-theme');
         const patternCanvas = document.createElement('canvas');
         patternCanvas.width = 12;
         patternCanvas.height = 12;
@@ -396,10 +403,10 @@ function initHeroGlobe() {
             return null;
         }
 
-        patternContext.fillStyle = 'rgba(20, 24, 28, 0.72)';
+        patternContext.fillStyle = isLight ? 'rgba(248, 250, 252, 0.88)' : 'rgba(20, 24, 28, 0.72)';
         patternContext.fillRect(0, 0, 12, 12);
 
-        patternContext.fillStyle = 'rgba(230, 232, 234, 0.62)';
+        patternContext.fillStyle = isLight ? 'rgba(148, 163, 184, 0.28)' : 'rgba(230, 232, 234, 0.62)';
         patternContext.fillRect(1, 1, 4, 4);
         patternContext.fillRect(7, 1, 4, 4);
         patternContext.fillRect(1, 7, 4, 4);
@@ -412,6 +419,8 @@ function initHeroGlobe() {
         if (!boliviaShape.length) {
             return;
         }
+
+        const isLight = document.documentElement.classList.contains('light-theme');
 
         context.save();
         context.beginPath();
@@ -430,11 +439,11 @@ function initHeroGlobe() {
             context.fillStyle = pattern;
             context.globalAlpha = 0.52;
         } else {
-            context.fillStyle = 'rgba(210, 214, 218, 0.26)';
+            context.fillStyle = isLight ? 'rgba(15, 118, 110, 0.08)' : 'rgba(210, 214, 218, 0.26)';
         }
         context.fill();
         context.globalAlpha = 1;
-        context.strokeStyle = 'rgba(223, 243, 248, 0.72)';
+        context.strokeStyle = isLight ? 'rgba(15, 118, 110, 0.72)' : 'rgba(223, 243, 248, 0.72)';
         context.lineWidth = 1.4;
         context.stroke();
         context.restore();
@@ -445,6 +454,8 @@ function initHeroGlobe() {
             return;
         }
 
+        const isLight = document.documentElement.classList.contains('light-theme');
+
         context.save();
         capitalCities.forEach((city, index) => {
             const point = projectBolivia(city.lon, city.lat);
@@ -454,7 +465,9 @@ function initHeroGlobe() {
                 [16, 10].forEach((ring, ringIndex) => {
                     context.beginPath();
                     context.arc(point.x, point.y, ring + Math.sin(time * 0.05) * 1.2, 0, Math.PI * 2);
-                    context.strokeStyle = `rgba(243, 192, 58, ${0.2 - ringIndex * 0.07})`;
+                    context.strokeStyle = isLight 
+                        ? `rgba(234, 88, 12, ${0.2 - ringIndex * 0.07})` 
+                        : `rgba(243, 192, 58, ${0.2 - ringIndex * 0.07})`;
                     context.lineWidth = 4 - ringIndex;
                     context.stroke();
                 });
@@ -462,12 +475,16 @@ function initHeroGlobe() {
 
             context.beginPath();
             context.arc(point.x, point.y, radius, 0, Math.PI * 2);
-            context.fillStyle = index % 2 === 0 ? 'rgba(243, 192, 58, 0.95)' : 'rgba(223, 243, 248, 0.95)';
+            if (isLight) {
+                context.fillStyle = index % 2 === 0 ? 'rgba(234, 88, 12, 0.95)' : 'rgba(15, 118, 110, 0.95)';
+            } else {
+                context.fillStyle = index % 2 === 0 ? 'rgba(243, 192, 58, 0.95)' : 'rgba(223, 243, 248, 0.95)';
+            }
             context.fill();
 
             context.beginPath();
             context.arc(point.x, point.y, radius + 2.2, 0, Math.PI * 2);
-            context.strokeStyle = 'rgba(223, 243, 248, 0.22)';
+            context.strokeStyle = isLight ? 'rgba(15, 118, 110, 0.22)' : 'rgba(223, 243, 248, 0.22)';
             context.lineWidth = 1;
             context.stroke();
         });
@@ -479,6 +496,7 @@ function initHeroGlobe() {
             return;
         }
 
+        const isLight = document.documentElement.classList.contains('light-theme');
         const point = projectBolivia(hoveredCity.lon, hoveredCity.lat);
         const label = hoveredCity.name;
         context.save();
@@ -490,36 +508,43 @@ function initHeroGlobe() {
         const boxX = Math.min(Math.max(point.x - boxWidth / 2, 12), width - boxWidth - 12);
         const boxY = Math.max(point.y - 42, 12);
 
-        context.fillStyle = 'rgba(31, 42, 49, 0.94)';
-        context.strokeStyle = 'rgba(243, 201, 138, 0.28)';
+        context.fillStyle = isLight ? 'rgba(255, 255, 255, 0.96)' : 'rgba(31, 42, 49, 0.94)';
+        context.strokeStyle = isLight ? 'rgba(15, 118, 110, 0.35)' : 'rgba(243, 201, 138, 0.28)';
         context.lineWidth = 1;
         context.beginPath();
         context.roundRect(boxX, boxY, boxWidth, boxHeight, 8);
         context.fill();
         context.stroke();
 
-        context.fillStyle = 'rgba(243, 246, 247, 0.96)';
+        context.fillStyle = isLight ? 'rgba(15, 23, 42, 0.96)' : 'rgba(243, 246, 247, 0.96)';
         context.textBaseline = 'middle';
         context.fillText(label, boxX + paddingX, boxY + boxHeight / 2);
         context.restore();
     }
 
     function drawBackground() {
+        const isLight = document.documentElement.classList.contains('light-theme');
         const background = context.createLinearGradient(0, 0, width, height);
-        background.addColorStop(0, '#243139');
-        background.addColorStop(0.55, '#2b3942');
-        background.addColorStop(1, '#1f2a31');
+        if (isLight) {
+            background.addColorStop(0, '#f8fafc');
+            background.addColorStop(0.55, '#f1f5f9');
+            background.addColorStop(1, '#e2e8f0');
+        } else {
+            background.addColorStop(0, '#243139');
+            background.addColorStop(0.55, '#2b3942');
+            background.addColorStop(1, '#1f2a31');
+        }
         context.fillStyle = background;
         context.fillRect(0, 0, width, height);
 
         context.save();
-        context.globalAlpha = 0.08;
+        context.globalAlpha = isLight ? 0.05 : 0.08;
         for (let i = 0; i < 60; i += 1) {
             const y = (i / 60) * height;
             context.beginPath();
             context.moveTo(0, y);
             context.lineTo(width, y + Math.sin(i * 0.8) * 10);
-            context.strokeStyle = 'rgba(243, 201, 138, 0.16)';
+            context.strokeStyle = isLight ? 'rgba(15, 118, 110, 0.12)' : 'rgba(243, 201, 138, 0.16)';
             context.lineWidth = 1;
             context.stroke();
         }
@@ -551,6 +576,7 @@ function initHeroGlobe() {
     });
     window.addEventListener('beforeunload', () => cancelAnimationFrame(animationFrameId), { once: true });
 }
+
 
 function initCareerMap() {
     const mapElement = document.getElementById('career-map');
@@ -846,7 +872,11 @@ function initCareerMap() {
         }
     }
 
-    showMunicipalityBoundaries();
+    showMunicipalityBoundaries().then(() => {
+        document.getElementById('career-map-loader')?.classList.add('is-hidden');
+    }).catch(() => {
+        document.getElementById('career-map-loader')?.classList.add('is-hidden');
+    });
 }
 
 async function initStudentsMap() {
@@ -986,13 +1016,21 @@ async function initStudentsMap() {
             municipalityCounts.add(normalizeMunicipalityKey(student.municipality));
             markerBounds.push(student.latLng);
 
-            const marker = L.circleMarker(student.latLng, {
+            const customIcon = L.divIcon({
+                className: 'custom-geodetic-marker',
+                html: `
+                    <div class="geodetic-pulse-marker">
+                        <div class="geodetic-pulse-ring"></div>
+                        <div class="geodetic-pulse-center"></div>
+                    </div>
+                `,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            });
+
+            const marker = L.marker(student.latLng, {
                 pane: 'studentsMarkers',
-                radius: 6,
-                color: 'rgba(240, 248, 160, 0.98)',
-                weight: 1.4,
-                fillColor: '#d8eb2f',
-                fillOpacity: 0.92
+                icon: customIcon
             }).addTo(map);
 
             marker.bindPopup(`
@@ -1015,8 +1053,10 @@ async function initStudentsMap() {
         if (statMunicipalities) {
             statMunicipalities.textContent = String(municipalityCounts.size);
         }
+        document.getElementById('students-map-loader')?.classList.add('is-hidden');
     } catch (error) {
         console.error('No se pudo construir el mapa de estudiantes.', error);
+        document.getElementById('students-map-loader')?.classList.add('is-hidden');
     }
 }
 
@@ -1162,4 +1202,804 @@ function escapeHtml(value) {
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&quot;')
         .replaceAll("'", '&#39;');
+}
+
+/* ==========================================================================
+   PREMIUM FEATURES ENGINE IMPLEMENTATION
+   ========================================================================= */
+
+/* 1. Theme Control Engine */
+function initThemeToggle() {
+    const themeBtn = document.getElementById('theme-toggle');
+    if (!themeBtn) return;
+
+    // Read stored theme preference or use system preference
+    const storedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (storedTheme === 'light' || (!storedTheme && !systemPrefersDark)) {
+        document.documentElement.classList.add('light-theme');
+        themeBtn.textContent = '☀️';
+    } else {
+        document.documentElement.classList.remove('light-theme');
+        themeBtn.textContent = '🌙';
+    }
+
+    themeBtn.addEventListener('click', () => {
+        const isLight = document.documentElement.classList.toggle('light-theme');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        themeBtn.textContent = isLight ? '☀️' : '🌙';
+        
+        // Dynamic animation/scale effect
+        themeBtn.style.transform = 'scale(0.85)';
+        setTimeout(() => themeBtn.style.transform = '', 150);
+    });
+}
+
+/* 2. localized Multilingual Engine */
+const translations = {
+    es: {
+        "nav-home": "Inicio",
+        "nav-about": "Sobre mí",
+        "nav-trajectory": "Trayectoria",
+        "nav-recognition": "Reconocimientos y afiliaciones",
+        "nav-projects": "Proyectos",
+        "nav-geoportfolio": "Geoportafolio",
+        "nav-gallery": "Galería",
+        "nav-map": "Alcance territorial",
+        "nav-research-teaching": "Investigación y docencia",
+        "nav-research-lines": "Líneas de investigación",
+        "nav-university-teaching": "Docencia universitaria",
+        "nav-students": "Alcance formativo",
+        "nav-faq": "Preguntas clave",
+        "nav-contact": "Contacto",
+        "hero-eyebrow": "Ingeniero Agrimensor | Catastro | SIG | Geodesia | Cartografía",
+        "hero-motto": "¡Entre la teoría y la realidad!",
+        "hero-lead": "Me interesa que la información territorial deje de ser un producto estático y se convierta en un sistema vivo: útil para planificar, decidir y actuar.",
+        "hero-cta-portfolio": "Ver geoportafolio",
+        "hero-cta-about": "Sobre mí",
+        "hero-cta-cv": "Descargar CV",
+        "hero-panel-label": "Líneas activas",
+        "hero-line-1": "Procesamiento GNSS con GAMIT/GLOBK",
+        "hero-line-2": "Estructuración de catastro multifinalitario en SIG libre",
+        "hero-line-3": "Cartografía para planificación urbana-rural y gestión ambiental",
+        "about-kicker": "Sobre mí",
+        "about-title": "Sobre mí",
+        "about-text": "Soy Ingeniero Agrimensor con experiencia en cartografía, geodesia, planificación territorial, catastro y sistemas de información geográfica. He desarrollado investigaciones sobre modelos de trayectoria de estaciones GNSS y he participado en proyectos vinculados al desarrollo urbano, el monitoreo geoespacial y la actualización catastral. Mi trabajo se ha orientado a la innovación aplicada, especialmente mediante el uso de SIG libre para el fortalecimiento del catastro multifinalitario. Asimismo, he brindado asistencia técnica en gestión del riesgo de incendios forestales, trabajos de gravimetría y docencia en programas de pregrado y postgrado. He liderado procesos de análisis urbano-rural y modernización catastral, promoviendo la implementación de sistemas de referencia geodésicos modernos y enfoques de catastro multifinalitario, con un firme compromiso con la formulación y aplicación de políticas territoriales y ambientales.",
+        "pill-catastro": "Catastro multifinalitario",
+        "pill-geodesia": "Geodesia",
+        "pill-cartografia": "Cartografía",
+        "pill-sig": "SIG",
+        "pill-politicas": "Políticas territoriales y ambientales",
+        "trajectory-kicker": "Trayectoria",
+        "trajectory-title": "Trayectoria",
+        "traj-item1-year": "Actualidad",
+        "traj-item1-status": "En curso",
+        "traj-item1-title": "Docente de Rutas y Mapas Digitales",
+        "traj-item1-role": "Unifranz · Docencia universitaria aplicada al turismo y los SIG",
+        "traj-item1-h1": "Formación en levantamiento, depuración y análisis de datos territoriales.",
+        "traj-item1-h2": "Visualización cartográfica y publicación de información geoespacial.",
+        "traj-item1-h3": "Integración de SIG para planificación, gestión y comunicación de rutas y destinos turísticos.",
+        "traj-item2-year": "2025",
+        "traj-item2-title": "Docente de Diplomado en Catastro Multifinalitario",
+        "traj-item2-role": "Módulo: \"Catastro Multifinalitario y Desarrollo Urbano\"",
+        "traj-item2-h1": "Diseño y desarrollo del módulo para gobiernos autónomos municipales.",
+        "traj-item2-h2": "Articulación de componentes físicos, jurídicos, económicos, sociales y ambientales.",
+        "traj-item2-h3": "Aplicación de SIG, datos abiertos, planificación urbana, tributación y sostenibilidad territorial.",
+        "traj-item3-year": "2024 · 2026",
+        "traj-item3-title": "Técnico de Catastro en Santa Rosa del Sara",
+        "traj-item3-role": "Gobierno Municipal · Gestión catastral y ordenamiento territorial",
+        "traj-item3-h1": "Actualización de áreas urbanas dispersas y migración CAD-SIG.",
+        "traj-item3-h2": "Cartografía, geodesia y soporte técnico para delimitaciones territoriales.",
+        "traj-item3-h3": "Propuestas para distritos urbanos-rurales y organización del territorio.",
+        "traj-item4-year": "2023",
+        "traj-item4-title": "Catastro, Drones y Alerta Temprana",
+        "traj-item4-role": "Proyecto municipal · Gestión territorial y respuesta ante incendios",
+        "traj-item4-h1": "Estructuración metodológica de un catastro multifinalitario.",
+        "traj-item4-h2": "Actualizaciones catastrales con dron y regularización predial.",
+        "traj-item4-h3": "Apoyo al SMAT frente a incendios y monitoreo territorial.",
+        "traj-item5-year": "2021 · 2022",
+        "traj-item5-title": "Cartografía y Urbanismo Municipal",
+        "traj-item5-role": "San Miguel de Velasco · Análisis territorial y SIG",
+        "traj-item5-h1": "Análisis de accesibilidad educativa y evaluación del crecimiento urbano.",
+        "traj-item5-h2": "Cartografía base municipal e implementación de SIG.",
+        "traj-item5-h3": "Soporte para planificación urbana y rural.",
+        "traj-item6-year": "2021",
+        "traj-item6-title": "Investigación Geodésica en el IGM",
+        "traj-item6-role": "Instituto Geográfico Militar · GNSS y marco vertical",
+        "traj-item6-h1": "Modelo de trayectoria para la estación GNSS SCRZ.",
+        "traj-item6-h2": "Análisis de velocidad por componentes.",
+        "traj-item6-h3": "Apoyo al levantamiento gravimétrico para el marco vertical MARGEV.",
+        "traj-item7-year": "2020",
+        "traj-item7-title": "Asistencia SIG en la Chiquitania",
+        "traj-item7-role": "Comité de Crisis Permanente · Incendios forestales",
+        "traj-item7-h1": "Priorización de comunidades y soporte técnico geoespacial.",
+        "traj-item7-h2": "Reporte de perímetro activo y áreas quemadas.",
+        "traj-item7-h3": "Simulación y seguimiento de incendios.",
+        "traj-item8-year": "2019 · 2020",
+        "traj-item8-title": "UMIG · Autoridad de Bosques y Tierra",
+        "traj-item8-role": "Chuquisaca y Santa Cruz · Teledetección y monitoreo",
+        "traj-item8-h1": "Evaluación de incidencia antrópica con técnicas de teledetección.",
+        "traj-item8-h2": "Monitoreo de información geoespacial para gestión territorial.",
+        "traj-item9-year": "2018",
+        "traj-item9-title": "Topografía para Infraestructura Hídrica",
+        "traj-item9-role": "Saipina y Vallegrande · Obras de agua y micro riego",
+        "traj-item9-h1": "Apoyo topográfico para mejora del sistema de agua potable de Saipina.",
+        "traj-item9-h2": "Trabajo técnico en el sistema de micro riego San Gerónimo-Coloradillo.",
+        "rec-kicker": "Reconocimiento e institucionalidad",
+        "rec-title": "Reconocimientos y afiliaciones",
+        "rec-feat1-label": "Reconocimiento 2024",
+        "rec-feat1-title": "Distinción del Concejo Municipal de San Miguel de Velasco",
+        "rec-feat1-desc": "A inicios de 2024 recibí un reconocimiento por mis contribuciones técnicas y sociales en proyectos municipales, destacando mi capacidad para integrar innovación, desarrollo urbano y enfoque humano en beneficio de la población.",
+        "rec-feat2-label": "Afiliación",
+        "rec-feat2-title": "SIB-SC",
+        "rec-feat2-desc": "Soy miembro de la Sociedad de Ingenieros de Bolivia, Regional Santa Cruz, y del Colegio de Ingenieros Agrimensores.",
+        "projects-kicker": "Proyectos",
+        "projects-title": "Proyectos",
+        "filter-all": "Todos",
+        "filter-catastro": "Catastro",
+        "filter-geodesia": "Geodesia / GNSS",
+        "filter-sig": "SIG / Cartografía",
+        "filter-teledeteccion": "Teledetección",
+        "filter-storymaps": "StoryMaps",
+        "filter-webmaps": "Mapas Interactivos",
+        "filter-map3d": "Mapas 3D",
+        "filter-field": "Campo",
+        "filter-aerial": "Drones / Aérea",
+        "filter-technical": "Gabinete / Técnico",
+        "exp-catastro-tag": "Catastro y gestión municipal",
+        "exp-catastro-desc": "Registro, actualización y organización parcelaria para la gestión territorial y municipal.",
+        "exp-pill-catastro": "CATASTRO",
+        "exp-pill-normas": "NORMAS",
+        "exp-pill-sig": "SIG",
+        "exp-pill-gestion": "GESTIÓN MUNICIPAL",
+        "exp-geodesia-tag": "Geodesia y GNSS",
+        "exp-geodesia-desc": "Levantamientos, redes GNSS y control técnico con enfoque en precisión y referencia espacial.",
+        "exp-pill-gnss": "GNSS",
+        "exp-pill-rtk": "RTK",
+        "exp-pill-et": "ESTACIÓN TOTAL",
+        "exp-pill-control": "CONTROL",
+        "exp-sig-tag": "SIG y análisis territorial",
+        "exp-sig-desc": "Visualización, modelado y análisis territorial para apoyar decisiones basadas en datos.",
+        "exp-pill-qgis": "QGIS",
+        "exp-pill-arcgis": "ARCGIS PRO",
+        "exp-pill-analisis": "ANÁLISIS ESPACIAL",
+        "exp-pill-python": "PYTHON",
+        "exp-cartografia-tag": "Cartografía temática",
+        "exp-cartografia-desc": "Mapas temáticos orientados al análisis espacial y la lectura precisa del territorio.",
+        "exp-pill-blender": "BLENDER",
+        "exp-pill-web": "MAPAS WEB",
+        "exp-tele-tag": "Teledetección y fotogrametría aérea",
+        "exp-tele-desc": "Interpretación de imágenes y productos fotogramétricos para monitoreo y análisis territorial.",
+        "exp-pill-sentinel": "SENTINEL",
+        "exp-pill-landsat": "LANDSAT",
+        "exp-pill-gee": "GEE",
+        "exp-pill-drones": "DRONES",
+        "exp-plan-tag": "Planificación y ordenamiento territorial",
+        "exp-plan-desc": "Diseño de propuestas territoriales para orientar el crecimiento urbano y rural.",
+        "exp-pill-suelo": "USO DEL SUELO",
+        "exp-pill-zonificacion": "ZONIFICACIÓN",
+        "exp-pill-ptdi": "PTDI",
+        "exp-pill-gurbana": "GESTIÓN URBANA",
+        "geo-kicker": "Mapas web y StoryMaps",
+        "geo-title": "Geoportafolio",
+        "geo-elec-title": "Mapa interactivo de electricidad",
+        "geo-elec-desc": "Comunidades, viviendas sin energía eléctrica y evidencia de campo para proyectos de energía solar.",
+        "geo-link-view": "Ver mapa interactivo",
+        "geo-chore-title": "StoryMap El Choré",
+        "geo-chore-desc": "Reserva Forestal El Choré: 40 años de transformación visualizados con datos de cobertura y uso del suelo.",
+        "geo-link-story": "Visitar StoryMap",
+        "geo-sc3d-title": "Mapa 3D de población en Santa Cruz",
+        "geo-sc3d-desc": "Mapa 3D sobre población en Santa Cruz y lectura territorial del crecimiento metropolitano.",
+        "geo-link-view3d": "Ver mapa 3D",
+        "geo-digital-title": "Mapas Digitales",
+        "geo-digital-desc": "Visor web de cartografía digital para explorar información territorial de Santa Cruz.",
+        "geo-link-viewdigital": "Ver mapa digital",
+        "gal-kicker": "Registro visual",
+        "gal-title": "Galería",
+        "gal-img1-title": "Geodesia y topografía",
+        "gal-img1-desc": "Participación en talleres regionales sobre sistemas de referencia geodésicos modernos.",
+        "gal-img2-title": "Teledetección y fotogrametría aérea",
+        "gal-img2-desc": "Análisis del territorio a partir de información aérea en contextos urbano-rurales.",
+        "gal-img3-title": "Planificación y ordenamiento territorial",
+        "gal-img3-desc": "Mi trabajo territorial también se vincula con actores locales, lectura social y realidad comunitaria.",
+        "gal-img4-title": "Planificación y ordenamiento territorial",
+        "gal-img4-desc": "Proyectos de planificación en comunidades rurales vulnerables.",
+        "gal-img5-title": "Gravimetría",
+        "gal-img5-desc": "Trabajos técnicos de gravimetría para el cálculo de números geopotenciales con el fin de definir el marco vertical de referencia nacional (MARGEV).",
+        "gal-img6-title": "Geodesia y topografía",
+        "gal-img6-desc": "Levantamiento topográfico para determinar volúmenes de materiales en bancos de tierra.",
+        "gal-img7-title": "Geodesia y topografía",
+        "gal-img7-desc": "Levantamientos catastrales de bienes inmuebles en áreas urbanas.",
+        "gal-img8-title": "Geodesia y topografía",
+        "gal-img8-desc": "Levantamiento y control topográfico en obra.",
+        "map-kicker": "Alcance territorial",
+        "map-title": "Alcance territorial",
+        "map-desc": "Mi trayectoria se concentra en Santa Cruz, donde he desarrollado experiencia en gestión municipal, monitoreo ambiental, incendios forestales, cartografía urbana y redes geodésicas. Este mapa sintetiza el alcance geográfico de mi trabajo y los principales regiones del departamento donde he desarrollado proyectos.",
+        "map-stat1-label": "Regiones recorridas",
+        "map-stat2-label": "Municipios visitados",
+        "map-loading": "Cargando mapa territorial...",
+        "res-kicker": "Investigación y docencia",
+        "res-title": "Líneas de investigación",
+        "res-status-process": "En proceso",
+        "res-card1-title": "Estimación y validación del retardo troposférico cenital (ZTD) y del vapor de agua precipitable (PWV)",
+        "res-card1-desc": "Mediante el análisis de datos de la estación CORS SCRZ, se estima el Retardo Troposférico Cenital (ZTD) para derivar el Vapor de Agua Precipitable (PWV). Este proceso permite un monitoreo hidroclimático preciso y casi en tiempo real, fundamental para entender la dinámica atmosférica de la región y mejorar los pronósticos locales.",
+        "res-card2-title": "Determinación de un modelo de velocidades regional para el área metropolitana de Santa Cruz con GAMIT/GLOBK",
+        "res-card2-desc": "El objetivo es desarrollar un modelo que cuantifique el desplazamiento de las estaciones a través del tiempo, permitiendo mantener la precisión del marco geodésico frente a la deformación de la corteza y proporcionando datos clave para estudios de tectónica y planificación urbana en Santa Cruz.",
+        "res-card3-title": "SIG de código abierto como soporte metodológico para la planificación, difusión y monitoreo de productos turísticos",
+        "res-card3-desc": "La propuesta busca contribuir al fortalecimiento técnico de los productos turísticos mediante el uso de herramientas accesibles, replicables y de bajo costo. La incorporación de SIG de código abierto ofrecen una alternativa para organizar, representar, difundir y monitorear productos turísticos, ampliando su utilidad tanto en contextos académicos como profesionales.",
+        "teach-kicker": "Docencia universitaria",
+        "teach-title": "Docencia universitaria",
+        "teach-status-now": "Actualidad",
+        "teach-status-2025": "2025",
+        "teach-status-focus": "Enfoque",
+        "teach-card1-title": "Docente de Rutas y Mapas Digitales",
+        "teach-card1-desc": "Docencia universitaria aplicada al turismo y los SIG, con énfasis en levantamiento, depuración, análisis, visualización y publicación de información geoespacial.",
+        "teach-card2-title": "Diplomado en Catastro Multifinalitario",
+        "teach-card2-desc": "Diseño y desarrollo del módulo \"Catastro Multifinalitario y Desarrollo Urbano\", orientado a gobiernos autónomos municipales y gestión territorial.",
+        "teach-card3-title": "Formación técnica aplicada",
+        "teach-card3-desc": "Integración de SIG, datos abiertos, planificación urbana, tributación, sostenibilidad territorial y comunicación cartográfica en procesos formativos.",
+        "stu-kicker": "Alcance formativo",
+        "stu-title": "Alcance formativo",
+        "stu-desc": "Este espacio presenta una síntesis del alcance formativo. En ella se encuentra la ubicación geográfica y la procedencia municipal de los estudiantes registrados.",
+        "stu-stat1-label": "Estudiantes",
+        "stu-stat2-label": "Estudiantes georreferenciados",
+        "stu-stat3-label": "Municipios registrados",
+        "faq-kicker": "Preguntas clave",
+        "faq-title": "Preguntas clave",
+        "faq-q1": "¿Quién es Gustavo Abel Cáceres Martínez?",
+        "faq-a1": "Gustavo Abel Cáceres Martínez es Ingeniero Agrimensor en Bolivia, con experiencia en SIG, catastro multifinalitario, geodesia, cartografía, GNSS, planificación territorial y análisis geoespacial.",
+        "faq-q2": "¿En qué áreas trabaja Gustavo Cáceres?",
+        "faq-a2": "Trabaja en catastro y gestión municipal, geodesia y GNSS, cartografía temática, SIG, teledetección, fotogrametría aérea, planificación urbana-rural, docencia e investigación aplicada.",
+        "faq-q3": "¿Dónde se concentra su experiencia territorial?",
+        "faq-a3": "Su experiencia se concentra principalmente en Santa Cruz, Bolivia, con proyectos municipales, monitoreo ambiental, gestión de incendios forestales, cartografía urbana y redes geodésicas.",
+        "faq-q4": "¿Qué tipo de geoportafolio presenta?",
+        "faq-a4": "El geoportafolio incluye mapas web, StoryMaps y visores interactivos sobre electricidad rural, transformación de cobertura del suelo, población metropolitana y cartografía digital de Santa Cruz.",
+        "footer-kicker": "Contacto",
+        "footer-desc": "Estoy disponible para proyectos técnicos, docencia, investigación aplicada y colaboración institucional.",
+        "footer-mail-label": "Correo",
+        "footer-mail-action": "Enviar mensaje",
+        "footer-phone-label": "Teléfono",
+        "footer-phone-action": "Llamar ahora",
+        "footer-linkedin-action": "Abrir perfil ↗",
+        "footer-portfolio-action": "Ver trabajos ↗",
+        "footer-orcid-action": "Ver identidad académica ↗",
+        "footer-researchgate-action": "Ver perfil académico ↗",
+        "footer-github-action": "Ver código y proyectos ↗",
+        "footer-job": "Ingeniero Agrimensor",
+        "footer-loc": "Santa Cruz, Bolivia",
+        "footer-copy": "©2026. Todos los derechos reservados.",
+        "form-title": "Envíame un mensaje",
+        "form-name-label": "Nombre completo",
+        "form-email-label": "Correo electrónico",
+        "form-msg-label": "Mensaje",
+        "form-submit": "Enviar mensaje",
+        "form-name-placeholder": "Ingresa tu nombre",
+        "form-email-placeholder": "tu@correo.com",
+        "form-msg-placeholder": "Escribe tu mensaje detallado aquí..."
+    },
+    en: {
+        "nav-home": "Home",
+        "nav-about": "About me",
+        "nav-trajectory": "Trajectory",
+        "nav-recognition": "Awards & Affiliations",
+        "nav-projects": "Projects",
+        "nav-geoportfolio": "Geoportfolio",
+        "nav-gallery": "Gallery",
+        "nav-map": "Territorial Scope",
+        "nav-research-teaching": "Research & Teaching",
+        "nav-research-lines": "Research Lines",
+        "nav-university-teaching": "University Teaching",
+        "nav-students": "Educational Scope",
+        "nav-faq": "Key Questions",
+        "nav-contact": "Contact",
+        "hero-eyebrow": "Land Surveyor | Catastre | GIS | Geodesy | Cartography",
+        "hero-motto": "Between theory and reality!",
+        "hero-lead": "I am interested in ensuring that territorial information ceases to be a static product and becomes a living system: useful for planning, deciding, and acting.",
+        "hero-cta-portfolio": "View geoportfolio",
+        "hero-cta-about": "About me",
+        "hero-cta-cv": "Download CV",
+        "hero-panel-label": "Active Lines",
+        "hero-line-1": "GNSS processing with GAMIT/GLOBK",
+        "hero-line-2": "Structuring of multifinalitary cadastres in free GIS",
+        "hero-line-3": "Cartography for urban-rural planning and environmental management",
+        "about-kicker": "About me",
+        "about-title": "About me",
+        "about-text": "I am a Land Surveyor with experience in cartography, geodesy, territorial planning, cadastre, and geographic information systems. I have developed research on GNSS station trajectory models and participated in projects related to urban development, geospatial monitoring, and cadastral updating. My work focuses on applied innovation, particularly using open-source GIS to strengthen multifinalitary cadastres. Additionally, I have provided technical assistance in forest fire risk management, gravimetry, and university teaching in both undergraduate and postgraduate programs. I have led urban-rural analysis and cadastral modernization processes, promoting the implementation of modern geodetic reference systems and multifinalitary cadastre approaches, with a strong commitment to territorial and environmental policy formulation and application.",
+        "pill-catastro": "Multifinalitary Cadastre",
+        "pill-geodesia": "Geodesy",
+        "pill-cartografia": "Cartography",
+        "pill-sig": "GIS",
+        "pill-politicas": "Territorial & Environmental Policies",
+        "trajectory-kicker": "Trajectory",
+        "trajectory-title": "Trajectory",
+        "traj-item1-year": "Present",
+        "traj-item1-status": "Ongoing",
+        "traj-item1-title": "Lecturer in Routes and Digital Maps",
+        "traj-item1-role": "Unifranz · University teaching applied to tourism and GIS",
+        "traj-item1-h1": "Training in territorial data collection, cleaning, and analysis.",
+        "traj-item1-h2": "Cartographic visualization and geospatial information publication.",
+        "traj-item1-h3": "GIS integration for planning, managing, and communicating tourist routes and destinations.",
+        "traj-item2-year": "2025",
+        "traj-item2-title": "Postgraduate Lecturer in Multifinalitary Cadastre",
+        "traj-item2-role": "Module: \"Multifinalitary Cadastre and Urban Development\"",
+        "traj-item2-h1": "Design and development of the module for municipal autonomous governments.",
+        "traj-item2-h2": "Integration of physical, legal, economic, social, and environmental components.",
+        "traj-item2-h3": "Application of GIS, open data, urban planning, taxation, and territorial sustainability.",
+        "traj-item3-year": "2024 · 2026",
+        "traj-item3-title": "Cadastre Technician at Santa Rosa del Sara",
+        "traj-item3-role": "Municipal Government · Cadastral management and land use planning",
+        "traj-item3-h1": "Updating scattered urban areas and CAD-to-GIS migration.",
+        "traj-item3-h2": "Cartography, geodesy, and technical support for territorial boundary delimitations.",
+        "traj-item3-h3": "Proposals for urban-rural districts and territorial organization.",
+        "traj-item4-year": "2023",
+        "traj-item4-title": "Cadastre, Drones and Early Warning",
+        "traj-item4-role": "Municipal project · Territorial management and fire response",
+        "traj-item4-h1": "Methodological structuring of a multifinalitary cadastre.",
+        "traj-item4-h2": "Cadastral updates using drones and property legalization.",
+        "traj-item4-h3": "Support to SMAT for fire control and territorial monitoring.",
+        "traj-item5-year": "2021 · 2022",
+        "traj-item5-title": "Municipal Cartography and Urbanism",
+        "traj-item5-role": "San Miguel de Velasco · Territorial analysis and GIS",
+        "traj-item5-h1": "Educational accessibility analysis and urban growth assessment.",
+        "traj-item5-h2": "Municipal base cartography and GIS implementation.",
+        "traj-item5-h3": "Support for urban and rural planning.",
+        "traj-item6-year": "2021",
+        "traj-item6-title": "Geodetic Research at IGM",
+        "traj-item6-role": "Military Geographic Institute · GNSS and vertical framework",
+        "traj-item6-h1": "Trajectory model for the SCRZ GNSS station.",
+        "traj-item6-h2": "Velocity analysis by components.",
+        "traj-item6-h3": "Support for gravimetric survey for the MARGEV vertical reference framework.",
+        "traj-item7-year": "2020",
+        "traj-item7-title": "GIS Assistance in the Chiquitania",
+        "traj-item7-role": "Permanent Crisis Committee · Forest fires",
+        "traj-item7-h1": "Community prioritization and geospatial technical support.",
+        "traj-item7-h2": "Reporting active perimeters and burned areas.",
+        "traj-item7-h3": "Fire simulation and tracking.",
+        "traj-item8-year": "2019 · 2020",
+        "traj-item8-title": "UMIG · Forest and Land Authority",
+        "traj-item8-role": "Chuquisaca and Santa Cruz · Remote sensing and monitoring",
+        "traj-item8-h1": "Assessment of anthropogenic impact using remote sensing techniques.",
+        "traj-item8-h2": "Monitoring geospatial information for territorial management.",
+        "traj-item9-year": "2018",
+        "traj-item9-title": "Topography for Water Infrastructure",
+        "traj-item9-role": "Saipina and Vallegrande · Water and micro-irrigation works",
+        "traj-item9-h1": "Topographical support for the drinking water system improvement of Saipina.",
+        "traj-item9-h2": "Technical work on the San Gerónimo-Coloradillo micro-irrigation system.",
+        "rec-kicker": "Recognition & Institutional Presence",
+        "rec-title": "Awards & Affiliations",
+        "rec-feat1-label": "Recognition 2024",
+        "rec-feat1-title": "Distinction by the Municipal Council of San Miguel de Velasco",
+        "rec-feat1-desc": "At the beginning of 2024, I received recognition for my technical and social contributions in municipal projects, highlighting my ability to integrate innovation, urban development, and a human approach for the benefit of the population.",
+        "rec-feat2-label": "Affiliation",
+        "rec-feat2-title": "SIB-SC",
+        "rec-feat2-desc": "I am a member of the Society of Engineers of Bolivia, Santa Cruz Regional, and the College of Land Surveyors.",
+        "projects-kicker": "Projects",
+        "projects-title": "Projects",
+        "filter-all": "All",
+        "filter-catastro": "Cadastre",
+        "filter-geodesia": "Geodesy / GNSS",
+        "filter-sig": "GIS / Cartography",
+        "filter-teledeteccion": "Remote Sensing",
+        "filter-storymaps": "StoryMaps",
+        "filter-webmaps": "Interactive Maps",
+        "filter-map3d": "3D Maps",
+        "filter-field": "Field",
+        "filter-aerial": "Drones / Aerial",
+        "filter-technical": "Office / Technical",
+        "exp-catastro-tag": "Cadastre & Municipal Management",
+        "exp-catastro-desc": "Registration, updating, and parcel organization for territorial and municipal management.",
+        "exp-pill-catastro": "CADASTRE",
+        "exp-pill-normas": "REGULATIONS",
+        "exp-pill-sig": "GIS",
+        "exp-pill-gestion": "MUNICIPAL MANAGEMENT",
+        "exp-geodesia-tag": "Geodesy & GNSS",
+        "exp-geodesia-desc": "Surveys, GNSS networks, and technical control focusing on precision and spatial reference.",
+        "exp-pill-gnss": "GNSS",
+        "exp-pill-rtk": "RTK",
+        "exp-pill-et": "TOTAL STATION",
+        "exp-pill-control": "CONTROL",
+        "exp-sig-tag": "GIS & Territorial Analysis",
+        "exp-sig-desc": "Visualization, modeling, and territorial analysis to support data-driven decisions.",
+        "exp-pill-qgis": "QGIS",
+        "exp-pill-arcgis": "ARCGIS PRO",
+        "exp-pill-analisis": "SPATIAL ANALYSIS",
+        "exp-pill-python": "PYTHON",
+        "exp-cartografia-tag": "Thematic Cartography",
+        "exp-cartografia-desc": "Thematic maps oriented towards spatial analysis and precise territorial reading.",
+        "exp-pill-blender": "BLENDER",
+        "exp-pill-web": "WEB MAPS",
+        "exp-tele-tag": "Remote Sensing & Aerial Photogrammetry",
+        "exp-tele-desc": "Image interpretation and photogrammetric products for territorial monitoring and analysis.",
+        "exp-pill-sentinel": "SENTINEL",
+        "exp-pill-landsat": "LANDSAT",
+        "exp-pill-gee": "GEE",
+        "exp-pill-drones": "DRONES",
+        "exp-plan-tag": "Land-use Planning & Territorial Organization",
+        "exp-plan-desc": "Design of territorial proposals to guide urban and rural growth.",
+        "exp-pill-suelo": "LAND USE",
+        "exp-pill-zonificacion": "ZONING",
+        "exp-pill-ptdi": "PTDI",
+        "exp-pill-gurbana": "URBAN MANAGEMENT",
+        "geo-kicker": "Web maps & StoryMaps",
+        "geo-title": "Geoportfolio",
+        "geo-elec-title": "Interactive Electricity Map",
+        "geo-elec-desc": "Communities, dwellings without electric energy, and field evidence for solar energy projects.",
+        "geo-link-view": "View interactive map",
+        "geo-chore-title": "El Choré StoryMap",
+        "geo-chore-desc": "El Choré Forest Reserve: 40 years of transformation visualized with cover and land use data.",
+        "geo-link-story": "Visit StoryMap",
+        "geo-sc3d-title": "3D Population Map of Santa Cruz",
+        "geo-sc3d-desc": "3D map on Santa Cruz population and territorial reading of metropolitan growth.",
+        "geo-link-view3d": "View 3D map",
+        "geo-digital-title": "Digital Maps",
+        "geo-digital-desc": "Web viewer of digital cartography to explore Santa Cruz territorial information.",
+        "geo-link-viewdigital": "View digital map",
+        "gal-kicker": "Visual record",
+        "gal-title": "Gallery",
+        "gal-img1-title": "Geodesy & surveying",
+        "gal-img1-desc": "Participation in regional workshops on modern geodetic reference systems.",
+        "gal-img2-title": "Remote sensing & aerial photogrammetry",
+        "gal-img2-desc": "Territorial analysis based on aerial information in urban-rural contexts.",
+        "gal-img3-title": "Land-use planning & territorial organization",
+        "gal-img3-desc": "My territorial work is also linked with local actors, social readings, and community reality.",
+        "gal-img4-title": "Land-use planning & territorial organization",
+        "gal-img4-desc": "Planning projects in vulnerable rural communities.",
+        "gal-img5-title": "Gravimetry",
+        "gal-img5-desc": "Technical gravimetry works for calculating geopotential numbers in order to define the national vertical reference framework (MARGEV).",
+        "gal-img6-title": "Geodesy & surveying",
+        "gal-img6-desc": "Topographical survey to determine volumes of materials in earth banks.",
+        "gal-img7-title": "Geodesy & surveying",
+        "gal-img7-desc": "Cadastral surveys of real estate in urban areas.",
+        "gal-img8-title": "Geodesy & surveying",
+        "gal-img8-desc": "Topographical survey and control on site.",
+        "map-kicker": "Territorial scope",
+        "map-title": "Territorial scope",
+        "map-desc": "My career is focused on Santa Cruz, where I have developed experience in municipal management, environmental monitoring, forest fires, urban cartography, and geodetic networks. This map synthesizes the geographical scope of my work and the main regions of the department where I have carried out projects.",
+        "map-stat1-label": "Regions traveled",
+        "map-stat2-label": "Municipalities visited",
+        "map-loading": "Loading territorial map...",
+        "res-kicker": "Research & teaching",
+        "res-title": "Research Lines",
+        "res-status-process": "In progress",
+        "res-card1-title": "Estimation and validation of Zenith Tropospheric Delay (ZTD) and Precipitable Water Vapor (PWV)",
+        "res-card1-desc": "Through the analysis of data from the CORS SCRZ station, the Zenith Tropospheric Delay (ZTD) is estimated to derive the Precipitable Water Vapor (PWV). This process enables precise, near-real-time hydroclimatic monitoring, crucial for understanding the region's atmospheric dynamics and improving local forecasts.",
+        "res-card2-title": "Determination of a regional velocity model for the metropolitan area of Santa Cruz with GAMIT/GLOBK",
+        "res-card2-desc": "The goal is to develop a model that quantifies the displacement of stations over time, allowing the geodetic reference framework accuracy to be maintained against crustal deformation and providing key data for tectonic and urban planning studies in Santa Cruz.",
+        "res-card3-title": "Open-source GIS as methodological support for tourist product planning, dissemination, and monitoring",
+        "res-card3-desc": "The proposal aims to contribute to the technical strengthening of tourism products through accessible, replicable, and low-cost tools. The integration of open-source GIS offers an alternative to organize, represent, disseminate, and monitor tourism products, expanding their utility in both academic and professional contexts.",
+        "teach-kicker": "University teaching",
+        "teach-title": "University teaching",
+        "teach-status-now": "Present",
+        "teach-status-2025": "2025",
+        "teach-status-focus": "Focus",
+        "teach-card1-title": "Lecturer in Routes and Digital Maps",
+        "teach-card1-desc": "University teaching applied to tourism and GIS, emphasizing spatial data collection, debugging, analysis, visualization, and publication.",
+        "teach-card2-title": "Diploma in Multifinalitary Cadastre",
+        "teach-card2-desc": "Design and development of the \"Multifinalitary Cadastre and Urban Development\" module, oriented towards municipal autonomous governments and territorial management.",
+        "teach-card3-title": "Applied technical training",
+        "teach-card3-desc": "Integration of GIS, open data, urban planning, taxation, territorial sustainability, and cartographic communication in educational processes.",
+        "stu-kicker": "Educational scope",
+        "stu-title": "Educational scope",
+        "stu-desc": "This section presents a synthesis of the educational scope. It shows the geographical location and municipal origin of the registered students.",
+        "stu-stat1-label": "Students",
+        "stu-stat2-label": "Georeferenced students",
+        "stu-stat3-label": "Registered municipalities",
+        "faq-kicker": "Key questions",
+        "faq-title": "Key questions",
+        "faq-q1": "Who is Gustavo Abel Cáceres Martínez?",
+        "faq-a1": "Gustavo Abel Cáceres Martínez is a Land Surveyor in Bolivia, with experience in GIS, multifinalitary cadastre, geodesy, cartography, GNSS, territorial planning, and geospatial analysis.",
+        "faq-q2": "In which fields does Gustavo Cáceres work?",
+        "faq-a2": "He works in cadastre and municipal management, geodesy and GNSS, thematic cartography, GIS, remote sensing, aerial photogrammetry, urban-rural planning, teaching, and applied research.",
+        "faq-q3": "Where is his territorial experience focused?",
+        "faq-a3": "His experience is mainly focused on Santa Cruz, Bolivia, with municipal projects, environmental monitoring, forest fire management, urban cartography, and geodetic networks.",
+        "faq-q4": "What kind of geoportfolio does he present?",
+        "faq-a4": "The geoportfolio includes web maps, StoryMaps, and interactive viewers on rural electricity, land cover transformation, metropolitan population, and digital cartography of Santa Cruz.",
+        "footer-kicker": "Contact",
+        "footer-desc": "I am available for technical projects, teaching, applied research, and institutional collaboration.",
+        "footer-mail-label": "Email",
+        "footer-mail-action": "Send message",
+        "footer-phone-label": "Phone",
+        "footer-phone-action": "Call now",
+        "footer-linkedin-action": "Open profile ↗",
+        "footer-portfolio-action": "View works ↗",
+        "footer-orcid-action": "View academic identity ↗",
+        "footer-researchgate-action": "View academic profile ↗",
+        "footer-github-action": "View code and projects ↗",
+        "footer-job": "Land Surveyor",
+        "footer-loc": "Santa Cruz, Bolivia",
+        "footer-copy": "©2026. All rights reserved.",
+        "form-title": "Send me a message",
+        "form-name-label": "Full Name",
+        "form-email-label": "Email Address",
+        "form-msg-label": "Message",
+        "form-submit": "Send message",
+        "form-name-placeholder": "Enter your name",
+        "form-email-placeholder": "you@email.com",
+        "form-msg-placeholder": "Write your detailed message here..."
+    }
+};
+
+function initLanguageToggle() {
+    const langBtn = document.getElementById('lang-toggle');
+    if (!langBtn) return;
+
+    // Read stored language or default to 'es'
+    const storedLang = localStorage.getItem('language') || 'es';
+    translatePage(storedLang);
+    langBtn.textContent = storedLang === 'es' ? 'EN' : 'ES';
+
+    langBtn.addEventListener('click', () => {
+        const currentLang = localStorage.getItem('language') || 'es';
+        const nextLang = currentLang === 'es' ? 'en' : 'es';
+        
+        translatePage(nextLang);
+        localStorage.setItem('language', nextLang);
+        langBtn.textContent = nextLang === 'es' ? 'EN' : 'ES';
+        
+        // dynamic visual feedback
+        langBtn.style.transform = 'scale(0.85)';
+        setTimeout(() => langBtn.style.transform = '', 150);
+    });
+}
+
+function translatePage(lang) {
+    const dict = translations[lang];
+    if (!dict) return;
+
+    // Update document language tag
+    document.documentElement.setAttribute('lang', lang);
+
+    // Translate content elements
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) {
+            el.textContent = dict[key];
+        }
+    });
+
+    // Translate placeholder elements
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) {
+            el.setAttribute('placeholder', dict[key]);
+        }
+    });
+}
+
+/* 3. Grid Filters Engine */
+function initPortfolioFilters() {
+    const setups = [
+        { filtersId: 'projects-filters', itemsClass: 'expertise-card' },
+        { filtersId: 'geo-filters', itemsClass: 'gallery-card' },
+        { filtersId: 'gallery-filters', itemsClass: 'gallery-card' }
+    ];
+
+    setups.forEach(({ filtersId, itemsClass }) => {
+        const filterContainer = document.getElementById(filtersId);
+        if (!filterContainer) return;
+
+        const buttons = filterContainer.querySelectorAll('.filter-btn');
+        const parentSection = filterContainer.closest('section');
+        if (!parentSection) return;
+
+        const items = parentSection.querySelectorAll(`.${itemsClass}`);
+
+        buttons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                // Toggle active state
+                buttons.forEach((b) => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filterVal = btn.getAttribute('data-filter');
+
+                items.forEach((item) => {
+                    const cat = item.getAttribute('data-category');
+                    if (filterVal === 'all' || cat === filterVal) {
+                        // Smooth scale-fade reveal
+                        item.classList.remove('is-hidden');
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        // Smooth scale-fade hide
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.92)';
+                        setTimeout(() => {
+                            if (item.style.opacity === '0') {
+                                item.classList.add('is-hidden');
+                            }
+                        }, 350);
+                    }
+                });
+            });
+        });
+    });
+}
+
+/* 4. Touch & Keyboard Responsive Gallery Lightbox */
+function initLightbox() {
+    const gallery = document.getElementById('lightbox-gallery');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    
+    if (!gallery || !lightbox || !lightboxImg || !lightboxCaption) return;
+
+    const cards = Array.from(gallery.querySelectorAll('.gallery-card'));
+    const images = cards.map(c => c.querySelector('img')).filter(Boolean);
+    let currentIndex = -1;
+
+    // Attach click listeners to cards
+    cards.forEach((card, index) => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', (e) => {
+            // Prevent interference with internal links (if any)
+            if (e.target.closest('a')) return;
+            
+            currentIndex = index;
+            openLightbox(images[currentIndex]);
+        });
+    });
+
+    function openLightbox(imgEl) {
+        if (!imgEl) return;
+        
+        lightboxImg.src = imgEl.src;
+        lightboxImg.alt = imgEl.alt;
+        
+        const fig = imgEl.closest('figure');
+        const captionStrong = fig?.querySelector('figcaption strong')?.textContent || '';
+        const captionSpan = fig?.querySelector('figcaption span')?.textContent || '';
+        
+        lightboxCaption.innerHTML = captionStrong ? `<strong>${captionStrong}</strong><br><span>${captionSpan}</span>` : '';
+        
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden'; // Lock scrolling
+    }
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            lightboxImg.src = '';
+            lightboxCaption.textContent = '';
+        }, 300);
+    }
+
+    function showNext() {
+        if (currentIndex === -1 || images.length === 0) return;
+        currentIndex = (currentIndex + 1) % images.length;
+        
+        // Smooth slide cross-fade
+        lightboxImg.style.opacity = '0';
+        setTimeout(() => {
+            openLightbox(images[currentIndex]);
+            lightboxImg.style.opacity = '1';
+        }, 150);
+    }
+
+    function showPrev() {
+        if (currentIndex === -1 || images.length === 0) return;
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        
+        lightboxImg.style.opacity = '0';
+        setTimeout(() => {
+            openLightbox(images[currentIndex]);
+            lightboxImg.style.opacity = '1';
+        }, 150);
+    }
+
+    // Modal control actions
+    lightbox.querySelector('.lightbox-close')?.addEventListener('click', closeLightbox);
+    lightbox.querySelector('.lightbox-prev')?.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+    lightbox.querySelector('.lightbox-next')?.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+    
+    // Close on click outside content
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
+            closeLightbox();
+        }
+    });
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        
+        if (e.key === 'Escape') closeLightbox();
+        else if (e.key === 'ArrowRight') showNext();
+        else if (e.key === 'ArrowLeft') showPrev();
+    });
+
+    // Swipe touch navigation support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    
+    lightbox.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const threshold = 50;
+        if (touchEndX < touchStartX - threshold) {
+            showNext(); // Swipe left -> Next image
+        } else if (touchEndX > touchStartX + threshold) {
+            showPrev(); // Swipe right -> Previous image
+        }
+    }
+}
+
+/* 5. Asynchronous AJAX Contact Form Submission */
+function initContactForm() {
+    const form = document.getElementById('contact-form');
+    const statusDiv = document.getElementById('form-status');
+    
+    if (!form || !statusDiv) return;
+
+    const submitBtn = form.querySelector('.form-submit-btn');
+    const btnText = submitBtn?.querySelector('.btn-text');
+    const btnSpinner = submitBtn?.querySelector('.btn-spinner');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // 1. Loading state styling
+        statusDiv.className = 'form-status is-hidden';
+        if (btnText && btnSpinner) {
+            btnText.classList.add('is-hidden');
+            btnSpinner.classList.remove('is-hidden');
+            submitBtn.disabled = true;
+        }
+
+        const formData = new FormData(form);
+        const currentLang = localStorage.getItem('language') || 'es';
+
+        try {
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Success message
+                statusDiv.classList.remove('is-hidden', 'error');
+                statusDiv.classList.add('success');
+                statusDiv.textContent = currentLang === 'es' 
+                    ? '¡Tu mensaje ha sido enviado con éxito! Gustavo se pondrá en contacto pronto.' 
+                    : 'Your message has been sent successfully! Gustavo will contact you soon.';
+                form.reset();
+            } else {
+                // Error response
+                throw new Error(result.message || 'Error en el servidor');
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            // Error message
+            statusDiv.classList.remove('is-hidden', 'success');
+            statusDiv.classList.add('error');
+            statusDiv.textContent = currentLang === 'es'
+                ? 'Lo sentimos, hubo un problema al enviar tu mensaje. Por favor intenta de nuevo o comunícate vía correo directo.'
+                : 'Sorry, there was a problem sending your message. Please try again or contact via direct email.';
+        } finally {
+            // Restore button state
+            if (btnText && btnSpinner) {
+                btnText.classList.remove('is-hidden');
+                btnSpinner.classList.add('is-hidden');
+                submitBtn.disabled = false;
+            }
+        }
+    });
 }
