@@ -6,13 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollSpy();
     initCounters();
     initHeroGlobe();
+    initThemeToggle();
     initCareerMap();
     initStudentsMap();
-    initThemeToggle();
     initLanguageToggle();
     initPortfolioFilters();
     initLightbox();
     initContactForm();
+    init3DTilt();
 });
 
 function initReveal() {
@@ -146,7 +147,7 @@ function initMobileNav() {
 
 function initScrollSpy() {
     const nav = document.querySelector('.site-nav');
-    const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
+    const navLinks = Array.from(document.querySelectorAll('.nav-links a'));
     const aboutToggle = document.querySelector('[aria-controls="about-submenu"]');
     const projectToggle = document.querySelector('[aria-controls="projects-submenu"]');
     const researchToggle = document.querySelector('[aria-controls="research-submenu"]');
@@ -155,11 +156,20 @@ function initScrollSpy() {
         return;
     }
 
+    const normalizePath = (path) => {
+        const cleanPath = path.replace(/\/$/, '');
+        return cleanPath.endsWith('/index.html') || cleanPath === '' ? cleanPath.replace(/\/index.html$/, '') : cleanPath;
+    };
+
+    const currentPath = normalizePath(window.location.pathname);
+
     const navItems = navLinks
         .map((link) => {
-            const targetId = link.getAttribute('href');
+            const url = new URL(link.href, window.location.href);
+            const targetId = url.hash;
+            const isSamePage = normalizePath(url.pathname) === currentPath;
 
-            if (!targetId) {
+            if (!targetId || !isSamePage) {
                 return null;
             }
 
@@ -201,7 +211,7 @@ function initScrollSpy() {
         const isProjectActive = ['#projects', '#geoportfolio', '#gallery', '#map'].includes(activeId);
         projectToggle?.classList.toggle('is-active', isProjectActive);
 
-        const isAboutActive = ['#profile', '#trajectory', '#recognition'].includes(activeId);
+        const isAboutActive = ['#profile', '#trajectory', '#recognition', '#faq'].includes(activeId);
         aboutToggle?.classList.toggle('is-active', isAboutActive);
 
         const isResearchActive = ['#research-teaching', '#university-teaching', '#students'].includes(activeId);
@@ -242,7 +252,12 @@ function initScrollSpy() {
 
     navLinks.forEach((link) => {
         link.addEventListener('click', () => {
-            setActiveLink(link.getAttribute('href'));
+            const url = new URL(link.href, window.location.href);
+
+            if (normalizePath(url.pathname) === currentPath && url.hash) {
+                setActiveLink(url.hash);
+            }
+
             window.setTimeout(requestUpdate, 180);
         });
     });
@@ -524,18 +539,6 @@ function initHeroGlobe() {
 
     function drawBackground() {
         const isLight = document.documentElement.classList.contains('light-theme');
-        const background = context.createLinearGradient(0, 0, width, height);
-        if (isLight) {
-            background.addColorStop(0, '#f8fafc');
-            background.addColorStop(0.55, '#f1f5f9');
-            background.addColorStop(1, '#e2e8f0');
-        } else {
-            background.addColorStop(0, '#243139');
-            background.addColorStop(0.55, '#2b3942');
-            background.addColorStop(1, '#1f2a31');
-        }
-        context.fillStyle = background;
-        context.fillRect(0, 0, width, height);
 
         context.save();
         context.globalAlpha = isLight ? 0.05 : 0.08;
@@ -578,23 +581,71 @@ function initHeroGlobe() {
 }
 
 
+window.activeMaps = [];
+
+function setupMapLayers(map) {
+    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+    });
+
+    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+    });
+
+    const isLight = document.documentElement.classList.contains('light-theme');
+    if (isLight) {
+        lightLayer.addTo(map);
+    } else {
+        darkLayer.addTo(map);
+    }
+
+    window.activeMaps.push({ map, darkLayer, lightLayer });
+
+    return { darkLayer, lightLayer };
+}
+
+function updateMapThemes(isLight) {
+    if (window.activeMaps) {
+        window.activeMaps.forEach(({ map, darkLayer, lightLayer }) => {
+            if (isLight) {
+                if (map.hasLayer(darkLayer)) {
+                    map.removeLayer(darkLayer);
+                }
+                if (!map.hasLayer(lightLayer)) {
+                    map.addLayer(lightLayer);
+                }
+            } else {
+                if (map.hasLayer(lightLayer)) {
+                    map.removeLayer(lightLayer);
+                }
+                if (!map.hasLayer(darkLayer)) {
+                    map.addLayer(darkLayer);
+                }
+            }
+        });
+    }
+}
+
 function initCareerMap() {
     const mapElement = document.getElementById('career-map');
     if (!mapElement || typeof L === 'undefined') {
         return;
     }
 
+    const isMobile = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+
     const map = L.map(mapElement, {
         center: [-17.2, -62.8],
         zoom: 6,
-        scrollWheelZoom: true
+        scrollWheelZoom: !isMobile,
+        tap: !isMobile
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19
-    }).addTo(map);
+    setupMapLayers(map);
 
     let boliviaLayer = null;
     let regionsLayer = null;
@@ -670,11 +721,14 @@ function initCareerMap() {
     }
 
     function getDepartmentLayerStyle() {
+        const isLight = document.documentElement.classList.contains('light-theme');
+
         return {
-            color: '#fff4d6',
-            weight: 2,
-            opacity: 0.95,
-            fillOpacity: 0
+            color: isLight ? '#9c653c' : '#fff4d6',
+            weight: isLight ? 1.9 : 2,
+            opacity: isLight ? 0.88 : 0.95,
+            fillColor: isLight ? '#d6b374' : '#fff4d6',
+            fillOpacity: isLight ? 0.08 : 0
         };
     }
 
@@ -877,6 +931,13 @@ function initCareerMap() {
     }).catch(() => {
         document.getElementById('career-map-loader')?.classList.add('is-hidden');
     });
+
+    document.addEventListener('themechange', () => {
+        boliviaLayer?.setStyle(getBoliviaLayerStyle());
+        regionsLayer?.setStyle(getRegionLayerStyle);
+        departmentLayer?.setStyle(getDepartmentLayerStyle());
+        departmentsBoliviaLayer?.setStyle(getDepartmentsBoliviaLayerStyle());
+    });
 }
 
 async function initStudentsMap() {
@@ -892,13 +953,16 @@ async function initStudentsMap() {
         L.latLng(-9.5, -57.3)
     );
 
+    const isMobile = window.matchMedia('(max-width: 768px)').matches || ('ontouchstart' in window);
+
     const map = L.map(mapElement, {
         center: [-17.35, -64.65],
         zoom: 5.9,
         preferCanvas: true,
-        scrollWheelZoom: true,
+        scrollWheelZoom: !isMobile,
         minZoom: 1,
-        maxZoom: 18
+        maxZoom: 18,
+        tap: !isMobile
     });
 
     map.createPane('studentsDepartments');
@@ -907,12 +971,7 @@ async function initStudentsMap() {
     map.createPane('studentsMarkers');
     map.getPane('studentsMarkers').style.zIndex = '430';
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19,
-        noWrap: true
-    }).addTo(map);
+    setupMapLayers(map);
 
     try {
         const boliviaResponse = await fetch('data/Bolivia.geojson');
@@ -1216,22 +1275,29 @@ function initThemeToggle() {
     // Read stored theme preference or use system preference
     const storedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isLight = storedTheme === 'light' || (!storedTheme && !systemPrefersDark);
     
-    if (storedTheme === 'light' || (!storedTheme && !systemPrefersDark)) {
+    if (isLight) {
         document.documentElement.classList.add('light-theme');
-        themeBtn.textContent = '☀️';
+        themeBtn.setAttribute('aria-pressed', 'true');
     } else {
         document.documentElement.classList.remove('light-theme');
-        themeBtn.textContent = '🌙';
+        themeBtn.setAttribute('aria-pressed', 'false');
     }
 
     themeBtn.addEventListener('click', () => {
-        const isLight = document.documentElement.classList.toggle('light-theme');
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        themeBtn.textContent = isLight ? '☀️' : '🌙';
+        const nextLight = document.documentElement.classList.toggle('light-theme');
+        localStorage.setItem('theme', nextLight ? 'light' : 'dark');
+        themeBtn.setAttribute('aria-pressed', String(nextLight));
         
+        // Sincronizar mapas de Leaflet con el tema seleccionado
+        if (typeof updateMapThemes === 'function') {
+            updateMapThemes(nextLight);
+        }
+        document.dispatchEvent(new CustomEvent('themechange', { detail: { isLight: nextLight } }));
+
         // Dynamic animation/scale effect
-        themeBtn.style.transform = 'scale(0.85)';
+        themeBtn.style.transform = 'scale(0.92)';
         setTimeout(() => themeBtn.style.transform = '', 150);
     });
 }
@@ -1265,7 +1331,8 @@ const translations = {
         "hero-line-3": "Cartografía para planificación urbana-rural y gestión ambiental",
         "about-kicker": "Sobre mí",
         "about-title": "Sobre mí",
-        "about-text": "Soy Ingeniero Agrimensor con experiencia en cartografía, geodesia, planificación territorial, catastro y sistemas de información geográfica. He desarrollado investigaciones sobre modelos de trayectoria de estaciones GNSS y he participado en proyectos vinculados al desarrollo urbano, el monitoreo geoespacial y la actualización catastral. Mi trabajo se ha orientado a la innovación aplicada, especialmente mediante el uso de SIG libre para el fortalecimiento del catastro multifinalitario. Asimismo, he brindado asistencia técnica en gestión del riesgo de incendios forestales, trabajos de gravimetría y docencia en programas de pregrado y postgrado. He liderado procesos de análisis urbano-rural y modernización catastral, promoviendo la implementación de sistemas de referencia geodésicos modernos y enfoques de catastro multifinalitario, con un firme compromiso con la formulación y aplicación de políticas territoriales y ambientales.",
+        "about-text-1": "Soy Ingeniero Agrimensor con experiencia en cartografía, geodesia, planificación territorial, catastro y sistemas de información geográfica. He desarrollado investigaciones sobre modelos de trayectoria de estaciones GNSS y he participado en proyectos vinculados al desarrollo urbano, el monitoreo geoespacial y la actualización catastral. Mi trabajo se ha orientado a la innovación aplicada, especialmente mediante el uso de SIG libre para el fortalecimiento del catastro multifinalitario.",
+        "about-text-2": "Asimismo, he brindado asistencia técnica en gestión del riesgo de incendios forestales, trabajos de gravimetría y docencia en programas de pregrado y postgrado. He liderado procesos de análisis urbano-rural y modernización catastral, promoviendo la implementación de sistemas de referencia geodésicos modernos y enfoques de catastro multifinalitario, con un firme compromiso con la formulación y aplicación de políticas territoriales y ambientales.",
         "pill-catastro": "Catastro multifinalitario",
         "pill-geodesia": "Geodesia",
         "pill-cartografia": "Cartografía",
@@ -1410,9 +1477,9 @@ const translations = {
         "gal-img6-title": "Geodesia y topografía",
         "gal-img6-desc": "Levantamiento topográfico para determinar volúmenes de materiales en bancos de tierra.",
         "gal-img7-title": "Geodesia y topografía",
-        "gal-img7-desc": "Levantamientos catastrales de bienes inmuebles en áreas urbanas.",
+        "gal-img7-desc": "Levantamientos catastrales de bienes inmuebles en áreas urbanas extensivas.",
         "gal-img8-title": "Geodesia y topografía",
-        "gal-img8-desc": "Levantamiento y control topográfico en obra.",
+        "gal-img8-desc": "Replanteo topográfico de bienes inmuebles en áreas urbanas extensivas.",
         "map-kicker": "Alcance territorial",
         "map-title": "Alcance territorial",
         "map-desc": "Mi trayectoria se concentra en Santa Cruz, donde he desarrollado experiencia en gestión municipal, monitoreo ambiental, incendios forestales, cartografía urbana y redes geodésicas. Este mapa sintetiza el alcance geográfico de mi trabajo y los principales regiones del departamento donde he desarrollado proyectos.",
@@ -1505,7 +1572,8 @@ const translations = {
         "hero-line-3": "Cartography for urban-rural planning and environmental management",
         "about-kicker": "About me",
         "about-title": "About me",
-        "about-text": "I am a Land Surveyor with experience in cartography, geodesy, territorial planning, cadastre, and geographic information systems. I have developed research on GNSS station trajectory models and participated in projects related to urban development, geospatial monitoring, and cadastral updating. My work focuses on applied innovation, particularly using open-source GIS to strengthen multifinalitary cadastres. Additionally, I have provided technical assistance in forest fire risk management, gravimetry, and university teaching in both undergraduate and postgraduate programs. I have led urban-rural analysis and cadastral modernization processes, promoting the implementation of modern geodetic reference systems and multifinalitary cadastre approaches, with a strong commitment to territorial and environmental policy formulation and application.",
+        "about-text-1": "I am a Land Surveyor with experience in cartography, geodesy, territorial planning, cadastre, and geographic information systems. I have developed research on GNSS station trajectory models and participated in projects related to urban development, geospatial monitoring, and cadastral updating. My work focuses on applied innovation, particularly using open-source GIS to strengthen multifinalitary cadastres.",
+        "about-text-2": "Additionally, I have provided technical assistance in forest fire risk management, gravimetry, and university teaching in both undergraduate and postgraduate programs. I have led urban-rural analysis and cadastral modernization processes, promoting the implementation of modern geodetic reference systems and multifinalitary cadastre approaches, with a strong commitment to territorial and environmental policy formulation and application.",
         "pill-catastro": "Multifinalitary Cadastre",
         "pill-geodesia": "Geodesy",
         "pill-cartografia": "Cartography",
@@ -2001,5 +2069,60 @@ function initContactForm() {
                 submitBtn.disabled = false;
             }
         }
+    });
+}
+
+/* 6. Dynamic 3D Parallax Tilt Effect Engine for Desktop Grid Cards */
+function init3DTilt() {
+    const isTouch = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
+    if (isTouch) {
+        return; // Disable on touch devices for mobile performance and scroll ease
+    }
+
+    const cards = document.querySelectorAll('.expertise-card, .gallery-card');
+    cards.forEach((card) => {
+        card.style.transformStyle = 'preserve-3d';
+        card.style.perspective = '1000px';
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Limit tilt angle to a subtle, premium 8 degrees
+            const rotateX = ((centerY - y) / centerY) * 8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+            
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+            
+            // Push internal elements in 3D space
+            const innerImg = card.querySelector('img');
+            if (innerImg) {
+                innerImg.style.transform = 'translate3d(0, 0, 12px) scale(1.03)';
+            }
+            
+            const content = card.querySelector('figcaption, .expertise-content');
+            if (content) {
+                content.style.transform = 'translate3d(0, 0, 20px)';
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            // Restore styles with smooth easing
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            
+            const innerImg = card.querySelector('img');
+            if (innerImg) {
+                innerImg.style.transform = '';
+            }
+            
+            const content = card.querySelector('figcaption, .expertise-content');
+            if (content) {
+                content.style.transform = '';
+            }
+        });
     });
 }
