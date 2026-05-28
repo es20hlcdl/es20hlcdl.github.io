@@ -476,12 +476,12 @@ function initHeroGlobe() {
             const point = projectBolivia(city.lon, city.lat);
             const radius = city.name === 'La Paz' || city.name === 'Santa Cruz' ? 5 : 4;
 
-             if (city.name === 'Santa Cruz') {
+            if (city.name === 'Santa Cruz') {
                 [16, 10].forEach((ring, ringIndex) => {
                     context.beginPath();
                     context.arc(point.x, point.y, ring + Math.sin(time * 0.05) * 1.2, 0, Math.PI * 2);
-                    context.strokeStyle = isLight 
-                        ? `rgba(234, 88, 12, ${0.2 - ringIndex * 0.07})` 
+                    context.strokeStyle = isLight
+                        ? `rgba(234, 88, 12, ${0.2 - ringIndex * 0.07})`
                         : `rgba(243, 192, 58, ${0.2 - ringIndex * 0.07})`;
                     context.lineWidth = 4 - ringIndex;
                     context.stroke();
@@ -662,7 +662,7 @@ function initCareerMap() {
         metropolitana: {
             title: 'Metropolitana',
             projects: [
-                'Investigacion sobre CORS RENA.',                
+                'Investigacion sobre CORS RENA.',
                 'Analisis de la serie temporal de la estacion GNSS SCRZ.',
                 'Docente en la materia de Rutas y Mapas digitales.',
                 'Docente de postgrado en el módulo de catastro multifinalitario y desarrollo urbano.'
@@ -1276,7 +1276,7 @@ function initThemeToggle() {
     const storedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isLight = storedTheme === 'light' || (!storedTheme && !systemPrefersDark);
-    
+
     if (isLight) {
         document.documentElement.classList.add('light-theme');
         themeBtn.setAttribute('aria-pressed', 'true');
@@ -1289,7 +1289,7 @@ function initThemeToggle() {
         const nextLight = document.documentElement.classList.toggle('light-theme');
         localStorage.setItem('theme', nextLight ? 'light' : 'dark');
         themeBtn.setAttribute('aria-pressed', String(nextLight));
-        
+
         // Sincronizar mapas de Leaflet con el tema seleccionado
         if (typeof updateMapThemes === 'function') {
             updateMapThemes(nextLight);
@@ -1800,11 +1800,11 @@ function initLanguageToggle() {
     langBtn.addEventListener('click', () => {
         const currentLang = localStorage.getItem('language') || 'es';
         const nextLang = currentLang === 'es' ? 'en' : 'es';
-        
+
         translatePage(nextLang);
         localStorage.setItem('language', nextLang);
         langBtn.textContent = nextLang === 'es' ? 'EN' : 'ES';
-        
+
         // dynamic visual feedback
         langBtn.style.transform = 'scale(0.85)';
         setTimeout(() => langBtn.style.transform = '', 150);
@@ -1892,7 +1892,7 @@ function initLightbox() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const lightboxCaption = document.getElementById('lightbox-caption');
-    
+
     if (!gallery || !lightbox || !lightboxImg || !lightboxCaption) return;
 
     const cards = Array.from(gallery.querySelectorAll('.gallery-card'));
@@ -1905,7 +1905,7 @@ function initLightbox() {
         card.addEventListener('click', (e) => {
             // Prevent interference with internal links (if any)
             if (e.target.closest('a')) return;
-            
+
             currentIndex = index;
             openLightbox(images[currentIndex]);
         });
@@ -1913,16 +1913,16 @@ function initLightbox() {
 
     function openLightbox(imgEl) {
         if (!imgEl) return;
-        
+
         lightboxImg.src = imgEl.src;
         lightboxImg.alt = imgEl.alt;
-        
+
         const fig = imgEl.closest('figure');
         const captionStrong = fig?.querySelector('figcaption strong')?.textContent || '';
         const captionSpan = fig?.querySelector('figcaption span')?.textContent || '';
-        
+
         lightboxCaption.innerHTML = captionStrong ? `<strong>${captionStrong}</strong><br><span>${captionSpan}</span>` : '';
-        
+
         lightbox.classList.add('active');
         lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden'; // Lock scrolling
@@ -1941,7 +1941,7 @@ function initLightbox() {
     function showNext() {
         if (currentIndex === -1 || images.length === 0) return;
         currentIndex = (currentIndex + 1) % images.length;
-        
+
         // Smooth slide cross-fade
         lightboxImg.style.opacity = '0';
         setTimeout(() => {
@@ -1953,7 +1953,7 @@ function initLightbox() {
     function showPrev() {
         if (currentIndex === -1 || images.length === 0) return;
         currentIndex = (currentIndex - 1 + images.length) % images.length;
-        
+
         lightboxImg.style.opacity = '0';
         setTimeout(() => {
             openLightbox(images[currentIndex]);
@@ -1965,7 +1965,7 @@ function initLightbox() {
     lightbox.querySelector('.lightbox-close')?.addEventListener('click', closeLightbox);
     lightbox.querySelector('.lightbox-prev')?.addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
     lightbox.querySelector('.lightbox-next')?.addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
-    
+
     // Close on click outside content
     lightbox.addEventListener('click', (e) => {
         if (e.target === lightbox || e.target.classList.contains('lightbox-content')) {
@@ -1976,7 +1976,7 @@ function initLightbox() {
     // Keyboard support
     document.addEventListener('keydown', (e) => {
         if (!lightbox.classList.contains('active')) return;
-        
+
         if (e.key === 'Escape') closeLightbox();
         else if (e.key === 'ArrowRight') showNext();
         else if (e.key === 'ArrowLeft') showPrev();
@@ -1985,11 +1985,11 @@ function initLightbox() {
     // Swipe touch navigation support
     let touchStartX = 0;
     let touchEndX = 0;
-    
+
     lightbox.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
-    
+
     lightbox.addEventListener('touchend', (e) => {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
@@ -2009,7 +2009,7 @@ function initLightbox() {
 function initContactForm() {
     const form = document.getElementById('contact-form');
     const statusDiv = document.getElementById('form-status');
-    
+
     if (!form || !statusDiv) return;
 
     const submitBtn = form.querySelector('.form-submit-btn');
@@ -2045,8 +2045,8 @@ function initContactForm() {
                 // Success message
                 statusDiv.classList.remove('is-hidden', 'error');
                 statusDiv.classList.add('success');
-                statusDiv.textContent = currentLang === 'es' 
-                    ? '¡Tu mensaje ha sido enviado con éxito! Gustavo se pondrá en contacto pronto.' 
+                statusDiv.textContent = currentLang === 'es'
+                    ? '¡Tu mensaje ha sido enviado con éxito! Gustavo se pondrá en contacto pronto.'
                     : 'Your message has been sent successfully! Gustavo will contact you soon.';
                 form.reset();
             } else {
@@ -2088,22 +2088,22 @@ function init3DTilt() {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            
+
             // Limit tilt angle to a subtle, premium 8 degrees
             const rotateX = ((centerY - y) / centerY) * 8;
             const rotateY = ((x - centerX) / centerX) * 8;
-            
+
             card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            
+
             // Push internal elements in 3D space
             const innerImg = card.querySelector('img');
             if (innerImg) {
                 innerImg.style.transform = 'translate3d(0, 0, 12px) scale(1.03)';
             }
-            
+
             const content = card.querySelector('figcaption, .expertise-content');
             if (content) {
                 content.style.transform = 'translate3d(0, 0, 20px)';
@@ -2113,12 +2113,12 @@ function init3DTilt() {
         card.addEventListener('mouseleave', () => {
             // Restore styles with smooth easing
             card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-            
+
             const innerImg = card.querySelector('img');
             if (innerImg) {
                 innerImg.style.transform = '';
             }
-            
+
             const content = card.querySelector('figcaption, .expertise-content');
             if (content) {
                 content.style.transform = '';

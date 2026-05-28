@@ -2847,7 +2847,8 @@ main section:first-of-type {
         linear-gradient(to bottom, transparent, black 35px, black calc(100% - 35px), transparent),
         linear-gradient(to right, transparent, black 35px, black calc(100% - 35px), transparent);
     mask-composite: intersect;
-    margin-top: -3rem; /* Shift map up on desktop to align perfectly with the title block */
+    margin-top: -3rem;
+    /* Shift map up on desktop to align perfectly with the title block */
 }
 
 .hero-panel-content {
@@ -2857,7 +2858,8 @@ main section:first-of-type {
 /* Custom hero panel adjustments inside hero copy to reduce vertical gap */
 .hero-copy .hero-panel-content {
     padding: 0;
-    margin-top: 2.3rem; /* Increased breathing room to separate from hero action buttons */
+    margin-top: 2.3rem;
+    /* Increased breathing room to separate from hero action buttons */
 }
 
 .hero-copy .panel-list {
@@ -3426,4 +3428,93 @@ html.light-theme .theme-switch-icon.moon,
 .reveal.active .students-stat-card::after,
 .reveal.active .map-stat-card::after {
     transform: scaleX(1);
+}
+
+/* ==========================================================================
+   ADDED PREMIUM PROJECT FILTERS & MAP GESTURE OVERLAYS
+   ========================================================================= */
+
+.portfolio-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 1.5rem 0 2.2rem;
+    justify-content: flex-start;
+}
+
+.filter-btn {
+    border: 1px solid var(--line);
+    background: var(--card-bg);
+    color: var(--muted);
+    padding: 0.65rem 1.35rem;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    font-size: 0.84rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.filter-btn:hover {
+    background: var(--surface-alt);
+    border-color: var(--accent);
+    color: var(--surface-strong);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(223, 133, 80, 0.15);
+}
+
+.filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #ffffff !important;
+    box-shadow: 0 8px 20px rgba(223, 133, 80, 0.3);
+}
+
+.light-theme .filter-btn:hover {
+    box-shadow: 0 8px 20px rgba(234, 88, 12, 0.15);
+}
+
+.light-theme .filter-btn.active {
+    box-shadow: 0 8px 20px rgba(234, 88, 12, 0.3);
+}
+
+/* Leaflet mobile gesture overlay */
+.map-gesture-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.map-gesture-overlay.is-active {
+    opacity: 1;
+}
+
+.map-gesture-message {
+    padding: 1.15rem 1.5rem;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+    font-size: 0.92rem;
+    font-weight: 700;
+    max-width: 260px;
+    text-align: center;
+    line-height: 1.5;
+    transform: scale(0.9);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.map-gesture-overlay.is-active .map-gesture-message {
+    transform: scale(1);
 }
