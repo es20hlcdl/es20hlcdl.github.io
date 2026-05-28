@@ -322,8 +322,22 @@ button {
     display: none;
     border: 1px solid var(--line);
     background: var(--card-bg);
-    color: var(--text);
-    padding: 0.55rem 0.8rem;
+    color: var(--muted);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease, border-color 0.3s ease, transform 0.15s ease, color 0.3s ease;
+}
+
+.nav-toggle:hover,
+.nav-toggle:focus-visible {
+    background: var(--surface-alt);
+    border-color: var(--accent);
+    color: var(--surface-strong);
+    outline: none;
 }
 
 main section {
@@ -1448,7 +1462,7 @@ main section,
 }
 
 .site-footer {
-    padding: 4rem 5vw 3rem;
+    padding: 2.2rem 5vw 3rem;
     border-top: 1px solid rgba(243, 201, 138, 0.16);
     background: transparent;
 }
@@ -1714,14 +1728,33 @@ main section,
 
 @media (max-width: 760px) {
     .site-nav {
+        display: flex;
         flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .brand {
+        order: 1;
+    }
+
+    .nav-controls {
+        order: 2;
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.45rem;
     }
 
     .nav-toggle {
+        order: 3;
         display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .nav-links {
+        order: 4;
         width: 100%;
         display: none;
         flex-direction: column;
@@ -2886,7 +2919,7 @@ main section:first-of-type {
 }
 
 .site-footer {
-    padding-top: clamp(4.8rem, 7vw, 6.5rem);
+    padding-top: clamp(2.2rem, 4vh, 3rem);
     background: transparent;
 }
 
@@ -2996,7 +3029,7 @@ main section:first-of-type {
     }
 
     main section {
-        padding: 4.7rem 1.15rem;
+        padding: clamp(1.2rem, 2.2vh, 1.6rem) 1.15rem;
     }
 
     main section:first-of-type {
