@@ -1,19 +1,28 @@
 {
   "name": "Gustavo Abel Caceres Martinez",
   "short_name": "Gustavo Caceres",
+  "description": "Portafolio profesional de Gustavo Abel Caceres Martinez, especializado en SIG, catastro, geodesia, cartografia, GNSS, planificacion territorial, teledeteccion e investigacion aplicada en Bolivia.",
+  "lang": "es",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/assets/favicon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/assets/favicon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "theme_color": "#162028",
   "background_color": "#162028",
-  "display": "standalone"
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "categories": ["portfolio", "business", "education"]
 }
