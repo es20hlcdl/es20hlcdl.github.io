@@ -1,26 +1,44 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
-import { CourseForm } from "@/components/admin/CourseForm";
+import { ModuleForm } from "@/components/admin/ModuleForm";
 import { UnauthorizedAdmin } from "@/components/admin/UnauthorizedAdmin";
 import { getAdminAuth } from "@/lib/auth/admin";
-import { toggleCoursePublishAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminCoursesPage() {
+type PageProps = {
+  params: Promise<{
+    courseId: string;
+  }>;
+};
+
+export default async function AdminCourseModulesPage({ params }: PageProps) {
+  const { courseId } = await params;
   const auth = await getAdminAuth();
 
   if (!auth.isAdmin) {
     return <UnauthorizedAdmin />;
   }
 
-  const { data: courses, error } = await auth.supabase
+  const { data: course } = await auth.supabase
     .from("courses")
     .select("id, title, description, is_published, created_at")
-    .order("created_at", { ascending: false });
+    .eq("id", courseId)
+    .maybeSingle();
+
+  if (!course) {
+    notFound();
+  }
+
+  const { data: modules, error } = await auth.supabase
+    .from("course_modules")
+    .select("id, course_id, title, description, position, created_at")
+    .eq("course_id", courseId)
+    .order("position", { ascending: true });
 
   if (error) {
-    console.error("Error loading admin courses", {
+    console.error("Error loading modules", {
       message: error.message,
       details: error.details,
       hint: error.hint,
@@ -30,66 +48,52 @@ export default async function AdminCoursesPage() {
 
   return (
     <AdminPageShell
-      title="Gestionar cursos"
-      description="Crea, edita y cambia el estado de publicacion."
+      title={`Modulos: ${course.title}`}
+      description="Crea y ordena modulos del curso."
     >
       <div className="grid gap-6 lg:grid-cols-[minmax(280px,360px)_1fr]">
         <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-slate-950">
-            Nuevo curso
+            Nuevo modulo
           </h2>
-          <CourseForm />
+          <ModuleForm courseId={courseId} />
         </div>
 
         <div className="space-y-4">
           {error ? (
             <div className="rounded-lg border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-              No se pudieron cargar los cursos.
+              No se pudieron cargar los modulos.
             </div>
           ) : null}
 
-          {!error && courses?.length === 0 ? (
+          {!error && modules?.length === 0 ? (
             <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center text-slate-600">
-              Todavia no hay cursos creados.
+              Todavia no hay modulos creados.
             </div>
           ) : null}
 
-          {courses?.map((course) => (
+          {modules?.map((module) => (
             <article
-              key={course.id}
+              key={module.id}
               className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
             >
               <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-950">
-                    {course.title}
-                  </h2>
-                  <p className="mt-1 text-xs text-slate-500">
-                    {course.is_published ? "Publicado" : "Borrador"}
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
+                    Posicion {module.position}
                   </p>
+                  <h2 className="mt-1 text-lg font-semibold text-slate-950">
+                    {module.title}
+                  </h2>
                 </div>
-                <form action={toggleCoursePublishAction}>
-                  <input type="hidden" name="id" value={course.id} />
-                  <input
-                    type="hidden"
-                    name="is_published"
-                    value={String(course.is_published)}
-                  />
-                  <button
-                    type="submit"
-                    className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                  >
-                    {course.is_published ? "Despublicar" : "Publicar"}
-                  </button>
-                </form>
                 <Link
-                  href={`/dashboard/admin/courses/${course.id}/modules`}
+                  href={`/dashboard/admin/modules/${module.id}/lessons`}
                   className="rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
                 >
-                  Modulos
+                  Ver lecciones
                 </Link>
               </div>
-              <CourseForm course={course} />
+              <ModuleForm courseId={courseId} module={module} />
             </article>
           ))}
         </div>

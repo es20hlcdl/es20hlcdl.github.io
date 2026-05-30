@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { CourseCard } from "@/components/CourseCard";
 import { createClient } from "@/lib/supabase/server";
 
@@ -144,16 +145,21 @@ export default async function MyCoursesPage() {
 
   return (
     <CoursesPageShell>
-      <div className="grid gap-4 md:grid-cols-2">
-        {visibleEnrollments.map((enrollment) => (
-          <CourseCard
-            key={enrollment.id}
-            title={enrollment.course?.title ?? "Curso"}
-            description={enrollment.course?.description ?? null}
-            status={enrollment.status}
-          />
-        ))}
-      </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {visibleEnrollments.map((enrollment) => (
+            <Link
+              key={enrollment.id}
+              href={`/dashboard/courses/${enrollment.course_id}`}
+              className="block"
+            >
+              <CourseCard
+                title={enrollment.course?.title ?? "Curso"}
+                description={enrollment.course?.description ?? null}
+                status={enrollment.status}
+              />
+            </Link>
+          ))}
+        </div>
     </CoursesPageShell>
   );
 }
