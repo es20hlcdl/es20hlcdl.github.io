@@ -38,13 +38,21 @@ export default async function DashboardPage() {
             {profile?.role ?? "student"}
           </span>
         </p>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-wrap gap-3">
           <Link
             href="/dashboard/courses"
             className="rounded-md bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
           >
             Ver mis cursos
           </Link>
+          {profile?.role === "admin" ? (
+            <Link
+              href="/dashboard/admin"
+              className="rounded-md border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              Panel admin
+            </Link>
+          ) : null}
         </div>
       </div>
     </section>

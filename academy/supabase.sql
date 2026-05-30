@@ -47,6 +47,8 @@ grant usage on schema public to authenticated;
 grant select on public.profiles to authenticated;
 grant select on public.courses to authenticated;
 grant select on public.enrollments to authenticated;
+grant insert, update on public.courses to authenticated;
+grant insert, update on public.enrollments to authenticated;
 
 create function public.handle_new_user()
 returns trigger
@@ -70,12 +72,35 @@ create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.handle_new_user();
 
+create or replace function public.is_admin()
+returns boolean
+language sql
+security definer
+set search_path = public
+as $$
+  select exists (
+    select 1
+    from public.profiles
+    where profiles.id = auth.uid()
+      and profiles.role = 'admin'
+  );
+$$;
+
+grant execute on function public.is_admin() to authenticated;
+
 drop policy if exists "Users can read own profile" on public.profiles;
 create policy "Users can read own profile"
 on public.profiles
 for select
 to authenticated
 using (auth.uid() = id);
+
+drop policy if exists "Admins can read profiles" on public.profiles;
+create policy "Admins can read profiles"
+on public.profiles
+for select
+to authenticated
+using (public.is_admin());
 
 drop policy if exists "Authenticated users can read published courses" on public.courses;
 create policy "Authenticated users can read published courses"
@@ -110,41 +135,13 @@ create policy "Admins can manage courses"
 on public.courses
 for all
 to authenticated
-using (
-  exists (
-    select 1
-    from public.profiles
-    where profiles.id = auth.uid()
-      and profiles.role = 'admin'
-  )
-)
-with check (
-  exists (
-    select 1
-    from public.profiles
-    where profiles.id = auth.uid()
-      and profiles.role = 'admin'
-  )
-);
+using (public.is_admin())
+with check (public.is_admin());
 
 drop policy if exists "Admins can manage enrollments" on public.enrollments;
 create policy "Admins can manage enrollments"
 on public.enrollments
 for all
 to authenticated
-using (
-  exists (
-    select 1
-    from public.profiles
-    where profiles.id = auth.uid()
-      and profiles.role = 'admin'
-  )
-)
-with check (
-  exists (
-    select 1
-    from public.profiles
-    where profiles.id = auth.uid()
-      and profiles.role = 'admin'
-  )
-);
+using (public.is_admin())
+with check (public.is_admin());

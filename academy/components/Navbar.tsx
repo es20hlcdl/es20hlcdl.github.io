@@ -8,6 +8,7 @@ export async function Navbar() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   let isAuthenticated = false;
+  let isAdmin = false;
 
   if (hasSupabaseConfig) {
     const supabase = await createClient();
@@ -16,6 +17,16 @@ export async function Navbar() {
     } = await supabase.auth.getUser();
 
     isAuthenticated = Boolean(user);
+
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      isAdmin = profile?.role === "admin";
+    }
   }
 
   return (
@@ -39,6 +50,14 @@ export async function Navbar() {
               >
                 Mis cursos
               </Link>
+              {isAdmin ? (
+                <Link
+                  href="/dashboard/admin"
+                  className="rounded-md px-3 py-2 text-slate-700 hover:bg-slate-100"
+                >
+                  Admin
+                </Link>
+              ) : null}
               <SignOutButton />
             </>
           ) : (
