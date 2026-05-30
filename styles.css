@@ -852,6 +852,111 @@ main section,
     gap: 1.2rem;
 }
 
+.courses-section {
+    background: transparent;
+}
+
+.courses-intro {
+    max-width: 980px;
+    margin: -1.2rem 0 2rem;
+    color: var(--muted);
+    font-size: clamp(1rem, 1.3vw, 1.12rem);
+    line-height: 1.8;
+}
+
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+}
+
+.course-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 1.6rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.course-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(240, 195, 106, 0.34);
+}
+
+.course-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    margin-bottom: 0.85rem;
+}
+
+.course-card h3 {
+    margin: 0;
+    color: var(--surface-strong);
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    line-height: 1.25;
+}
+
+.course-card p {
+    flex: 1;
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.75;
+}
+
+.course-status {
+    align-self: flex-start;
+    padding: 0.28rem 0.7rem;
+    border: 1px solid rgba(240, 195, 106, 0.35);
+    border-radius: 6px;
+    color: var(--accent);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.course-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.25rem 0 1.4rem;
+}
+
+.course-tags span {
+    padding: 0.34rem 0.62rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.course-action {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--surface-strong);
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.course-action:hover,
+.course-action:focus-visible {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
 @media (max-width: 1150px) {
 
     .expertise-grid,
@@ -864,6 +969,10 @@ main section,
 
     .expertise-grid,
     .research-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .courses-grid {
         grid-template-columns: 1fr;
     }
 }
@@ -2363,6 +2472,7 @@ html.light-theme body {
 .light-theme .expertise-section,
 .light-theme .gallery-section,
 .light-theme .geoportfolio-section,
+.light-theme .courses-section,
 .light-theme .research-section,
 .light-theme .teaching-section,
 .light-theme .students-section,
@@ -2787,6 +2897,7 @@ main section:first-of-type {
 
 .expertise-grid,
 .research-grid,
+.courses-grid,
 .faq-layout,
 .gallery-layout,
 .recognition-list {
@@ -2800,6 +2911,7 @@ main section:first-of-type {
 .faq-card,
 .expertise-card,
 .research-card,
+.course-card,
 .mini-card,
 .timeline-body,
 .map-stat-card,
@@ -2817,6 +2929,7 @@ main section:first-of-type {
 
 .expertise-card,
 .research-card,
+.course-card,
 .mini-card,
 .timeline-body,
 .map-sidebar,
@@ -2836,6 +2949,7 @@ main section:first-of-type {
 .recognition-feature p,
 .research-card p,
 .expertise-card p,
+.course-card p,
 .timeline-body p,
 .mini-card p,
 .students-sidebar p,
@@ -2848,6 +2962,8 @@ main section:first-of-type {
 .hero-badges span,
 .expertise-tag,
 .expertise-pills span,
+.course-status,
+.course-tags span,
 .research-status {
     border-radius: 6px;
 }
@@ -3173,6 +3289,7 @@ main section:first-of-type {
 
     .expertise-card,
     .research-card,
+    .course-card,
     .mini-card,
     .timeline-body,
     .map-sidebar,
