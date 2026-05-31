@@ -11,6 +11,18 @@ type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 type Course = Database["public"]["Tables"]["courses"]["Row"];
 type Enrollment = Database["public"]["Tables"]["enrollments"]["Row"];
 type StudentProfile = Pick<Profile, "id" | "email" | "full_name" | "role">;
+type CourseModule = Pick<
+  Database["public"]["Tables"]["course_modules"]["Row"],
+  "id" | "course_id"
+>;
+type PublishedLesson = Pick<
+  Database["public"]["Tables"]["lessons"]["Row"],
+  "id" | "module_id"
+>;
+type LessonProgress = Pick<
+  Database["public"]["Tables"]["lesson_progress"]["Row"],
+  "user_id" | "lesson_id" | "completed"
+>;
 
 function logAdminError(context: string, error: {
   message: string;
@@ -69,9 +81,104 @@ export default async function AdminEnrollmentsPage() {
   const enrollments = enrollmentsResult.data ?? [];
   const studentById = new Map(students.map((student) => [student.id, student]));
   const courseById = new Map(courses.map((course) => [course.id, course]));
-  const hasError = Boolean(
+  let hasError = Boolean(
     profilesResult.error || coursesResult.error || enrollmentsResult.error,
   );
+
+  const courseIds = Array.from(
+    new Set(enrollments.map((enrollment) => enrollment.course_id)),
+  );
+  const userIds = Array.from(
+    new Set(enrollments.map((enrollment) => enrollment.user_id)),
+  );
+
+  const { data: modules, error: modulesError } = courseIds.length
+    ? await auth.supabase
+        .from("course_modules")
+        .select("id, course_id")
+        .in("course_id", courseIds)
+        .returns<CourseModule[]>()
+    : { data: [], error: null };
+
+  if (modulesError) {
+    logAdminError("Error loading enrollment course modules", modulesError);
+    hasError = true;
+  }
+
+  const courseModules = modules ?? [];
+  const moduleIds = courseModules.map((module) => module.id);
+  const { data: lessons, error: lessonsError } = moduleIds.length
+    ? await auth.supabase
+        .from("lessons")
+        .select("id, module_id")
+        .in("module_id", moduleIds)
+        .eq("is_published", true)
+        .returns<PublishedLesson[]>()
+    : { data: [], error: null };
+
+  if (lessonsError) {
+    logAdminError("Error loading enrollment published lessons", lessonsError);
+    hasError = true;
+  }
+
+  const moduleCourseById = new Map(
+    courseModules.map((module) => [module.id, module.course_id]),
+  );
+  const publishedLessons = lessons ?? [];
+  const lessonsByCourse = new Map<string, PublishedLesson[]>();
+  const lessonCourseById = new Map<string, string>();
+
+  publishedLessons.forEach((lesson) => {
+    const courseId = moduleCourseById.get(lesson.module_id);
+
+    if (!courseId) {
+      return;
+    }
+
+    const current = lessonsByCourse.get(courseId) ?? [];
+    current.push(lesson);
+    lessonsByCourse.set(courseId, current);
+    lessonCourseById.set(lesson.id, courseId);
+  });
+
+  const publishedLessonIds = publishedLessons.map((lesson) => lesson.id);
+  const { data: lessonProgress, error: lessonProgressError } =
+    publishedLessonIds.length && userIds.length
+      ? await auth.supabase
+          .from("lesson_progress")
+          .select("user_id, lesson_id, completed")
+          .in("user_id", userIds)
+          .in("lesson_id", publishedLessonIds)
+          .eq("completed", true)
+          .returns<LessonProgress[]>()
+      : { data: [], error: null };
+
+  if (lessonProgressError) {
+    console.error("lessonProgressError", lessonProgressError);
+    logAdminError("Error loading enrollment lesson progress", lessonProgressError);
+    hasError = true;
+  }
+
+  const completedLessonsByEnrollment = new Map<string, Set<string>>();
+
+  lessonProgress?.forEach((item) => {
+    if (!item.completed) {
+      return;
+    }
+
+    const courseId = lessonCourseById.get(item.lesson_id);
+
+    if (!courseId) {
+      return;
+    }
+
+    const enrollmentKey = `${item.user_id}:${courseId}`;
+    const completedLessons =
+      completedLessonsByEnrollment.get(enrollmentKey) ?? new Set<string>();
+
+    completedLessons.add(item.lesson_id);
+    completedLessonsByEnrollment.set(enrollmentKey, completedLessons);
+  });
 
   return (
     <AdminPageShell
@@ -122,6 +229,15 @@ export default async function AdminEnrollmentsPage() {
           {enrollments.map((enrollment) => {
             const student = studentById.get(enrollment.user_id);
             const course = courseById.get(enrollment.course_id);
+            const courseLessons = lessonsByCourse.get(enrollment.course_id) ?? [];
+            const totalPublishedLessons = courseLessons.length;
+            const enrollmentProgressKey = `${enrollment.user_id}:${enrollment.course_id}`;
+            const completedLessons =
+              completedLessonsByEnrollment.get(enrollmentProgressKey)?.size ?? 0;
+            const progressPercent =
+              totalPublishedLessons > 0
+                ? Math.round((completedLessons / totalPublishedLessons) * 100)
+                : 0;
 
             return (
               <article
@@ -156,6 +272,29 @@ export default async function AdminEnrollmentsPage() {
                   id={enrollment.id}
                   status={enrollment.status}
                 />
+                <div className="mt-5 border-t border-slate-200 pt-4">
+                  {totalPublishedLessons > 0 ? (
+                    <>
+                      <div className="mb-2 flex justify-between gap-4 text-sm font-medium text-slate-700">
+                        <span>
+                          Avance: {completedLessons} de {totalPublishedLessons}{" "}
+                          lecciones
+                        </span>
+                        <span>{progressPercent}%</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-slate-200">
+                        <div
+                          className="h-2 rounded-full bg-emerald-600"
+                          style={{ width: `${progressPercent}%` }}
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <p className="rounded-md border border-dashed border-slate-300 p-3 text-sm text-slate-600">
+                      Este curso aún no tiene lecciones publicadas.
+                    </p>
+                  )}
+                </div>
               </article>
             );
           })}

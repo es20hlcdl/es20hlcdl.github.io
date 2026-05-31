@@ -140,6 +140,7 @@ returns boolean
 language sql
 security definer
 set search_path = public
+stable
 as $$
   select exists (
     select 1
@@ -234,6 +235,7 @@ using (public.is_admin())
 with check (public.is_admin());
 
 drop policy if exists "Admins can read lesson progress" on public.lesson_progress;
+grant select on public.lesson_progress to authenticated;
 create policy "Admins can read lesson progress"
 on public.lesson_progress
 for select
