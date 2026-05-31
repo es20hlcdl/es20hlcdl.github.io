@@ -112,6 +112,9 @@ export default async function StudentCoursePage({ params }: PageProps) {
     current.push(lesson);
     lessonsByModule.set(lesson.module_id, current);
   });
+  const visibleModules =
+    modules?.filter((module) => (lessonsByModule.get(module.id) ?? []).length > 0) ??
+    [];
 
   const completedLessonIds = new Set(
     progress
@@ -152,8 +155,8 @@ export default async function StudentCoursePage({ params }: PageProps) {
       </div>
 
       <div className="space-y-5">
-        {modules && modules.length > 0 ? (
-          modules.map((module) => {
+        {visibleModules.length > 0 ? (
+          visibleModules.map((module) => {
             const moduleLessons = lessonsByModule.get(module.id) ?? [];
 
             return (
@@ -172,51 +175,45 @@ export default async function StudentCoursePage({ params }: PageProps) {
                   ) : null}
                 </div>
 
-                {moduleLessons.length > 0 ? (
-                  <div className="divide-y divide-slate-200 rounded-lg border border-slate-200">
-                    {moduleLessons.map((lesson) => {
-                      const isCompleted = completedLessonIds.has(lesson.id);
+                <div className="divide-y divide-slate-200 rounded-lg border border-slate-200">
+                  {moduleLessons.map((lesson) => {
+                    const isCompleted = completedLessonIds.has(lesson.id);
 
-                      return (
-                        <div
-                          key={lesson.id}
-                          className="flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between"
-                        >
-                          <div>
-                            <h3 className="font-semibold text-slate-950">
-                              {lesson.title}
-                            </h3>
-                            <span
-                              className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
-                                isCompleted
-                                  ? "bg-emerald-50 text-emerald-700"
-                                  : "bg-slate-100 text-slate-600"
-                              }`}
-                            >
-                              {isCompleted ? "Completada" : "Pendiente"}
-                            </span>
-                          </div>
-                          <Link
-                            href={`/dashboard/courses/${courseId}/lessons/${lesson.id}`}
-                            className="inline-flex items-center justify-center rounded-md bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                    return (
+                      <div
+                        key={lesson.id}
+                        className="flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between"
+                      >
+                        <div>
+                          <h3 className="font-semibold text-slate-950">
+                            {lesson.title}
+                          </h3>
+                          <span
+                            className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
+                              isCompleted
+                                ? "bg-emerald-50 text-emerald-700"
+                                : "bg-slate-100 text-slate-600"
+                            }`}
                           >
-                            Abrir leccion
-                          </Link>
+                            {isCompleted ? "Completada" : "Pendiente"}
+                          </span>
                         </div>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <div className="rounded-lg border border-dashed border-slate-300 p-5 text-sm text-slate-600">
-                    Este modulo todavia no tiene lecciones publicadas.
-                  </div>
-                )}
+                        <Link
+                          href={`/dashboard/courses/${courseId}/lessons/${lesson.id}`}
+                          className="inline-flex items-center justify-center rounded-md bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+                        >
+                          Abrir leccion
+                        </Link>
+                      </div>
+                    );
+                  })}
+                </div>
               </section>
             );
           })
         ) : (
           <div className="rounded-lg border border-dashed border-slate-300 p-8 text-center text-slate-600">
-            Este curso todavia no tiene modulos disponibles.
+            Este curso aún no tiene lecciones publicadas.
           </div>
         )}
       </div>
