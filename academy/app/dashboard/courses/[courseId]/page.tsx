@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { issueCertificateAction } from "./certificate-actions";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,7 @@ export default async function StudentCoursePage({ params }: PageProps) {
     .select("id, user_id, course_id, status, enrolled_at")
     .eq("user_id", user.id)
     .eq("course_id", courseId)
-    .eq("status", "active")
+    .in("status", ["active", "completed"])
     .maybeSingle();
 
   if (enrollmentError) {
@@ -106,6 +107,22 @@ export default async function StudentCoursePage({ params }: PageProps) {
     });
   }
 
+  const { data: certificate, error: certificateError } = await supabase
+    .from("certificates")
+    .select("id, code, issued_at")
+    .eq("user_id", user.id)
+    .eq("course_id", courseId)
+    .maybeSingle();
+
+  if (certificateError) {
+    console.error("Error loading course certificate", {
+      message: certificateError.message,
+      details: certificateError.details,
+      hint: certificateError.hint,
+      code: certificateError.code,
+    });
+  }
+
   const lessonsByModule = new Map<string, typeof lessons>();
   lessons?.forEach((lesson) => {
     const current = lessonsByModule.get(lesson.module_id) ?? [];
@@ -125,6 +142,8 @@ export default async function StudentCoursePage({ params }: PageProps) {
   const totalLessons = lessons?.length ?? 0;
   const progressPercent =
     totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+  const isCourseCompleted =
+    totalLessons > 0 && completedCount === totalLessons;
 
   return (
     <section className="mx-auto max-w-5xl px-6 py-10">
@@ -152,6 +171,26 @@ export default async function StudentCoursePage({ params }: PageProps) {
             />
           </div>
         </div>
+        {certificate ? (
+          <div className="mt-5">
+            <Link
+              href={`/dashboard/certificates/${certificate.id}`}
+              className="inline-flex items-center justify-center rounded-md bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800"
+            >
+              Ver certificado
+            </Link>
+          </div>
+        ) : isCourseCompleted ? (
+          <form action={issueCertificateAction} className="mt-5">
+            <input type="hidden" name="course_id" value={courseId} />
+            <button
+              type="submit"
+              className="rounded-md bg-slate-950 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800"
+            >
+              Generar certificado
+            </button>
+          </form>
+        ) : null}
       </div>
 
       <div className="space-y-5">

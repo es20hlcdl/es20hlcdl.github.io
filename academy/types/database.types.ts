@@ -242,9 +242,85 @@ export type Database = {
           },
         ];
       };
+      certificates: {
+        Row: {
+          id: string;
+          user_id: string;
+          course_id: string;
+          enrollment_id: string | null;
+          code: string;
+          student_name_snapshot: string | null;
+          course_title_snapshot: string | null;
+          issued_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          course_id: string;
+          enrollment_id?: string | null;
+          code: string;
+          student_name_snapshot?: string | null;
+          course_title_snapshot?: string | null;
+          issued_at?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          course_id?: string;
+          enrollment_id?: string | null;
+          code?: string;
+          student_name_snapshot?: string | null;
+          course_title_snapshot?: string | null;
+          issued_at?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "certificates_course_id_fkey";
+            columns: ["course_id"];
+            referencedRelation: "courses";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "certificates_enrollment_id_fkey";
+            columns: ["enrollment_id"];
+            referencedRelation: "enrollments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "certificates_user_id_fkey";
+            columns: ["user_id"];
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      issue_certificate: {
+        Args: {
+          p_course_id: string;
+        };
+        Returns: {
+          id: string;
+          code: string;
+          issued_at: string;
+        }[];
+      };
+      verify_certificate: {
+        Args: {
+          certificate_code: string;
+        };
+        Returns: {
+          code: string;
+          course_title: string | null;
+          issued_at: string;
+        }[];
+      };
+    };
     Enums: {
       user_role: "admin" | "student";
       enrollment_status: "active" | "completed" | "cancelled";

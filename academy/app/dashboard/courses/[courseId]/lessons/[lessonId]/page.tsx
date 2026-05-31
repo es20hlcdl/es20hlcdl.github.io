@@ -29,7 +29,7 @@ export default async function StudentLessonPage({ params }: PageProps) {
     .select("id, user_id, course_id, status, enrolled_at")
     .eq("user_id", user.id)
     .eq("course_id", courseId)
-    .eq("status", "active")
+    .in("status", ["active", "completed"])
     .maybeSingle();
 
   if (enrollmentError) {

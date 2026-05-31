@@ -82,6 +82,19 @@ create table if not exists public.lesson_progress (
   unique (user_id, lesson_id)
 );
 
+create table if not exists public.certificates (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  course_id uuid not null references public.courses(id) on delete cascade,
+  enrollment_id uuid references public.enrollments(id) on delete set null,
+  code text not null unique,
+  student_name_snapshot text,
+  course_title_snapshot text,
+  issued_at timestamptz not null default now(),
+  created_at timestamptz not null default now(),
+  unique (user_id, course_id)
+);
+
 alter table public.profiles enable row level security;
 alter table public.courses enable row level security;
 alter table public.enrollments enable row level security;
@@ -89,6 +102,7 @@ alter table public.course_modules enable row level security;
 alter table public.lessons enable row level security;
 alter table public.lesson_materials enable row level security;
 alter table public.lesson_progress enable row level security;
+alter table public.certificates enable row level security;
 
 create index if not exists idx_course_modules_course_position
 on public.course_modules(course_id, position);
@@ -102,6 +116,15 @@ on public.lesson_materials(lesson_id);
 create index if not exists idx_lesson_progress_user_lesson
 on public.lesson_progress(user_id, lesson_id);
 
+create index if not exists idx_certificates_user
+on public.certificates(user_id);
+
+create index if not exists idx_certificates_course
+on public.certificates(course_id);
+
+create index if not exists idx_certificates_code
+on public.certificates(code);
+
 grant usage on schema public to authenticated;
 grant select on public.profiles to authenticated;
 grant select on public.courses to authenticated;
@@ -112,6 +135,8 @@ grant select, insert, update on public.course_modules to authenticated;
 grant select, insert, update on public.lessons to authenticated;
 grant select, insert, update, delete on public.lesson_materials to authenticated;
 grant select, insert, update on public.lesson_progress to authenticated;
+grant select on public.certificates to authenticated;
+revoke insert on public.certificates from authenticated;
 
 create function public.handle_new_user()
 returns trigger
@@ -139,7 +164,7 @@ create or replace function public.is_admin()
 returns boolean
 language sql
 security definer
-set search_path = public
+set search_path = public, pg_temp
 stable
 as $$
   select exists (
@@ -151,6 +176,179 @@ as $$
 $$;
 
 grant execute on function public.is_admin() to authenticated;
+
+create or replace function public.verify_certificate(certificate_code text)
+returns table (
+  code text,
+  course_title text,
+  issued_at timestamptz
+)
+language sql
+security definer
+set search_path = public, pg_temp
+stable
+as $$
+  select
+    certificates.code,
+    certificates.course_title_snapshot as course_title,
+    certificates.issued_at
+  from public.certificates
+  where certificates.code = certificate_code
+  limit 1;
+$$;
+
+revoke all on function public.verify_certificate(text) from public;
+grant execute on function public.verify_certificate(text) to anon, authenticated;
+
+create or replace function public.issue_certificate(p_course_id uuid)
+returns table (
+  id uuid,
+  code text,
+  issued_at timestamptz
+)
+language plpgsql
+security definer
+set search_path = public, pg_temp
+as $$
+declare
+  current_user_id uuid := auth.uid();
+  course_record record;
+  enrollment_record record;
+  existing_certificate record;
+  inserted_certificate record;
+  total_published_lessons integer;
+  completed_lessons integer;
+  generated_code text;
+  student_name text;
+begin
+  if current_user_id is null then
+    raise exception 'Authentication required';
+  end if;
+
+  select certificates.id, certificates.code, certificates.issued_at
+  into existing_certificate
+  from public.certificates
+  where certificates.user_id = current_user_id
+    and certificates.course_id = p_course_id
+  limit 1;
+
+  if found then
+    return query
+    select
+      existing_certificate.id::uuid,
+      existing_certificate.code::text,
+      existing_certificate.issued_at::timestamptz;
+    return;
+  end if;
+
+  select courses.id, courses.title, courses.is_published
+  into course_record
+  from public.courses
+  where courses.id = p_course_id
+  limit 1;
+
+  if not found or course_record.is_published is not true then
+    raise exception 'Course is not available for certificate issuing';
+  end if;
+
+  select enrollments.id, enrollments.status
+  into enrollment_record
+  from public.enrollments
+  where enrollments.user_id = current_user_id
+    and enrollments.course_id = p_course_id
+    and enrollments.status in ('active', 'completed')
+  limit 1;
+
+  if not found then
+    raise exception 'Active or completed enrollment is required';
+  end if;
+
+  select count(*)
+  into total_published_lessons
+  from public.lessons
+  join public.course_modules on course_modules.id = lessons.module_id
+  where course_modules.course_id = p_course_id
+    and lessons.is_published = true;
+
+  if total_published_lessons = 0 then
+    raise exception 'Course has no published lessons';
+  end if;
+
+  select count(distinct lessons.id)
+  into completed_lessons
+  from public.lessons
+  join public.course_modules on course_modules.id = lessons.module_id
+  join public.lesson_progress on lesson_progress.lesson_id = lessons.id
+  where course_modules.course_id = p_course_id
+    and lessons.is_published = true
+    and lesson_progress.user_id = current_user_id
+    and lesson_progress.completed = true;
+
+  if completed_lessons <> total_published_lessons then
+    raise exception 'Course is not completed';
+  end if;
+
+  select coalesce(profiles.full_name, profiles.email, 'Estudiante')
+  into student_name
+  from public.profiles
+  where profiles.id = current_user_id
+  limit 1;
+
+  for attempt in 1..5 loop
+    generated_code := 'CERT-' || upper(replace(gen_random_uuid()::text, '-', ''));
+
+    begin
+      insert into public.certificates (
+        user_id,
+        course_id,
+        enrollment_id,
+        code,
+        student_name_snapshot,
+        course_title_snapshot
+      )
+      values (
+        current_user_id,
+        p_course_id,
+        enrollment_record.id,
+        generated_code,
+        student_name,
+        course_record.title
+      )
+      returning certificates.id, certificates.code, certificates.issued_at
+      into inserted_certificate;
+
+      return query
+      select
+        inserted_certificate.id::uuid,
+        inserted_certificate.code::text,
+        inserted_certificate.issued_at::timestamptz;
+      return;
+    exception
+      when unique_violation then
+        select certificates.id, certificates.code, certificates.issued_at
+        into existing_certificate
+        from public.certificates
+        where certificates.user_id = current_user_id
+          and certificates.course_id = p_course_id
+        limit 1;
+
+        if found then
+          return query
+          select
+            existing_certificate.id::uuid,
+            existing_certificate.code::text,
+            existing_certificate.issued_at::timestamptz;
+          return;
+        end if;
+    end;
+  end loop;
+
+  raise exception 'Could not generate a unique certificate code';
+end;
+$$;
+
+revoke all on function public.issue_certificate(uuid) from public;
+grant execute on function public.issue_certificate(uuid) to authenticated;
 
 drop policy if exists "Users can read own profile" on public.profiles;
 create policy "Users can read own profile"
@@ -242,6 +440,22 @@ for select
 to authenticated
 using (public.is_admin());
 
+drop policy if exists "Users can read own certificates" on public.certificates;
+create policy "Users can read own certificates"
+on public.certificates
+for select
+to authenticated
+using (auth.uid() = user_id);
+
+drop policy if exists "Admins can read certificates" on public.certificates;
+create policy "Admins can read certificates"
+on public.certificates
+for select
+to authenticated
+using (public.is_admin());
+
+drop policy if exists "Users can issue own completed course certificates" on public.certificates;
+
 drop policy if exists "Students can read enrolled course modules" on public.course_modules;
 create policy "Students can read enrolled course modules"
 on public.course_modules
@@ -253,7 +467,7 @@ using (
     from public.enrollments
     where enrollments.course_id = course_modules.course_id
       and enrollments.user_id = auth.uid()
-      and enrollments.status = 'active'
+      and enrollments.status in ('active', 'completed')
   )
 );
 
@@ -270,7 +484,7 @@ using (
     join public.enrollments on enrollments.course_id = course_modules.course_id
     where course_modules.id = lessons.module_id
       and enrollments.user_id = auth.uid()
-      and enrollments.status = 'active'
+      and enrollments.status in ('active', 'completed')
   )
 );
 
@@ -288,7 +502,7 @@ using (
     where lessons.id = lesson_materials.lesson_id
       and lessons.is_published = true
       and enrollments.user_id = auth.uid()
-      and enrollments.status = 'active'
+      and enrollments.status in ('active', 'completed')
   )
 );
 
@@ -314,7 +528,7 @@ with check (
     where lessons.id = lesson_progress.lesson_id
       and lessons.is_published = true
       and enrollments.user_id = auth.uid()
-      and enrollments.status = 'active'
+      and enrollments.status in ('active', 'completed')
   )
 );
 
@@ -334,6 +548,6 @@ with check (
     where lessons.id = lesson_progress.lesson_id
       and lessons.is_published = true
       and enrollments.user_id = auth.uid()
-      and enrollments.status = 'active'
+      and enrollments.status in ('active', 'completed')
   )
 );
