@@ -256,10 +256,12 @@ export async function deleteMaterialAction(formData: FormData) {
   }
 
   const materialId = String(formData.get("material_id") ?? "");
-  const moduleId = String(formData.get("module_id") ?? "");
   const currentPath = String(formData.get("current_path") ?? "");
 
   if (!materialId) {
+    console.error("Error deleting material", {
+      message: "Missing material_id in FormData.",
+    });
     return;
   }
 
@@ -277,12 +279,7 @@ export async function deleteMaterialAction(formData: FormData) {
     });
   }
 
-  if (currentPath.startsWith("/dashboard/admin/modules/")) {
+  if (currentPath) {
     revalidatePath(currentPath);
-    return;
-  }
-
-  if (moduleId) {
-    revalidatePath(`/dashboard/admin/modules/${moduleId}/lessons`);
   }
 }

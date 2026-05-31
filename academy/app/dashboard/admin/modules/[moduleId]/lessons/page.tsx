@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { AdminPageShell } from "@/components/admin/AdminPageShell";
+import DeleteMaterialButton from "@/components/admin/DeleteMaterialButton";
 import { LessonForm } from "@/components/admin/LessonForm";
 import { MaterialForm } from "@/components/admin/MaterialForm";
 import { UnauthorizedAdmin } from "@/components/admin/UnauthorizedAdmin";
@@ -232,20 +233,10 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
                               />
                               <input
                                 type="hidden"
-                                name="module_id"
-                                value={moduleId}
-                              />
-                              <input
-                                type="hidden"
                                 name="current_path"
                                 value={`/dashboard/admin/modules/${moduleId}/lessons`}
                               />
-                              <button
-                                type="submit"
-                                className="rounded-md border border-red-200 px-3 py-2 text-sm font-semibold text-red-700 hover:bg-red-50"
-                              >
-                                Eliminar
-                              </button>
+                              <DeleteMaterialButton />
                             </form>
                           </div>
                         </li>

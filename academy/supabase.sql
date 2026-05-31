@@ -110,7 +110,7 @@ grant insert, update on public.courses to authenticated;
 grant insert, update on public.enrollments to authenticated;
 grant select, insert, update on public.course_modules to authenticated;
 grant select, insert, update on public.lessons to authenticated;
-grant select, insert, update on public.lesson_materials to authenticated;
+grant select, insert, update, delete on public.lesson_materials to authenticated;
 grant select, insert, update on public.lesson_progress to authenticated;
 
 create function public.handle_new_user()
