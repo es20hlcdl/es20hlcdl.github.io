@@ -203,3 +203,42 @@ export async function createMaterialAction(
   revalidatePath(`/dashboard/admin/modules/${moduleId}/lessons`);
   return { ok: true, message: "Material agregado correctamente." };
 }
+
+export async function deleteMaterialAction(formData: FormData) {
+  const auth = await requireAdmin();
+
+  if (!auth) {
+    return;
+  }
+
+  const materialId = String(formData.get("material_id") ?? "");
+  const moduleId = String(formData.get("module_id") ?? "");
+  const currentPath = String(formData.get("current_path") ?? "");
+
+  if (!materialId) {
+    return;
+  }
+
+  const { error } = await auth.supabase
+    .from("lesson_materials")
+    .delete()
+    .eq("id", materialId);
+
+  if (error) {
+    console.error("Error deleting material", {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
+  }
+
+  if (currentPath.startsWith("/dashboard/admin/modules/")) {
+    revalidatePath(currentPath);
+    return;
+  }
+
+  if (moduleId) {
+    revalidatePath(`/dashboard/admin/modules/${moduleId}/lessons`);
+  }
+}
