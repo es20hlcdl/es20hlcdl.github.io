@@ -12,6 +12,7 @@ type Module = Database["public"]["Tables"]["course_modules"]["Row"];
 type ModuleFormProps = {
   courseId: string;
   module?: Module;
+  defaultPosition?: number;
 };
 
 const initialState = {
@@ -19,7 +20,7 @@ const initialState = {
   message: "",
 };
 
-export function ModuleForm({ courseId, module }: ModuleFormProps) {
+export function ModuleForm({ courseId, module, defaultPosition = 1 }: ModuleFormProps) {
   const action = module ? updateModuleAction : createModuleAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
 
@@ -49,13 +50,14 @@ export function ModuleForm({ courseId, module }: ModuleFormProps) {
       </label>
 
       <label className="block">
-        <span className="text-sm font-medium text-slate-700">Posicion</span>
+        <span className="text-sm font-medium text-slate-700">Orden</span>
         <input
           type="number"
           name="position"
-          min={0}
+          min={1}
           required
-          defaultValue={module?.position ?? 0}
+          placeholder="Ej. 1"
+          defaultValue={module?.position ?? defaultPosition}
           className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-950"
         />
       </label>

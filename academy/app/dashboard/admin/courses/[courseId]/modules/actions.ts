@@ -8,17 +8,16 @@ type ActionState = {
   message: string;
 };
 
+function isUniquePositionError(error: { code?: string }) {
+  return error.code === "23505";
+}
+
 function readModuleForm(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
-  const position = Number(formData.get("position") ?? 0);
 
   if (!title) {
     return { ok: false as const, message: "El titulo es obligatorio." };
-  }
-
-  if (!Number.isInteger(position) || position < 0) {
-    return { ok: false as const, message: "La posicion debe ser un entero positivo." };
   }
 
   return {
@@ -26,9 +25,44 @@ function readModuleForm(formData: FormData) {
     values: {
       title,
       description: description || null,
-      position,
     },
   };
+}
+
+function readPosition(formData: FormData) {
+  const rawPosition = String(formData.get("position") ?? "").trim();
+  const position = Number(rawPosition);
+
+  if (!rawPosition || !Number.isInteger(position) || position < 1) {
+    return null;
+  }
+
+  return position;
+}
+
+async function getNextModulePosition(
+  supabase: NonNullable<Awaited<ReturnType<typeof requireAdmin>>>["supabase"],
+  courseId: string,
+) {
+  const { data, error } = await supabase
+    .from("course_modules")
+    .select("position")
+    .eq("course_id", courseId)
+    .order("position", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error calculating next module position", {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
+    return null;
+  }
+
+  return (data?.position ?? 0) + 1;
 }
 
 export async function createModuleAction(
@@ -52,9 +86,17 @@ export async function createModuleAction(
     return { ok: false, message: parsed.message };
   }
 
+  const position =
+    readPosition(formData) ?? (await getNextModulePosition(auth.supabase, courseId));
+
+  if (!position) {
+    return { ok: false, message: "No se pudo calcular el orden del modulo." };
+  }
+
   const { error } = await auth.supabase.from("course_modules").insert({
     course_id: courseId,
     ...parsed.values,
+    position,
   });
 
   if (error) {
@@ -64,6 +106,9 @@ export async function createModuleAction(
       hint: error.hint,
       code: error.code,
     });
+    if (isUniquePositionError(error)) {
+      return { ok: false, message: "Ya existe un modulo con ese orden." };
+    }
     return { ok: false, message: "No se pudo crear el modulo." };
   }
 
@@ -93,9 +138,18 @@ export async function updateModuleAction(
     return { ok: false, message: parsed.message };
   }
 
+  const position = readPosition(formData);
+
+  if (!position) {
+    return { ok: false, message: "El orden debe ser un entero mayor o igual a 1." };
+  }
+
   const { error } = await auth.supabase
     .from("course_modules")
-    .update(parsed.values)
+    .update({
+      ...parsed.values,
+      position,
+    })
     .eq("id", id);
 
   if (error) {
@@ -105,6 +159,9 @@ export async function updateModuleAction(
       hint: error.hint,
       code: error.code,
     });
+    if (isUniquePositionError(error)) {
+      return { ok: false, message: "Ya existe un modulo con ese orden." };
+    }
     return { ok: false, message: "No se pudo actualizar el modulo." };
   }
 

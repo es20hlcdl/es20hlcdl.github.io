@@ -12,6 +12,7 @@ type Lesson = Database["public"]["Tables"]["lessons"]["Row"];
 type LessonFormProps = {
   moduleId: string;
   lesson?: Lesson;
+  defaultPosition?: number;
 };
 
 const initialState = {
@@ -19,7 +20,7 @@ const initialState = {
   message: "",
 };
 
-export function LessonForm({ moduleId, lesson }: LessonFormProps) {
+export function LessonForm({ moduleId, lesson, defaultPosition = 1 }: LessonFormProps) {
   const action = lesson ? updateLessonAction : createLessonAction;
   const [state, formAction, isPending] = useActionState(action, initialState);
 
@@ -60,13 +61,14 @@ export function LessonForm({ moduleId, lesson }: LessonFormProps) {
 
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
-          <span className="text-sm font-medium text-slate-700">Posicion</span>
+          <span className="text-sm font-medium text-slate-700">Orden</span>
           <input
             type="number"
             name="position"
-            min={0}
+            min={1}
             required
-            defaultValue={lesson?.position ?? 0}
+            placeholder="Ej. 1"
+            defaultValue={lesson?.position ?? defaultPosition}
             className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-slate-950"
           />
         </label>

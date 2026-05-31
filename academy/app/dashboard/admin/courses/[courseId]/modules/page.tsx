@@ -46,6 +46,9 @@ export default async function AdminCourseModulesPage({ params }: PageProps) {
     });
   }
 
+  const nextModulePosition =
+    Math.max(0, ...(modules?.map((module) => module.position) ?? [])) + 1;
+
   return (
     <AdminPageShell
       title={`Modulos: ${course.title}`}
@@ -56,7 +59,10 @@ export default async function AdminCourseModulesPage({ params }: PageProps) {
           <h2 className="mb-4 text-lg font-semibold text-slate-950">
             Nuevo modulo
           </h2>
-          <ModuleForm courseId={courseId} />
+          <p className="mb-4 text-sm leading-6 text-slate-600">
+            El orden define la secuencia academica del curso.
+          </p>
+          <ModuleForm courseId={courseId} defaultPosition={nextModulePosition} />
         </div>
 
         <div className="space-y-4">
@@ -80,7 +86,7 @@ export default async function AdminCourseModulesPage({ params }: PageProps) {
               <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                    Posicion {module.position}
+                    Orden {module.position}
                   </p>
                   <h2 className="mt-1 text-lg font-semibold text-slate-950">
                     {module.title}
@@ -93,7 +99,11 @@ export default async function AdminCourseModulesPage({ params }: PageProps) {
                   Ver lecciones
                 </Link>
               </div>
-              <ModuleForm courseId={courseId} module={module} />
+              <ModuleForm
+                courseId={courseId}
+                module={module}
+                defaultPosition={nextModulePosition}
+              />
             </article>
           ))}
         </div>

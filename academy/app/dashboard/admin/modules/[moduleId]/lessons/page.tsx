@@ -80,6 +80,9 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
     materialsByLesson.set(material.lesson_id, current);
   });
 
+  const nextLessonPosition =
+    Math.max(0, ...(lessons?.map((lesson) => lesson.position) ?? [])) + 1;
+
   return (
     <AdminPageShell
       title={`Lecciones: ${module.title}`}
@@ -90,7 +93,13 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
           <h2 className="mb-4 text-lg font-semibold text-slate-950">
             Nueva leccion
           </h2>
-          <LessonForm moduleId={moduleId} />
+          <p className="mb-4 text-sm leading-6 text-slate-600">
+            El orden define la secuencia de navegacion entre lecciones.
+          </p>
+          <LessonForm
+            moduleId={moduleId}
+            defaultPosition={nextLessonPosition}
+          />
         </div>
 
         <div className="space-y-4">
@@ -114,7 +123,7 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
               <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">
-                    Posicion {lesson.position} ·{" "}
+                    Orden {lesson.position} ·{" "}
                     {lesson.is_published ? "Publicada" : "Borrador"}
                   </p>
                   <h2 className="mt-1 text-lg font-semibold text-slate-950">
@@ -138,7 +147,11 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
                 </form>
               </div>
 
-              <LessonForm moduleId={moduleId} lesson={lesson} />
+              <LessonForm
+                moduleId={moduleId}
+                lesson={lesson}
+                defaultPosition={nextLessonPosition}
+              />
 
               <div className="mt-5 border-t border-slate-200 pt-4">
                 <h3 className="text-sm font-semibold text-slate-950">

@@ -16,19 +16,18 @@ const allowedMaterialTypes = new Set([
   "other",
 ]);
 
+function isUniquePositionError(error: { code?: string }) {
+  return error.code === "23505";
+}
+
 function readLessonForm(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const content = String(formData.get("content") ?? "").trim();
   const videoUrl = String(formData.get("video_url") ?? "").trim();
-  const position = Number(formData.get("position") ?? 0);
   const isPublished = formData.get("is_published") === "on";
 
   if (!title) {
     return { ok: false as const, message: "El titulo es obligatorio." };
-  }
-
-  if (!Number.isInteger(position) || position < 0) {
-    return { ok: false as const, message: "La posicion debe ser un entero positivo." };
   }
 
   return {
@@ -37,10 +36,45 @@ function readLessonForm(formData: FormData) {
       title,
       content: content || null,
       video_url: videoUrl || null,
-      position,
       is_published: isPublished,
     },
   };
+}
+
+function readPosition(formData: FormData) {
+  const rawPosition = String(formData.get("position") ?? "").trim();
+  const position = Number(rawPosition);
+
+  if (!rawPosition || !Number.isInteger(position) || position < 1) {
+    return null;
+  }
+
+  return position;
+}
+
+async function getNextLessonPosition(
+  supabase: NonNullable<Awaited<ReturnType<typeof requireAdmin>>>["supabase"],
+  moduleId: string,
+) {
+  const { data, error } = await supabase
+    .from("lessons")
+    .select("position")
+    .eq("module_id", moduleId)
+    .order("position", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Error calculating next lesson position", {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
+    return null;
+  }
+
+  return (data?.position ?? 0) + 1;
 }
 
 export async function createLessonAction(
@@ -64,9 +98,18 @@ export async function createLessonAction(
     return { ok: false, message: parsed.message };
   }
 
+  const position =
+    readPosition(formData) ??
+    (await getNextLessonPosition(auth.supabase, moduleId));
+
+  if (!position) {
+    return { ok: false, message: "No se pudo calcular el orden de la leccion." };
+  }
+
   const { error } = await auth.supabase.from("lessons").insert({
     module_id: moduleId,
     ...parsed.values,
+    position,
   });
 
   if (error) {
@@ -76,6 +119,9 @@ export async function createLessonAction(
       hint: error.hint,
       code: error.code,
     });
+    if (isUniquePositionError(error)) {
+      return { ok: false, message: "Ya existe una leccion con ese orden." };
+    }
     return { ok: false, message: "No se pudo crear la leccion." };
   }
 
@@ -105,9 +151,18 @@ export async function updateLessonAction(
     return { ok: false, message: parsed.message };
   }
 
+  const position = readPosition(formData);
+
+  if (!position) {
+    return { ok: false, message: "El orden debe ser un entero mayor o igual a 1." };
+  }
+
   const { error } = await auth.supabase
     .from("lessons")
-    .update(parsed.values)
+    .update({
+      ...parsed.values,
+      position,
+    })
     .eq("id", id);
 
   if (error) {
@@ -117,6 +172,9 @@ export async function updateLessonAction(
       hint: error.hint,
       code: error.code,
     });
+    if (isUniquePositionError(error)) {
+      return { ok: false, message: "Ya existe una leccion con ese orden." };
+    }
     return { ok: false, message: "No se pudo actualizar la leccion." };
   }
 
