@@ -204,6 +204,50 @@ export async function createMaterialAction(
   return { ok: true, message: "Material agregado correctamente." };
 }
 
+export async function updateMaterialAction(formData: FormData) {
+  const auth = await requireAdmin();
+
+  if (!auth) {
+    return;
+  }
+
+  const materialId = String(formData.get("material_id") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const materialUrl = String(formData.get("material_url") ?? "").trim();
+  const rawMaterialType = String(formData.get("material_type") ?? "").trim();
+  const currentPath = String(formData.get("current_path") ?? "");
+  const materialType = rawMaterialType.toLowerCase();
+  const safeMaterialType = allowedMaterialTypes.has(materialType)
+    ? materialType
+    : "other";
+
+  if (!materialId || !title || !materialUrl || !materialType) {
+    return;
+  }
+
+  const { error } = await auth.supabase
+    .from("lesson_materials")
+    .update({
+      title,
+      material_url: materialUrl,
+      material_type: safeMaterialType,
+    })
+    .eq("id", materialId);
+
+  if (error) {
+    console.error("Error updating material", {
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+      code: error.code,
+    });
+  }
+
+  if (currentPath.startsWith("/dashboard/admin/modules/")) {
+    revalidatePath(currentPath);
+  }
+}
+
 export async function deleteMaterialAction(formData: FormData) {
   const auth = await requireAdmin();
 

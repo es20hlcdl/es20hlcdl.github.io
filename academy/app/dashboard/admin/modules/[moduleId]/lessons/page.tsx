@@ -4,7 +4,11 @@ import { LessonForm } from "@/components/admin/LessonForm";
 import { MaterialForm } from "@/components/admin/MaterialForm";
 import { UnauthorizedAdmin } from "@/components/admin/UnauthorizedAdmin";
 import { getAdminAuth } from "@/lib/auth/admin";
-import { deleteMaterialAction, toggleLessonPublishAction } from "./actions";
+import {
+  deleteMaterialAction,
+  toggleLessonPublishAction,
+  updateMaterialAction,
+} from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -147,23 +151,79 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
                           key={material.id}
                           className="rounded-md border border-slate-200 bg-slate-50 p-3"
                         >
-                          <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
-                            <div>
-                              <p className="font-semibold text-slate-950">
-                                {material.title}
-                              </p>
-                              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
-                                {material.material_type}
-                              </p>
-                            </div>
+                          <div className="mb-3 flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                            <p className="font-semibold text-slate-950">
+                              {material.title}
+                            </p>
+                            <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                              {material.material_type}
+                            </span>
                             <a
                               href={material.material_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="break-all text-sm font-semibold text-slate-950 underline"
+                              className="text-sm font-semibold text-slate-950 underline"
                             >
-                              {material.material_url}
+                              Abrir material
                             </a>
+                          </div>
+
+                          <div className="grid gap-3 lg:grid-cols-[1fr_auto]">
+                            <form
+                              action={updateMaterialAction}
+                              className="grid gap-3 md:grid-cols-[1fr_1fr_140px_auto]"
+                            >
+                              <input
+                                type="hidden"
+                                name="material_id"
+                                value={material.id}
+                              />
+                              <input
+                                type="hidden"
+                                name="current_path"
+                                value={`/dashboard/admin/modules/${moduleId}/lessons`}
+                              />
+                              <label className="grid gap-1 text-sm font-medium text-slate-700">
+                                Título
+                                <input
+                                  name="title"
+                                  required
+                                  defaultValue={material.title}
+                                  className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-normal outline-none focus:border-slate-950"
+                                />
+                              </label>
+                              <label className="grid gap-1 text-sm font-medium text-slate-700">
+                                URL
+                                <input
+                                  name="material_url"
+                                  type="url"
+                                  required
+                                  defaultValue={material.material_url}
+                                  className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-normal outline-none focus:border-slate-950"
+                                />
+                              </label>
+                              <label className="grid gap-1 text-sm font-medium text-slate-700">
+                                Tipo
+                                <select
+                                  name="material_type"
+                                  required
+                                  defaultValue={material.material_type}
+                                  className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-normal outline-none focus:border-slate-950"
+                                >
+                                  <option value="link">link</option>
+                                  <option value="pdf">pdf</option>
+                                  <option value="video">video</option>
+                                  <option value="document">document</option>
+                                  <option value="other">other</option>
+                                </select>
+                              </label>
+                              <button
+                                type="submit"
+                                className="self-end rounded-md border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-white"
+                              >
+                                Guardar material
+                              </button>
+                            </form>
                             <form action={deleteMaterialAction}>
                               <input
                                 type="hidden"
