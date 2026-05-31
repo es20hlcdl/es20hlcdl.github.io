@@ -16,6 +16,7 @@ export async function completeLessonAction(formData: FormData) {
 
   const courseId = String(formData.get("course_id") ?? "");
   const lessonId = String(formData.get("lesson_id") ?? "");
+  const currentPath = String(formData.get("current_path") ?? "");
 
   if (!courseId || !lessonId) {
     return;
@@ -43,4 +44,8 @@ export async function completeLessonAction(formData: FormData) {
   }
 
   revalidatePath(`/dashboard/courses/${courseId}`);
+
+  if (currentPath.startsWith(`/dashboard/courses/${courseId}`)) {
+    revalidatePath(currentPath);
+  }
 }
