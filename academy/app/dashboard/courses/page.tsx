@@ -11,6 +11,21 @@ type Enrollment = {
   status: string;
 };
 
+type CourseModule = {
+  id: string;
+  course_id: string;
+};
+
+type PublishedLesson = {
+  id: string;
+  module_id: string;
+};
+
+type LessonProgress = {
+  lesson_id: string;
+  completed: boolean;
+};
+
 type SupabaseError = {
   message: string;
   details: string | null;
@@ -114,6 +129,107 @@ export default async function MyCoursesPage() {
     );
   }
 
+  const { data: modules, error: modulesError } = await supabase
+    .from("course_modules")
+    .select("id, course_id")
+    .in("course_id", courseIds)
+    .returns<CourseModule[]>();
+
+  if (modulesError) {
+    logSupabaseError("Error loading enrolled course modules", modulesError);
+    return (
+      <CoursesPageShell>
+        <CoursesErrorMessage />
+      </CoursesPageShell>
+    );
+  }
+
+  const moduleIds = modules?.map((module) => module.id) ?? [];
+  const { data: lessons, error: lessonsError } = moduleIds.length
+    ? await supabase
+        .from("lessons")
+        .select("id, module_id")
+        .in("module_id", moduleIds)
+        .eq("is_published", true)
+        .returns<PublishedLesson[]>()
+    : { data: [], error: null };
+
+  if (lessonsError) {
+    logSupabaseError("Error loading enrolled course lessons", lessonsError);
+    return (
+      <CoursesPageShell>
+        <CoursesErrorMessage />
+      </CoursesPageShell>
+    );
+  }
+
+  const moduleCourseById = new Map(
+    modules?.map((module) => [module.id, module.course_id]) ?? [],
+  );
+  const lessonsByCourse = new Map<string, PublishedLesson[]>();
+  lessons?.forEach((lesson) => {
+    const courseId = moduleCourseById.get(lesson.module_id);
+
+    if (!courseId) {
+      return;
+    }
+
+    const current = lessonsByCourse.get(courseId) ?? [];
+    current.push(lesson);
+    lessonsByCourse.set(courseId, current);
+  });
+
+  const lessonIds = lessons?.map((lesson) => lesson.id) ?? [];
+  const { data: progress, error: progressError } = lessonIds.length
+    ? await supabase
+        .from("lesson_progress")
+        .select("lesson_id, completed")
+        .eq("user_id", user.id)
+        .in("lesson_id", lessonIds)
+        .returns<LessonProgress[]>()
+    : { data: [], error: null };
+
+  if (progressError) {
+    logSupabaseError("Error loading enrolled course progress", progressError);
+    return (
+      <CoursesPageShell>
+        <CoursesErrorMessage />
+      </CoursesPageShell>
+    );
+  }
+
+  const completedLessonIds = new Set(
+    progress
+      ?.filter((item) => item.completed)
+      .map((item) => item.lesson_id) ?? [],
+  );
+  const progressByCourse = new Map<
+    string,
+    {
+      totalPublishedLessons: number;
+      completedLessons: number;
+      progressPercent: number;
+    }
+  >();
+
+  courseIds.forEach((courseId) => {
+    const courseLessons = lessonsByCourse.get(courseId) ?? [];
+    const totalPublishedLessons = courseLessons.length;
+    const completedLessons = courseLessons.filter((lesson) =>
+      completedLessonIds.has(lesson.id),
+    ).length;
+    const progressPercent =
+      totalPublishedLessons > 0
+        ? Math.round((completedLessons / totalPublishedLessons) * 100)
+        : 0;
+
+    progressByCourse.set(courseId, {
+      totalPublishedLessons,
+      completedLessons,
+      progressPercent,
+    });
+  });
+
   const courseById = new Map(
     courses?.map((course) => [
       course.id,
@@ -156,6 +272,18 @@ export default async function MyCoursesPage() {
                 title={enrollment.course?.title ?? "Curso"}
                 description={enrollment.course?.description ?? null}
                 status={enrollment.status}
+                totalPublishedLessons={
+                  progressByCourse.get(enrollment.course_id)
+                    ?.totalPublishedLessons ?? 0
+                }
+                completedLessons={
+                  progressByCourse.get(enrollment.course_id)?.completedLessons ??
+                  0
+                }
+                progressPercent={
+                  progressByCourse.get(enrollment.course_id)?.progressPercent ??
+                  0
+                }
               />
             </Link>
           ))}
