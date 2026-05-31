@@ -34,7 +34,9 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
 
   const { data: lessons, error: lessonsError } = await auth.supabase
     .from("lessons")
-    .select("id, module_id, title, content, video_url, position, is_published, created_at")
+    .select(
+      "id, module_id, title, content, video_url, position, is_published, created_at",
+    )
     .eq("module_id", moduleId)
     .order("position", { ascending: true });
 
@@ -53,6 +55,7 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
         .from("lesson_materials")
         .select("id, lesson_id, title, material_url, material_type, created_at")
         .in("lesson_id", lessonIds)
+        .order("created_at", { ascending: true })
     : { data: [], error: null };
 
   if (materialsError) {
@@ -136,23 +139,41 @@ export default async function AdminModuleLessonsPage({ params }: PageProps) {
                 <h3 className="text-sm font-semibold text-slate-950">
                   Materiales
                 </h3>
-                <ul className="mt-3 space-y-2 text-sm text-slate-600">
-                  {(materialsByLesson.get(lesson.id) ?? []).map((material) => (
-                    <li key={material.id}>
-                      <a
-                        href={material.material_url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="font-medium text-slate-950 underline"
-                      >
-                        {material.title}
-                      </a>{" "}
-                      <span className="text-slate-500">
-                        ({material.material_type})
-                      </span>
-                    </li>
-                  ))}
-                </ul>
+                {(materialsByLesson.get(lesson.id) ?? []).length > 0 ? (
+                  <ul className="mt-3 space-y-3 text-sm">
+                    {(materialsByLesson.get(lesson.id) ?? []).map(
+                      (material) => (
+                        <li
+                          key={material.id}
+                          className="rounded-md border border-slate-200 bg-slate-50 p-3"
+                        >
+                          <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                            <div>
+                              <p className="font-semibold text-slate-950">
+                                {material.title}
+                              </p>
+                              <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">
+                                {material.material_type}
+                              </p>
+                            </div>
+                            <a
+                              href={material.material_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="break-all text-sm font-semibold text-slate-950 underline"
+                            >
+                              {material.material_url}
+                            </a>
+                          </div>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                ) : (
+                  <p className="mt-3 rounded-md border border-dashed border-slate-300 p-3 text-sm text-slate-600">
+                    Esta lección aún no tiene materiales.
+                  </p>
+                )}
                 <MaterialForm moduleId={moduleId} lessonId={lesson.id} />
               </div>
             </article>

@@ -8,6 +8,14 @@ type ActionState = {
   message: string;
 };
 
+const allowedMaterialTypes = new Set([
+  "link",
+  "pdf",
+  "video",
+  "document",
+  "other",
+]);
+
 function readLessonForm(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
   const content = String(formData.get("content") ?? "").trim();
@@ -162,17 +170,24 @@ export async function createMaterialAction(
   const moduleId = String(formData.get("module_id") ?? "");
   const title = String(formData.get("title") ?? "").trim();
   const materialUrl = String(formData.get("material_url") ?? "").trim();
-  const materialType = String(formData.get("material_type") ?? "link").trim();
+  const rawMaterialType = String(formData.get("material_type") ?? "").trim();
+  const materialType = rawMaterialType.toLowerCase();
+  const safeMaterialType = allowedMaterialTypes.has(materialType)
+    ? materialType
+    : "other";
 
-  if (!lessonId || !moduleId || !title || !materialUrl) {
-    return { ok: false, message: "Titulo y URL son obligatorios." };
+  if (!lessonId || !moduleId || !title || !materialUrl || !materialType) {
+    return {
+      ok: false,
+      message: "Leccion, titulo, URL y tipo de material son obligatorios.",
+    };
   }
 
   const { error } = await auth.supabase.from("lesson_materials").insert({
     lesson_id: lessonId,
     title,
     material_url: materialUrl,
-    material_type: materialType || "link",
+    material_type: safeMaterialType,
   });
 
   if (error) {
