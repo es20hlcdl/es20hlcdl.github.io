@@ -1463,6 +1463,8 @@ const translations = {
         "geo-elec2025-desc": "Visualización interactiva en 3D de la participación ciudadana y resultados de las Elecciones Generales 2025 a nivel de recintos.",
         "geo-chochis-title": "Chochís: mapa turístico interactivo",
         "geo-chochis-desc": "Visor web para explorar atractivos, rutas y puntos de interés de Chochís.",
+        "geo-sc-portal-title": "Geoportal Santa Cruz",
+        "geo-sc-portal-desc": "Geoportal interactivo para consultar capas, mapas y datos territoriales de Santa Cruz.",
         "geo-digital-title": "Mapas Digitales",
         "geo-digital-desc": "Visor web de cartografía digital para explorar información territorial de Santa Cruz.",
         "geo-link-viewdigital": "Ver mapa digital",
@@ -1709,6 +1711,8 @@ const translations = {
         "geo-elec2025-desc": "Interactive 3D visualization of voter turnout and results of the 2025 General Elections at the polling station level.",
         "geo-chochis-title": "Chochis: interactive tourist map",
         "geo-chochis-desc": "Web viewer to explore attractions, routes, and points of interest in Chochis.",
+        "geo-sc-portal-title": "Santa Cruz Geoportal",
+        "geo-sc-portal-desc": "Interactive geoportal for consulting layers, maps, and territorial data from Santa Cruz.",
         "geo-digital-title": "Digital Maps",
         "geo-digital-desc": "Web viewer of digital cartography to explore Santa Cruz territorial information.",
         "geo-link-viewdigital": "View digital map",
@@ -2082,57 +2086,6 @@ function initContactForm() {
     });
 }
 
-/* 6. Dynamic 3D Parallax Tilt Effect Engine for Desktop Grid Cards */
 function init3DTilt() {
-    const isTouch = window.matchMedia('(pointer: coarse)').matches || ('ontouchstart' in window);
-    if (isTouch) {
-        return; // Disable on touch devices for mobile performance and scroll ease
-    }
-
-    const cards = document.querySelectorAll('.expertise-card, .gallery-card');
-    cards.forEach((card) => {
-        card.style.transformStyle = 'preserve-3d';
-        card.style.perspective = '1000px';
-
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            // Limit tilt angle to a subtle, premium 8 degrees
-            const rotateX = ((centerY - y) / centerY) * 8;
-            const rotateY = ((x - centerX) / centerX) * 8;
-
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-
-            // Push internal elements in 3D space
-            const innerImg = card.querySelector('img');
-            if (innerImg) {
-                innerImg.style.transform = 'translate3d(0, 0, 12px) scale(1.03)';
-            }
-
-            const content = card.querySelector('figcaption, .expertise-content');
-            if (content) {
-                content.style.transform = 'translate3d(0, 0, 20px)';
-            }
-        });
-
-        card.addEventListener('mouseleave', () => {
-            // Restore styles with smooth easing
-            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-
-            const innerImg = card.querySelector('img');
-            if (innerImg) {
-                innerImg.style.transform = '';
-            }
-
-            const content = card.querySelector('figcaption, .expertise-content');
-            if (content) {
-                content.style.transform = '';
-            }
-        });
-    });
+    return;
 }
