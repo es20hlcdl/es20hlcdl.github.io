@@ -583,14 +583,20 @@ function initHeroGlobe() {
 
 window.activeMaps = [];
 
+// Clave de CARTO Basemaps para las capas clara y oscura de ambos mapas.
+const CARTO_BASEMAPS_API_KEY = 'cb1_2wxc_1_8f1fb6a34a44a8844d1a3805';
+
 function setupMapLayers(map) {
-    const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    const apiKey = CARTO_BASEMAPS_API_KEY.trim();
+    const keyQuery = apiKey ? `?key=${encodeURIComponent(apiKey)}` : '';
+
+    const darkLayer = L.tileLayer(`https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png${keyQuery}`, {
         attribution: '&copy; OpenStreetMap &copy; CARTO',
         subdomains: 'abcd',
         maxZoom: 19
     });
 
-    const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    const lightLayer = L.tileLayer(`https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png${keyQuery}`, {
         attribution: '&copy; OpenStreetMap &copy; CARTO',
         subdomains: 'abcd',
         maxZoom: 19
@@ -1037,6 +1043,7 @@ async function initStudentsMap() {
 
     try {
         const sources = [
+            { group: 'G1 UPI', path: 'data/G1_UPI.csv', delimiter: ';' },
             { group: 'G2 ESAM LATAM', path: 'data/G2_ESAM LATAM.csv' },
             { group: 'G3 ESAM LATAM', path: 'data/G3_ESAM LATAM.csv' }
         ];
@@ -1048,7 +1055,7 @@ async function initStudentsMap() {
             }
 
             const csvText = await response.text();
-            const rows = parseCSV(csvText);
+            const rows = parseCSV(csvText, source.delimiter);
 
             return rows.map((row) => ({
                 group: source.group,
@@ -1194,7 +1201,7 @@ function getProfessionSummary(professions) {
     return `${items.slice(0, 3).join(', ')} y otras`;
 }
 
-function parseCSV(csvText) {
+function parseCSV(csvText, delimiter = ',') {
     const rows = [];
     let currentField = '';
     let currentRow = [];
@@ -1214,7 +1221,7 @@ function parseCSV(csvText) {
             continue;
         }
 
-        if (char === ',' && !insideQuotes) {
+        if (char === delimiter && !insideQuotes) {
             currentRow.push(currentField);
             currentField = '';
             continue;
