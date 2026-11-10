@@ -303,18 +303,10 @@
         <a class="nav-dropdown-toggle" href="sobre-mi.html#profile" aria-expanded="false" aria-controls="about-submenu"
           data-i18n="nav-about">Sobre mí</a>
         <ul class="nav-submenu" id="about-submenu">
+          <li><a href="sobre-mi.html#projects" data-i18n="nav-specialties">Áreas de especialidad</a></li>
           <li><a href="sobre-mi.html#trajectory" data-i18n="nav-trajectory">Trayectoria</a></li>
           <li><a href="sobre-mi.html#recognition" data-i18n="nav-recognition">Reconocimientos y afiliaciones</a></li>
           <li><a href="sobre-mi.html#faq" data-i18n="nav-faq">Preguntas clave</a></li>
-        </ul>
-      </li>
-      <li class="nav-item-has-submenu">
-        <a class="nav-dropdown-toggle" href="geoportafolio.html#projects" aria-expanded="false"
-          aria-controls="projects-submenu" data-i18n="nav-projects">Proyectos</a>
-        <ul class="nav-submenu" id="projects-submenu">
-          <li><a href="geoportafolio.html#geoportfolio" data-i18n="nav-geoportfolio">Geoportafolio</a></li>
-          <li><a href="geoportafolio.html#gallery" data-i18n="nav-gallery">Galería</a></li>
-          <li><a href="geoportafolio.html#map" data-i18n="nav-map">Alcance territorial</a></li>
         </ul>
       </li>
       <li class="nav-item-has-submenu">
@@ -323,8 +315,8 @@
         <ul class="nav-submenu" id="research-submenu">
           <li><a href="docencia-investigacion.html#research-teaching" data-i18n="nav-research-lines">Líneas de
               investigación</a></li>
-          <li><a href="docencia-investigacion.html#university-teaching" data-i18n="nav-university-teaching">Docencia
-              universitaria</a></li>
+          <li><a href="docencia-investigacion.html#conferences" data-i18n="nav-conferences">Congresos y simposios</a></li>
+          <li><a href="docencia-investigacion.html#university-teaching" data-i18n="nav-university-teaching">Docencia</a></li>
           <li><a href="docencia-investigacion.html#students" data-i18n="nav-students">Alcance formativo</a></li>
         </ul>
       </li>
@@ -414,124 +406,9 @@
       </div>
     </section>
 
-    <section class="expertise-section" id="projects">
-      <div class="section-heading reveal">
-        <span class="section-index">02</span>
-        <div>
-          <p class="section-kicker" data-i18n="projects-kicker">Proyectos</p>
-          <h2 data-i18n="projects-title">Proyectos</h2>
-        </div>
-      </div>
-
-      <!-- Botonera de Filtros para Proyectos -->
-      <div class="portfolio-filters reveal" id="projects-filters">
-        <button class="filter-btn active" data-filter="all" data-i18n="filter-all">Todos</button>
-        <button class="filter-btn" data-filter="catastro" data-i18n="filter-catastro">Catastro</button>
-        <button class="filter-btn" data-filter="geodesia" data-i18n="filter-geodesia">Geodesia / GNSS</button>
-        <button class="filter-btn" data-filter="sig" data-i18n="filter-sig">SIG / Cartografía</button>
-        <button class="filter-btn" data-filter="teledeteccion" data-i18n="filter-teledeteccion">Teledetección</button>
-      </div>
-
-      <div class="expertise-grid">
-        <article class="expertise-card reveal" data-category="catastro">
-          <img class="expertise-image" src="assets/catastro.jpg" alt="Gestión catastral y registro territorial"
-            loading="lazy" decoding="async">
-          <div class="expertise-content">
-            <span class="expertise-tag" data-i18n="exp-catastro-tag">Catastro y gestión municipal</span>
-            <p data-i18n="exp-catastro-desc">Registro, actualización y organización parcelaria para la gestión
-              territorial y municipal.</p>
-            <div class="expertise-pills">
-              <span data-i18n="exp-pill-catastro">CATASTRO</span>
-              <span data-i18n="exp-pill-normas">NORMAS</span>
-              <span data-i18n="exp-pill-sig">SIG</span>
-              <span data-i18n="exp-pill-gestion">GESTIÓN MUNICIPAL</span>
-            </div>
-          </div>
-        </article>
-        <article class="expertise-card reveal" data-category="geodesia">
-          <img class="expertise-image" src="assets/geodesia-topografia.jpg"
-            alt="Trabajos de geodesia y topografía de precisión" loading="lazy" decoding="async">
-          <div class="expertise-content">
-            <span class="expertise-tag" data-i18n="exp-geodesia-tag">Geodesia y GNSS</span>
-            <p data-i18n="exp-geodesia-desc">Levantamientos, redes GNSS y control técnico con enfoque en precisión y
-              referencia espacial.</p>
-            <div class="expertise-pills">
-              <span data-i18n="exp-pill-gnss">GNSS</span>
-              <span data-i18n="exp-pill-rtk">RTK</span>
-              <span data-i18n="exp-pill-et">ESTACIÓN TOTAL</span>
-              <span data-i18n="exp-pill-control">CONTROL</span>
-            </div>
-          </div>
-        </article>
-        <article class="expertise-card reveal" data-category="sig">
-          <img class="expertise-image" src="assets/sig-mapa-optimized.jpg"
-            alt="Sistema de información geográfica y análisis geoespacial" loading="lazy" decoding="async">
-          <div class="expertise-content">
-            <span class="expertise-tag" data-i18n="exp-sig-tag">SIG y análisis territorial</span>
-            <p data-i18n="exp-sig-desc">Visualización, modelado y análisis territorial para apoyar decisiones basadas en
-              datos.</p>
-            <div class="expertise-pills">
-              <span data-i18n="exp-pill-qgis">QGIS</span>
-              <span data-i18n="exp-pill-arcgis">ARCGIS PRO</span>
-              <span data-i18n="exp-pill-analisis">ANÁLISIS ESPACIAL</span>
-              <span data-i18n="exp-pill-python">PYTHON</span>
-            </div>
-          </div>
-        </article>
-        <article class="expertise-card reveal" data-category="sig">
-          <img class="expertise-image" src="assets/cartografia-tematica.jpeg"
-            alt="Cartografía temática y análisis espacial" loading="lazy" decoding="async">
-          <div class="expertise-content">
-            <span class="expertise-tag" data-i18n="exp-cartografia-tag">Cartografía temática</span>
-            <p data-i18n="exp-cartografia-desc">Mapas temáticos orientados al análisis espacial y la lectura precisa del
-              territorio.</p>
-            <div class="expertise-pills">
-              <span data-i18n="exp-pill-qgis">QGIS</span>
-              <span data-i18n="exp-pill-arcgis">ARCGIS PRO</span>
-              <span data-i18n="exp-pill-blender">BLENDER</span>
-              <span data-i18n="exp-pill-web">MAPAS WEB</span>
-            </div>
-          </div>
-        </article>
-        <article class="expertise-card reveal" data-category="teledeteccion">
-          <img class="expertise-image" src="assets/teledeteccion.jpeg" alt="Teledetección y fotogrametría aérea"
-            loading="lazy" decoding="async">
-          <div class="expertise-content">
-            <span class="expertise-tag" data-i18n="exp-tele-tag">Teledetección y fotogrametría aérea</span>
-            <p data-i18n="exp-tele-desc">Interpretación de imágenes y productos fotogramétricos para monitoreo y
-              análisis territorial.</p>
-            <div class="expertise-pills">
-              <span data-i18n="exp-pill-sentinel">SENTINEL</span>
-              <span data-i18n="exp-pill-landsat">LANDSAT</span>
-              <span data-i18n="exp-pill-gee">GEE</span>
-              <span data-i18n="exp-pill-drones">DRONES</span>
-            </div>
-          </div>
-        </article>
-        <article class="expertise-card reveal" data-category="catastro">
-          <img class="expertise-image" src="assets/planificacion-urbana-800.webp"
-            srcset="assets/planificacion-urbana-480.webp 480w, assets/planificacion-urbana-800.webp 800w, assets/planificacion-urbana-1200.webp 1200w, assets/planificacion-urbana-1600.webp 1600w"
-            sizes="(max-width: 760px) calc(100vw - 2.3rem), (max-width: 980px) 90vw, (max-width: 1150px) calc(45vw - 0.8rem), calc(30vw - 1.1rem)"
-            width="1600" height="798"
-            alt="Planificación y ordenamiento territorial" loading="lazy" decoding="async">
-          <div class="expertise-content">
-            <span class="expertise-tag" data-i18n="exp-plan-tag">Planificación y ordenamiento territorial</span>
-            <p data-i18n="exp-plan-desc">Diseño de propuestas territoriales para orientar el crecimiento urbano y rural.
-            </p>
-            <div class="expertise-pills">
-              <span data-i18n="exp-pill-suelo">USO DEL SUELO</span>
-              <span data-i18n="exp-pill-zonificacion">ZONIFICACIÓN</span>
-              <span data-i18n="exp-pill-ptdi">PTDI</span>
-              <span data-i18n="exp-pill-gurbana">GESTIÓN URBANA</span>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
     <section class="gallery-section geoportfolio-section" id="geoportfolio">
       <div class="section-heading reveal">
-        <span class="section-index">02-01</span>
+        <span class="section-index">02</span>
         <div>
           <p class="section-kicker" data-i18n="geo-kicker">Mapas web y StoryMaps</p>
           <h2 data-i18n="geo-title">Geoportafolio</h2>
@@ -548,15 +425,13 @@
 
       <div class="gallery-layout">
         <figure class="gallery-card gallery-card-feature reveal" data-category="webmaps">
-          <img src="assets/levantamiento-datos.jpg"
-            alt="Mapa web de diagnóstico territorial para proyectos de energía solar en San Miguel de Velasco"
+          <img src="assets/geoportal-optimized.jpg" alt="Geoportal Santa Cruz con cartografia interactiva"
             loading="lazy" decoding="async">
           <figcaption>
-            <strong data-i18n="geo-elec-title">Mapa interactivo de electricidad</strong>
-            <span data-i18n="geo-elec-desc">Comunidades, viviendas sin energía eléctrica y evidencia de campo para
-              proyectos de energía solar.</span>
-            <a class="gallery-link" href="https://gustavocaceresmartinez.com/electricidad/#10/-16.5684/-61.5179"
-              target="_blank" rel="noreferrer" data-i18n="geo-link-view">Ver mapa interactivo</a>
+            <strong data-i18n="geo-sc-portal-title">Geoportal Santa Cruz</strong>
+            <span data-i18n="geo-sc-portal-desc">Geoportal interactivo para consultar capas, mapas y datos territoriales de Santa Cruz.</span>
+            <a class="gallery-link" href="https://geoportal-sc.gustavocaceresmartinez.com/" target="_blank"
+              rel="noreferrer" data-i18n="geo-link-view">Ver mapa interactivo</a>
           </figcaption>
         </figure>
         <figure class="gallery-card reveal" data-category="webmaps">
@@ -565,20 +440,6 @@
             <strong data-i18n="geo-catastro-title">Sistema Catastral Municipal</strong>
             <span data-i18n="geo-catastro-desc">Sistema interactivo para la gestión y actualización catastral multifinalitaria.</span>
             <a class="gallery-link" href="https://catastro.gustavocaceresmartinez.com/" target="_blank" rel="noreferrer" data-i18n="geo-link-view">Ver mapa interactivo</a>
-          </figcaption>
-        </figure>
-        <figure class="gallery-card reveal" data-category="storymaps">
-          <img src="assets/portada-800.webp"
-            srcset="assets/portada-480.webp 480w, assets/portada-800.webp 800w, assets/portada-917.webp 917w"
-            sizes="(max-width: 760px) calc(100vw - 2.3rem), (max-width: 1200px) calc(45vw - 0.8rem), calc(30vw - 1.1rem)"
-            width="917" height="819" alt="StoryMap de la Reserva Forestal El Choré con datos de MapBiomas Bolivia"
-            loading="lazy" decoding="async">
-          <figcaption>
-            <strong data-i18n="geo-chore-title">StoryMap El Choré</strong>
-            <span data-i18n="geo-chore-desc">Reserva Forestal El Choré: 40 años de transformación visualizados con datos
-              de cobertura y uso del suelo.</span>
-            <a class="gallery-link" href="https://gustavocaceresmartinez.com/elChore/" target="_blank" rel="noreferrer"
-              data-i18n="geo-link-story">Visitar StoryMap</a>
           </figcaption>
         </figure>
         <figure class="gallery-card reveal" data-category="map3d">
@@ -606,7 +467,8 @@
           <img src="assets/chochis-portada-800.webp"
             srcset="assets/chochis-portada-800.webp 800w, assets/chochis-portada-1200.webp 1200w, assets/chochis-portada-1920.webp 1920w"
             sizes="(max-width: 760px) max(660px, calc(100vw - 2.3rem)), (max-width: 980px) 660px, (max-width: 1200px) 880px, max(880px, calc(30vw - 1.1rem))"
-            width="1920" height="700" alt="Mapa turístico interactivo de Chochís" loading="lazy"
+            width="1920"
+            height="700" alt="Mapa turístico interactivo de Chochís" loading="lazy"
             decoding="async">
           <figcaption>
             <strong data-i18n="geo-chochis-title">Chochís: mapa turístico interactivo</strong>
@@ -615,18 +477,35 @@
               rel="noreferrer" data-i18n="geo-link-view">Ver mapa interactivo</a>
           </figcaption>
         </figure>
-        <figure class="gallery-card reveal" data-category="webmaps">
-          <img src="assets/geoportal-optimized.jpg" alt="Geoportal Santa Cruz con cartografia interactiva"
+        <figure class="gallery-card reveal" data-category="storymaps">
+          <img src="assets/portada-800.webp"
+            srcset="assets/portada-480.webp 480w, assets/portada-800.webp 800w, assets/portada-917.webp 917w"
+            sizes="(max-width: 760px) calc(100vw - 2.3rem), (max-width: 1200px) calc(45vw - 0.8rem), calc(30vw - 1.1rem)"
+            width="917"
+            height="819" alt="StoryMap de la Reserva Forestal El Choré con datos de MapBiomas Bolivia"
             loading="lazy" decoding="async">
           <figcaption>
-            <strong data-i18n="geo-sc-portal-title">Geoportal Santa Cruz</strong>
-            <span data-i18n="geo-sc-portal-desc">Geoportal interactivo para consultar capas, mapas y datos territoriales de Santa Cruz.</span>
-            <a class="gallery-link" href="https://geoportal-sc.gustavocaceresmartinez.com/" target="_blank"
-              rel="noreferrer" data-i18n="geo-link-view">Ver mapa interactivo</a>
+            <strong data-i18n="geo-chore-title">StoryMap El Choré</strong>
+            <span data-i18n="geo-chore-desc">Reserva Forestal El Choré: 40 años de transformación visualizados con datos
+              de cobertura y uso del suelo.</span>
+            <a class="gallery-link" href="https://gustavocaceresmartinez.com/elChore/" target="_blank" rel="noreferrer"
+              data-i18n="geo-link-story">Visitar StoryMap</a>
           </figcaption>
         </figure>
         <figure class="gallery-card reveal" data-category="webmaps">
-          <img src="assets/sig-mapa-optimized.jpg" alt="Mapa digital interactivo de Santa Cruz" loading="lazy"
+          <img src="assets/levantamiento-datos.jpg"
+            alt="Mapa web de diagnóstico territorial para proyectos de energía solar en San Miguel de Velasco"
+            loading="lazy" decoding="async">
+          <figcaption>
+            <strong data-i18n="geo-elec-title">Mapa interactivo de electricidad</strong>
+            <span data-i18n="geo-elec-desc">Comunidades, viviendas sin energía eléctrica y evidencia de campo para
+              proyectos de energía solar.</span>
+            <a class="gallery-link" href="https://gustavocaceresmartinez.com/electricidad/#10/-16.5684/-61.5179"
+              target="_blank" rel="noreferrer" data-i18n="geo-link-view">Ver mapa interactivo</a>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-category="webmaps">
+          <img src="assets/Rutas y mapas digitales Dark.jpg" alt="Mapa digital interactivo de Santa Cruz" loading="lazy"
             decoding="async">
           <figcaption>
             <strong data-i18n="geo-digital-title">Mapas Digitales</strong>
@@ -636,6 +515,191 @@
               target="_blank" rel="noreferrer" data-i18n="geo-link-viewdigital">Ver mapa digital</a>
           </figcaption>
         </figure>
+      </div>
+    </section>
+
+    <section class="gallery-section" id="gallery">
+      <div class="section-heading reveal">
+        <span class="section-index">03</span>
+        <div>
+          <p class="section-kicker" data-i18n="gal-kicker">Registro visual</p>
+          <h2 data-i18n="gal-title">Galería</h2>
+        </div>
+      </div>
+
+      <!-- Botonera de Filtros para Galería -->
+      <div class="portfolio-filters reveal" id="gallery-filters">
+        <button class="filter-btn active" data-filter="all" data-i18n="filter-all">Todos</button>
+        <button class="filter-btn" data-filter="campo" data-i18n="filter-field">Campo</button>
+        <button class="filter-btn" data-filter="aereo" data-i18n="filter-aerial">Drones / Aérea</button>
+        <button class="filter-btn" data-filter="tecnico" data-i18n="filter-technical">Gabinete / Técnico</button>
+      </div>
+
+      <div class="gallery-layout" id="lightbox-gallery">
+        <figure class="gallery-card gallery-card-feature gallery-card-carousel reveal" data-category="tecnico">
+          <div class="gallery-carousel-slides">
+            <img class="is-active" src="assets/yo-geodesia-onu-800.webp"
+            srcset="assets/yo-geodesia-onu-480.webp 480w, assets/yo-geodesia-onu-800.webp 800w, assets/yo-geodesia-onu-1200.webp 1200w"
+            sizes="(max-width: 760px) calc(100vw - 2.3rem), (max-width: 1200px) calc(45vw - 0.8rem), calc(30vw - 1.1rem)"
+            width="1600"
+            height="1067"
+            data-full-src="assets/yo-geodesia-onu-1600.webp"
+              alt="Participación profesional en espacio de geodesia e institucionalidad técnica"
+              loading="lazy" decoding="async">
+            <img src="assets/FOTO DE GEODESIA ONU 4.jpg"
+              alt="Sesión de trabajo técnico en taller regional de geodesia en la CEPAL / ONU"
+              loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-carousel-dots" aria-label="Cambiar foto del taller regional">
+            <button type="button" class="gallery-dot is-active" data-slide="0" aria-label="Foto 1"></button>
+            <button type="button" class="gallery-dot" data-slide="1" aria-label="Foto 2"></button>
+          </div>
+          <figcaption>
+            <strong data-i18n="gal-img1-title">Taller Regional UN-GGCE 2025</strong>
+            <span data-i18n="gal-img1-desc">Taller de desarrollo de capacidades para las Américas sobre la transición hacia un sistema de referencia geoespacial moderno (ONU · Chile).</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card gallery-card-carousel reveal" data-category="tecnico">
+          <div class="gallery-carousel-slides">
+            <img class="is-active" src="assets/imagen_simposio.jpeg"
+              alt="Exposición en el Simposio SIRGAS 2026 en Montevideo, Uruguay"
+              style="object-position: center 52%;"
+              loading="lazy" decoding="async">
+            <img src="assets/imagen_simposio_2.jpeg"
+              alt="Participación junto a colegas e investigadores en el Simposio SIRGAS 2026"
+              style="object-position: center 30%;"
+              loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-carousel-dots" aria-label="Cambiar foto del simposio">
+            <button type="button" class="gallery-dot is-active" data-slide="0" aria-label="Foto 1"></button>
+            <button type="button" class="gallery-dot" data-slide="1" aria-label="Foto 2"></button>
+          </div>
+          <figcaption>
+            <strong data-i18n="gal-img9-title">Simposio SIRGAS 2026</strong>
+            <span data-i18n="gal-img9-desc">Exposición sobre variabilidad estacional y coherencia temporal del retraso troposférico cenital (ZTD) en estaciones GNSS (Montevideo · Uruguay).</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-category="aereo">
+          <img src="assets/iglesia-san-miguel-dron.jpg"
+            alt="Vista aérea de trabajo territorial en San Miguel de Velasco" loading="lazy"
+            decoding="async">
+          <figcaption>
+            <strong data-i18n="gal-img2-title">Teledetección y fotogrametría aérea</strong>
+            <span data-i18n="gal-img2-desc">Análisis del territorio a partir de información aérea en
+              contextos urbano-rurales.</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-category="campo">
+          <img src="assets/comunidades.jpg" alt="Trabajo territorial con comunidades" loading="lazy"
+            decoding="async">
+          <figcaption>
+            <strong data-i18n="gal-img3-title">Diagnóstico y gestión comunitaria</strong>
+            <span data-i18n="gal-img3-desc">Mi trabajo territorial también se vincula con actores locales,
+              lectura social y realidad comunitaria.</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-category="campo">
+          <img src="assets/santa-rosita-ninos-800.webp"
+            srcset="assets/santa-rosita-ninos-480.webp 480w, assets/santa-rosita-ninos-800.webp 800w, assets/santa-rosita-ninos-1200.webp 1200w"
+            sizes="(max-width: 760px) calc(100vw - 2.3rem), (max-width: 1200px) calc(45vw - 0.8rem), calc(30vw - 1.1rem)"
+            width="1600"
+            height="1067"
+            data-full-src="assets/santa-rosita-ninos-1600.webp" alt="Actividad con niños en Santa Rosita"
+            loading="lazy" decoding="async">
+          <figcaption>
+            <strong data-i18n="gal-img4-title">Planificación y ordenamiento territorial</strong>
+            <span data-i18n="gal-img4-desc">Proyectos de planificación en comunidades rurales
+              vulnerables.</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card gallery-card-carousel reveal" data-category="tecnico">
+          <div class="gallery-carousel-slides">
+            <img class="is-active" src="assets/igm-portada-gravimetro.jpg"
+              alt="Trabajo técnico con gravímetro para marco vertical de referencia nacional" loading="lazy"
+              decoding="async">
+            <img src="assets/GRAVIMETRO.jpg"
+              alt="Medición gravimétrica en campo con equipos para el marco vertical nacional (MARGEV)" loading="lazy"
+              decoding="async">
+            <img src="assets/IMAGEN IGMA GAVIMETRO PROTADA.jpg"
+              alt="Equipo técnico del IGM con gravímetros para el proyecto MARGEV" loading="lazy"
+              decoding="async">
+          </div>
+          <div class="gallery-carousel-dots" aria-label="Cambiar foto de gravimetría">
+            <button type="button" class="gallery-dot is-active" data-slide="0" aria-label="Foto 1"></button>
+            <button type="button" class="gallery-dot" data-slide="1" aria-label="Foto 2"></button>
+            <button type="button" class="gallery-dot" data-slide="2" aria-label="Foto 3"></button>
+          </div>
+          <figcaption>
+            <strong data-i18n="gal-img5-title">Gravimetría · Proyecto MARGEV (IGM)</strong>
+            <span data-i18n="gal-img5-desc">Trabajos técnicos de gravimetría para el cálculo de números
+              geopotenciales con el fin de definir el marco vertical de referencia nacional (MARGEV).</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-category="campo">
+          <img src="assets/levantamiento-datos-com.jpg" alt="Levantamiento de datos con equipo GNSS en campo"
+            loading="lazy" decoding="async">
+          <figcaption>
+            <strong data-i18n="gal-img6-title">Topografía y cálculo de volúmenes</strong>
+            <span data-i18n="gal-img6-desc">Levantamiento topográfico para determinar volúmenes de
+              materiales en bancos de tierra.</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-category="campo">
+          <img src="assets/levantamiento-datos2.jpg" alt="Levantamiento técnico en obra con equipo GNSS"
+            loading="lazy" decoding="async">
+          <figcaption>
+            <strong data-i18n="gal-img7-title">Levantamiento catastral con GNSS</strong>
+            <span data-i18n="gal-img7-desc">Levantamientos catastrales de bienes inmuebles en áreas urbanas
+              extensivas.</span>
+          </figcaption>
+        </figure>
+        <figure class="gallery-card reveal" data-category="campo">
+          <img src="assets/levantamiento-datos3.jpg" alt="Levantamiento y control topográfico en obra"
+            loading="lazy" decoding="async">
+          <figcaption>
+            <strong data-i18n="gal-img8-title">Replanteo y control topográfico</strong>
+            <span data-i18n="gal-img8-desc">Replanteo topográfico de bienes inmuebles en áreas urbanas
+              extensivas.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="map-section" id="map">
+      <div class="section-heading reveal">
+        <span class="section-index">04</span>
+        <div>
+          <p class="section-kicker" data-i18n="map-kicker">Alcance territorial</p>
+          <h2 data-i18n="map-title">Alcance territorial</h2>
+        </div>
+      </div>
+
+      <div class="map-layout">
+        <div class="map-sidebar reveal">
+          <p data-i18n="map-desc">
+            Mi trayectoria se concentra en Santa Cruz, donde he desarrollado
+            experiencia en gestión municipal, monitoreo ambiental, incendios forestales,
+            cartografía urbana y redes geodésicas. Este mapa sintetiza el alcance geográfico de
+            mi trabajo y los principales regiones del departamento donde he desarrollado proyectos.
+          </p>
+          <div class="map-stats">
+            <article class="map-stat-card">
+              <strong>5/7</strong>
+              <span data-i18n="map-stat1-label">Regiones recorridas</span>
+            </article>
+            <article class="map-stat-card">
+              <strong>+30</strong>
+              <span data-i18n="map-stat2-label">Municipios visitados</span>
+            </article>
+          </div>
+        </div>
+        <div class="map-container-wrap reveal">
+          <div id="career-map-loader" class="map-loader">
+            <div class="spinner"></div>
+            <p data-i18n="map-loading">Cargando mapa territorial...</p>
+          </div>
+          <div id="career-map" aria-label="Mapa de trayectoria territorial"></div>
+        </div>
       </div>
     </section>
   </main>

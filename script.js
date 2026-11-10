@@ -180,13 +180,15 @@ function initScrollSpy() {
     const trackedSections = [
         { section: document.querySelector('.hero'), targetId: '#top' },
         { section: document.querySelector('#profile'), targetId: '#profile' },
+        { section: document.querySelector('#projects'), targetId: '#projects' },
         { section: document.querySelector('#trajectory'), targetId: '#trajectory' },
         { section: document.querySelector('#recognition'), targetId: '#recognition' },
-        { section: document.querySelector('#projects'), targetId: '#projects' },
+        { section: document.querySelector('#faq'), targetId: '#faq' },
         { section: document.querySelector('#geoportfolio'), targetId: '#geoportfolio' },
         { section: document.querySelector('#gallery'), targetId: '#gallery' },
         { section: document.querySelector('#map'), targetId: '#map' },
         { section: document.querySelector('#research-teaching'), targetId: '#research-teaching' },
+        { section: document.querySelector('#conferences'), targetId: '#conferences' },
         { section: document.querySelector('#university-teaching'), targetId: '#university-teaching' },
         { section: document.querySelector('#students'), targetId: '#students' },
         { section: document.querySelector('#contact'), targetId: '#contact' }
@@ -197,8 +199,13 @@ function initScrollSpy() {
     }
 
     const setActiveLink = (activeId) => {
+        const isHomePage = Boolean(document.querySelector('.hero'));
+        const homeSectionIds = ['#top', '#profile', '#geoportfolio', '#gallery', '#map'];
+
         navItems.forEach(({ link, targetId }) => {
-            const isActive = targetId === activeId;
+            const isActive = isHomePage && targetId === '#top'
+                ? homeSectionIds.includes(activeId)
+                : targetId === activeId;
             link.classList.toggle('is-active', isActive);
 
             if (isActive) {
@@ -208,13 +215,13 @@ function initScrollSpy() {
             }
         });
 
-        const isProjectActive = ['#projects', '#geoportfolio', '#gallery', '#map'].includes(activeId);
+        const isProjectActive = ['#geoportfolio', '#gallery', '#map'].includes(activeId);
         projectToggle?.classList.toggle('is-active', isProjectActive);
 
-        const isAboutActive = ['#profile', '#trajectory', '#recognition', '#faq'].includes(activeId);
+        const isAboutActive = !isHomePage && ['#profile', '#projects', '#trajectory', '#recognition', '#faq'].includes(activeId);
         aboutToggle?.classList.toggle('is-active', isAboutActive);
 
-        const isResearchActive = ['#research-teaching', '#university-teaching', '#students'].includes(activeId);
+        const isResearchActive = ['#research-teaching', '#conferences', '#university-teaching', '#students'].includes(activeId);
         researchToggle?.classList.toggle('is-active', isResearchActive);
     };
 
@@ -1314,6 +1321,7 @@ const translations = {
     es: {
         "nav-home": "Inicio",
         "nav-about": "Sobre mí",
+        "nav-specialties": "Áreas de especialidad",
         "nav-trajectory": "Trayectoria",
         "nav-recognition": "Reconocimientos y afiliaciones",
         "nav-projects": "Proyectos",
@@ -1322,7 +1330,14 @@ const translations = {
         "nav-map": "Alcance territorial",
         "nav-research-teaching": "Investigación y docencia",
         "nav-research-lines": "Líneas de investigación",
-        "nav-university-teaching": "Docencia universitaria",
+        "nav-conferences": "Congresos y simposios",
+        "conferences-title": "Participación en congresos y simposios",
+        "sirgas-role": "Expositor · Montevideo · 2026",
+        "sirgas-video-link": "Ver presentación en YouTube",
+        "sirgas-event": "Simposio SIRGAS 2026",
+        "sirgas-presentation": "Disponibilidad, variabilidad estacional y coherencia temporal del ZTD en tres estaciones GNSS de Santa Cruz, Bolivia, durante 2023–2025",
+        "sirgas-summary": "Análisis del retraso troposférico cenital (ZTD) en las estaciones GNSS BOL2, BOSC y SCRZ mediante GAMIT/GLOBK. Las series de 2023–2025 mostraron medianas de ZTD aproximadamente 87 mm mayores en la época húmeda y correlaciones superiores a 0,97 entre estaciones. En SCRZ, la comparación con el producto oficial del IGS obtuvo una raíz del error cuadrático medio (RMSE) de 7,03 mm. El estudio también identificó diferencias de disponibilidad y un aumento de la incertidumbre formal en 2025, aspectos clave para valorar el uso de estas series en futuras aplicaciones de meteorología GNSS.",
+        "nav-university-teaching": "Docencia",
         "nav-students": "Alcance formativo",
         "nav-faq": "Preguntas clave",
         "nav-contact": "Contacto",
@@ -1408,8 +1423,8 @@ const translations = {
         "rec-feat2-label": "Afiliación",
         "rec-feat2-title": "SIB-SC",
         "rec-feat2-desc": "Soy miembro de la Sociedad de Ingenieros de Bolivia, Regional Santa Cruz, y del Colegio de Ingenieros Agrimensores.",
-        "projects-kicker": "Proyectos",
-        "projects-title": "Proyectos",
+        "projects-kicker": "Áreas de especialidad",
+        "projects-title": "Áreas de especialidad",
         "filter-all": "Todos",
         "filter-catastro": "Catastro",
         "filter-geodesia": "Geodesia / GNSS",
@@ -1479,22 +1494,24 @@ const translations = {
         "geo-link-viewdigital": "Ver mapa digital",
         "gal-kicker": "Registro visual",
         "gal-title": "Galería",
-        "gal-img1-title": "Geodesia y topografía",
-        "gal-img1-desc": "Participación en talleres regionales sobre sistemas de referencia geodésicos modernos.",
+        "gal-img1-title": "Taller Regional UN-GGCE 2025",
+        "gal-img1-desc": "Taller de desarrollo de capacidades para las Américas sobre la transición hacia un sistema de referencia geoespacial moderno (ONU · Chile).",
         "gal-img2-title": "Teledetección y fotogrametría aérea",
         "gal-img2-desc": "Análisis del territorio a partir de información aérea en contextos urbano-rurales.",
-        "gal-img3-title": "Planificación y ordenamiento territorial",
+        "gal-img3-title": "Diagnóstico y gestión comunitaria",
         "gal-img3-desc": "Mi trabajo territorial también se vincula con actores locales, lectura social y realidad comunitaria.",
         "gal-img4-title": "Planificación y ordenamiento territorial",
         "gal-img4-desc": "Proyectos de planificación en comunidades rurales vulnerables.",
-        "gal-img5-title": "Gravimetría",
+        "gal-img5-title": "Gravimetría · Proyecto MARGEV (IGM)",
         "gal-img5-desc": "Trabajos técnicos de gravimetría para el cálculo de números geopotenciales con el fin de definir el marco vertical de referencia nacional (MARGEV).",
-        "gal-img6-title": "Geodesia y topografía",
+        "gal-img6-title": "Topografía y cálculo de volúmenes",
         "gal-img6-desc": "Levantamiento topográfico para determinar volúmenes de materiales en bancos de tierra.",
-        "gal-img7-title": "Geodesia y topografía",
+        "gal-img7-title": "Levantamiento catastral con GNSS",
         "gal-img7-desc": "Levantamientos catastrales de bienes inmuebles en áreas urbanas extensivas.",
-        "gal-img8-title": "Geodesia y topografía",
+        "gal-img8-title": "Replanteo y control topográfico",
         "gal-img8-desc": "Replanteo topográfico de bienes inmuebles en áreas urbanas extensivas.",
+        "gal-img9-title": "Simposio SIRGAS 2026",
+        "gal-img9-desc": "Exposición sobre variabilidad estacional y coherencia temporal del retraso troposférico cenital (ZTD) en estaciones GNSS (Montevideo · Uruguay).",
         "map-kicker": "Alcance territorial",
         "map-title": "Alcance territorial",
         "map-desc": "Mi trayectoria se concentra en Santa Cruz, donde he desarrollado experiencia en gestión municipal, monitoreo ambiental, incendios forestales, cartografía urbana y redes geodésicas. Este mapa sintetiza el alcance geográfico de mi trabajo y los principales regiones del departamento donde he desarrollado proyectos.",
@@ -1504,21 +1521,22 @@ const translations = {
         "res-kicker": "Investigación y docencia",
         "res-title": "Líneas de investigación",
         "res-status-process": "En proceso",
+        "res-status-completed": "Finalizada",
+        "res-card1-invitation": "¿Te interesa conocer la metodología y los resultados? Puedes solicitarme el trabajo completo a través de la sección de contacto al final de esta página.",
         "res-card1-title": "Estimación y validación del retardo troposférico cenital (ZTD) y del vapor de agua precipitable (PWV)",
-        "res-card1-desc": "Mediante el análisis de datos de la estación CORS SCRZ, se estima el Retardo Troposférico Cenital (ZTD) para derivar el Vapor de Agua Precipitable (PWV). Este proceso permite un monitoreo hidroclimático preciso y casi en tiempo real, fundamental para entender la dinámica atmosférica de la región y mejorar los pronósticos locales.",
+        "res-card1-desc": "Investigación finalizada sobre la estimación y validación del ZTD y del PWV a partir de datos de la estación CORS SCRZ. El trabajo reúne la metodología y los resultados del análisis para el estudio de la dinámica atmosférica en Santa Cruz, Bolivia.",
         "res-card2-title": "Determinación de un modelo de velocidades regional para el área metropolitana de Santa Cruz con GAMIT/GLOBK",
         "res-card2-desc": "El objetivo es desarrollar un modelo que cuantifique el desplazamiento de las estaciones a través del tiempo, permitiendo mantener la precisión del marco geodésico frente a la deformación de la corteza y proporcionando datos clave para estudios de tectónica y planificación urbana en Santa Cruz.",
         "res-card3-title": "SIG de código abierto como soporte metodológico para la planificación, difusión y monitoreo de productos turísticos",
         "res-card3-desc": "La propuesta busca contribuir al fortalecimiento técnico de los productos turísticos mediante el uso de herramientas accesibles, replicables y de bajo costo. La incorporación de SIG de código abierto ofrecen una alternativa para organizar, representar, difundir y monitorear productos turísticos, ampliando su utilidad tanto en contextos académicos como profesionales.",
-        "teach-kicker": "Docencia universitaria",
-        "teach-title": "Docencia universitaria",
+        "teach-kicker": "Docencia",
+        "teach-title": "Docencia",
         "teach-status-now": "Actualidad",
-        "teach-status-2025": "2025",
         "teach-status-focus": "Enfoque",
-        "teach-card1-title": "Docente de Rutas y Mapas Digitales",
-        "teach-card1-desc": "Docencia universitaria aplicada al turismo y los SIG, con énfasis en levantamiento, depuración, análisis, visualización y publicación de información geoespacial.",
-        "teach-card2-title": "Diplomado en Catastro Multifinalitario",
-        "teach-card2-desc": "Diseño y desarrollo del módulo \"Catastro Multifinalitario y Desarrollo Urbano\", orientado a gobiernos autónomos municipales y gestión territorial.",
+        "teach-card1-title": "Docente universitario",
+        "teach-card1-desc": "Imparto las asignaturas de Rutas y Mapas Digitales y Sistema de Posicionamiento Global. Mi enseñanza integra el posicionamiento satelital, la cartografía digital y los SIG, con énfasis en el levantamiento, análisis y representación de información geoespacial.",
+        "teach-card2-title": "Docente de postgrado",
+        "teach-card2-desc": "Imparto módulos de Catastro Multifinalitario y Desarrollo Urbano, Aplicaciones SIG y Bases Conceptuales en programas de diplomado. Mi enseñanza combina fundamentos teóricos y herramientas geoespaciales aplicadas al análisis y la gestión territorial.",
         "teach-card3-title": "Formación técnica aplicada",
         "teach-card3-desc": "Integración de SIG, datos abiertos, planificación urbana, tributación, sostenibilidad territorial y comunicación cartográfica en procesos formativos.",
         "stu-kicker": "Alcance formativo",
@@ -1564,6 +1582,7 @@ const translations = {
     en: {
         "nav-home": "Home",
         "nav-about": "About me",
+        "nav-specialties": "Areas of Expertise",
         "nav-trajectory": "Trajectory",
         "nav-recognition": "Awards & Affiliations",
         "nav-projects": "Projects",
@@ -1572,7 +1591,14 @@ const translations = {
         "nav-map": "Territorial Scope",
         "nav-research-teaching": "Research & Teaching",
         "nav-research-lines": "Research Lines",
-        "nav-university-teaching": "University Teaching",
+        "nav-conferences": "Conferences & Symposia",
+        "conferences-title": "Participation in conferences and symposia",
+        "sirgas-role": "Presenter · Montevideo · 2026",
+        "sirgas-video-link": "Watch presentation on YouTube",
+        "sirgas-event": "SIRGAS Symposium 2026",
+        "sirgas-presentation": "Availability, seasonal variability and temporal coherence of ZTD at three GNSS stations in Santa Cruz, Bolivia, during 2023–2025",
+        "sirgas-summary": "Analysis of zenith tropospheric delay (ZTD) at the BOL2, BOSC and SCRZ GNSS stations using GAMIT/GLOBK. The 2023–2025 time series showed median ZTD values approximately 87 mm higher in the wet season and correlations above 0.97 between stations. At SCRZ, comparison with the official IGS product yielded a root mean square error (RMSE) of 7.03 mm. The study also identified differences in data availability and an increase in formal uncertainty in 2025, key considerations when assessing these time series for future GNSS meteorology applications.",
+        "nav-university-teaching": "Teaching",
         "nav-students": "Educational Scope",
         "nav-faq": "Key Questions",
         "nav-contact": "Contact",
@@ -1658,8 +1684,8 @@ const translations = {
         "rec-feat2-label": "Affiliation",
         "rec-feat2-title": "SIB-SC",
         "rec-feat2-desc": "I am a member of the Society of Engineers of Bolivia, Santa Cruz Regional, and the College of Land Surveyors.",
-        "projects-kicker": "Projects",
-        "projects-title": "Projects",
+        "projects-kicker": "Areas of Expertise",
+        "projects-title": "Areas of Expertise",
         "filter-all": "All",
         "filter-catastro": "Cadastre",
         "filter-geodesia": "Geodesy / GNSS",
@@ -1729,22 +1755,24 @@ const translations = {
         "geo-link-viewdigital": "View digital map",
         "gal-kicker": "Visual record",
         "gal-title": "Gallery",
-        "gal-img1-title": "Geodesy & surveying",
-        "gal-img1-desc": "Participation in regional workshops on modern geodetic reference systems.",
+        "gal-img1-title": "UN-GGCE Regional Workshop 2025",
+        "gal-img1-desc": "Capacity development workshop for the Americas on transitioning to a modern geospatial reference system (UN · Chile).",
         "gal-img2-title": "Remote sensing & aerial photogrammetry",
         "gal-img2-desc": "Territorial analysis based on aerial information in urban-rural contexts.",
-        "gal-img3-title": "Land-use planning & territorial organization",
+        "gal-img3-title": "Community Diagnosis & Management",
         "gal-img3-desc": "My territorial work is also linked with local actors, social readings, and community reality.",
         "gal-img4-title": "Land-use planning & territorial organization",
         "gal-img4-desc": "Planning projects in vulnerable rural communities.",
-        "gal-img5-title": "Gravimetry",
+        "gal-img5-title": "Gravimetry · MARGEV Project (IGM)",
         "gal-img5-desc": "Technical gravimetry works for calculating geopotential numbers in order to define the national vertical reference framework (MARGEV).",
-        "gal-img6-title": "Geodesy & surveying",
+        "gal-img6-title": "Topographic Survey & Volume Calculation",
         "gal-img6-desc": "Topographical survey to determine volumes of materials in earth banks.",
-        "gal-img7-title": "Geodesy & surveying",
+        "gal-img7-title": "GNSS Cadastral Survey",
         "gal-img7-desc": "Cadastral surveys of real estate in urban areas.",
-        "gal-img8-title": "Geodesy & surveying",
+        "gal-img8-title": "Site Stakeout & Topographic Control",
         "gal-img8-desc": "Topographical survey and control on site.",
+        "gal-img9-title": "SIRGAS Symposium 2026",
+        "gal-img9-desc": "Presentation on seasonal variability and temporal coherence of zenith tropospheric delay (ZTD) at GNSS stations (Montevideo · Uruguay).",
         "map-kicker": "Territorial scope",
         "map-title": "Territorial scope",
         "map-desc": "My career is focused on Santa Cruz, where I have developed experience in municipal management, environmental monitoring, forest fires, urban cartography, and geodetic networks. This map synthesizes the geographical scope of my work and the main regions of the department where I have carried out projects.",
@@ -1754,21 +1782,22 @@ const translations = {
         "res-kicker": "Research & teaching",
         "res-title": "Research Lines",
         "res-status-process": "In progress",
+        "res-status-completed": "Completed",
+        "res-card1-invitation": "Interested in the methodology and findings? You can request the full study through the contact section at the bottom of this page.",
         "res-card1-title": "Estimation and validation of Zenith Tropospheric Delay (ZTD) and Precipitable Water Vapor (PWV)",
-        "res-card1-desc": "Through the analysis of data from the CORS SCRZ station, the Zenith Tropospheric Delay (ZTD) is estimated to derive the Precipitable Water Vapor (PWV). This process enables precise, near-real-time hydroclimatic monitoring, crucial for understanding the region's atmospheric dynamics and improving local forecasts.",
+        "res-card1-desc": "Completed research on the estimation and validation of ZTD and PWV using data from the SCRZ CORS station. The study presents the methodology and analysis results for studying atmospheric dynamics in Santa Cruz, Bolivia.",
         "res-card2-title": "Determination of a regional velocity model for the metropolitan area of Santa Cruz with GAMIT/GLOBK",
         "res-card2-desc": "The goal is to develop a model that quantifies the displacement of stations over time, allowing the geodetic reference framework accuracy to be maintained against crustal deformation and providing key data for tectonic and urban planning studies in Santa Cruz.",
         "res-card3-title": "Open-source GIS as methodological support for tourist product planning, dissemination, and monitoring",
         "res-card3-desc": "The proposal aims to contribute to the technical strengthening of tourism products through accessible, replicable, and low-cost tools. The integration of open-source GIS offers an alternative to organize, represent, disseminate, and monitor tourism products, expanding their utility in both academic and professional contexts.",
-        "teach-kicker": "University teaching",
-        "teach-title": "University teaching",
+        "teach-kicker": "Teaching",
+        "teach-title": "Teaching",
         "teach-status-now": "Present",
-        "teach-status-2025": "2025",
         "teach-status-focus": "Focus",
-        "teach-card1-title": "Lecturer in Routes and Digital Maps",
-        "teach-card1-desc": "University teaching applied to tourism and GIS, emphasizing spatial data collection, debugging, analysis, visualization, and publication.",
-        "teach-card2-title": "Diploma in Multifinalitary Cadastre",
-        "teach-card2-desc": "Design and development of the \"Multifinalitary Cadastre and Urban Development\" module, oriented towards municipal autonomous governments and territorial management.",
+        "teach-card1-title": "University lecturer",
+        "teach-card1-desc": "I teach the courses Routes and Digital Maps and Global Positioning System. My teaching integrates satellite positioning, digital cartography and GIS, with an emphasis on collecting, analysing and representing geospatial information.",
+        "teach-card2-title": "Postgraduate lecturer",
+        "teach-card2-desc": "I teach modules in Multifinalitary Cadastre and Urban Development, GIS Applications and Conceptual Foundations in diploma programmes. My teaching combines theoretical foundations and geospatial tools applied to territorial analysis and management.",
         "teach-card3-title": "Applied technical training",
         "teach-card3-desc": "Integration of GIS, open data, urban planning, taxation, territorial sustainability, and cartographic communication in educational processes.",
         "stu-kicker": "Educational scope",
@@ -1921,18 +1950,43 @@ function initLightbox() {
     if (!gallery || !lightbox || !lightboxImg || !lightboxCaption) return;
 
     const cards = Array.from(gallery.querySelectorAll('.gallery-card'));
-    const images = cards.map(c => c.querySelector('img')).filter(Boolean);
+    const images = Array.from(gallery.querySelectorAll('.gallery-card img'));
     let currentIndex = -1;
 
+    // Initialize any mini-carousels inside gallery cards (manual dot selection only)
+    gallery.querySelectorAll('.gallery-card-carousel').forEach((card) => {
+        const slides = Array.from(card.querySelectorAll('.gallery-carousel-slides img'));
+        const dots = Array.from(card.querySelectorAll('.gallery-dot'));
+        if (slides.length < 2) return;
+
+        let activeSlide = 0;
+
+        const goToSlide = (idx) => {
+            activeSlide = (idx + slides.length) % slides.length;
+            slides.forEach((img, i) => img.classList.toggle('is-active', i === activeSlide));
+            dots.forEach((dot, i) => dot.classList.toggle('is-active', i === activeSlide));
+        };
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goToSlide(i);
+            });
+        });
+    });
+
     // Attach click listeners to cards
-    cards.forEach((card, index) => {
+    cards.forEach((card) => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {
-            // Prevent interference with internal links (if any)
-            if (e.target.closest('a')) return;
+            // Prevent interference with internal links or carousel dots
+            if (e.target.closest('a') || e.target.closest('.gallery-dot')) return;
 
-            currentIndex = index;
-            openLightbox(images[currentIndex]);
+            const activeImg = card.querySelector('img.is-active') || card.querySelector('img');
+            currentIndex = images.indexOf(activeImg);
+            if (currentIndex !== -1) {
+                openLightbox(images[currentIndex]);
+            }
         });
     });
 
