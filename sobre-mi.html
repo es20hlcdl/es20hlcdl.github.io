@@ -35,7 +35,7 @@
     <meta property="og:description"
         content="Portafolio profesional de Gustavo Abel Cáceres Martínez, especializado en geodesia, catastro, SIG, GNSS, cartografía y planificación territorial.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gustavocaceresmartinez.com/">
+    <meta property="og:url" content="https://gustavocaceresmartinez.com/sobre-mi.html">
     <meta property="og:image" content="https://gustavocaceresmartinez.com/assets/portada.png">
     <meta property="og:locale" content="es_BO">
 
@@ -166,9 +166,9 @@
         },
         {
           "@type": "ProfilePage",
-          "@id": "https://gustavocaceresmartinez.com/#webpage",
-          "url": "https://gustavocaceresmartinez.com/",
-          "name": "Gustavo Abel Cáceres Martínez | Ingeniero Agrimensor, SIG, Catastro y Geodesia",
+          "@id": "https://gustavocaceresmartinez.com/sobre-mi.html#webpage",
+          "url": "https://gustavocaceresmartinez.com/sobre-mi.html",
+          "name": "Sobre mí | Gustavo Abel Cáceres Martínez",
           "description": "Perfil profesional, trayectoria, geoportafolio, docencia e investigación aplicada de Gustavo Abel Cáceres Martínez en Santa Cruz, Bolivia. / Professional profile, career path, geoportfolio, lecturing, and applied research of Gustavo Abel Cáceres Martínez in Santa Cruz, Bolivia.",
           "inLanguage": ["es-BO", "en-US"],
           "isPartOf": {
@@ -303,19 +303,11 @@
                 <a class="nav-dropdown-toggle" href="sobre-mi.html#profile" aria-expanded="false"
                     aria-controls="about-submenu" data-i18n="nav-about">Sobre mí</a>
                 <ul class="nav-submenu" id="about-submenu">
+                    <li><a href="sobre-mi.html#projects" data-i18n="nav-specialties">Áreas de especialidad</a></li>
                     <li><a href="sobre-mi.html#trajectory" data-i18n="nav-trajectory">Trayectoria</a></li>
                     <li><a href="sobre-mi.html#recognition" data-i18n="nav-recognition">Reconocimientos y
                             afiliaciones</a></li>
                     <li><a href="sobre-mi.html#faq" data-i18n="nav-faq">Preguntas clave</a></li>
-                </ul>
-            </li>
-            <li class="nav-item-has-submenu">
-                <a class="nav-dropdown-toggle" href="geoportafolio.html#projects" aria-expanded="false"
-                    aria-controls="projects-submenu" data-i18n="nav-projects">Proyectos</a>
-                <ul class="nav-submenu" id="projects-submenu">
-                    <li><a href="geoportafolio.html#geoportfolio" data-i18n="nav-geoportfolio">Geoportafolio</a></li>
-                    <li><a href="geoportafolio.html#gallery" data-i18n="nav-gallery">Galería</a></li>
-                    <li><a href="geoportafolio.html#map" data-i18n="nav-map">Alcance territorial</a></li>
                 </ul>
             </li>
             <li class="nav-item-has-submenu">
@@ -325,8 +317,9 @@
                 <ul class="nav-submenu" id="research-submenu">
                     <li><a href="docencia-investigacion.html#research-teaching" data-i18n="nav-research-lines">Líneas de
                             investigación</a></li>
+                    <li><a href="docencia-investigacion.html#conferences" data-i18n="nav-conferences">Congresos y simposios</a></li>
                     <li><a href="docencia-investigacion.html#university-teaching"
-                            data-i18n="nav-university-teaching">Docencia universitaria</a></li>
+                            data-i18n="nav-university-teaching">Docencia</a></li>
                     <li><a href="docencia-investigacion.html#students" data-i18n="nav-students">Alcance formativo</a>
                     </li>
                 </ul>
@@ -376,6 +369,120 @@
                         <span data-i18n="pill-politicas">Políticas territoriales y ambientales</span>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section class="expertise-section" id="projects">
+            <div class="section-heading reveal">
+                <span class="section-index">01-01</span>
+                <div>
+                    <p class="section-kicker" data-i18n="projects-kicker">Áreas de especialidad</p>
+                    <h2 data-i18n="projects-title">Áreas de especialidad</h2>
+                </div>
+            </div>
+
+            <!-- Botonera de Filtros para Áreas de especialidad -->
+            <div class="portfolio-filters reveal" id="projects-filters">
+                <button class="filter-btn active" data-filter="all" data-i18n="filter-all">Todos</button>
+                <button class="filter-btn" data-filter="catastro" data-i18n="filter-catastro">Catastro</button>
+                <button class="filter-btn" data-filter="geodesia" data-i18n="filter-geodesia">Geodesia / GNSS</button>
+                <button class="filter-btn" data-filter="sig" data-i18n="filter-sig">SIG / Cartografía</button>
+                <button class="filter-btn" data-filter="teledeteccion"
+                    data-i18n="filter-teledeteccion">Teledetección</button>
+            </div>
+
+            <div class="expertise-grid">
+                <article class="expertise-card reveal" data-category="catastro">
+                    <img class="expertise-image" src="assets/catastro.jpg"
+                        alt="Gestión catastral y registro territorial" loading="lazy" decoding="async">
+                    <div class="expertise-content">
+                        <span class="expertise-tag" data-i18n="exp-catastro-tag">Catastro y gestión municipal</span>
+                        <p data-i18n="exp-catastro-desc">Registro, actualización y organización parcelaria para la
+                            gestión territorial y municipal.</p>
+                        <div class="expertise-pills">
+                            <span data-i18n="exp-pill-catastro">CATASTRO</span>
+                            <span data-i18n="exp-pill-normas">NORMAS</span>
+                            <span data-i18n="exp-pill-sig">SIG</span>
+                            <span data-i18n="exp-pill-gestion">GESTIÓN MUNICIPAL</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="expertise-card reveal" data-category="geodesia">
+                    <img class="expertise-image" src="assets/geodesia-topografia.jpg"
+                        alt="Trabajos de geodesia y topografía de precisión" loading="lazy" decoding="async">
+                    <div class="expertise-content">
+                        <span class="expertise-tag" data-i18n="exp-geodesia-tag">Geodesia y GNSS</span>
+                        <p data-i18n="exp-geodesia-desc">Levantamientos, redes GNSS y control técnico con enfoque en
+                            precisión y referencia espacial.</p>
+                        <div class="expertise-pills">
+                            <span data-i18n="exp-pill-gnss">GNSS</span>
+                            <span data-i18n="exp-pill-rtk">RTK</span>
+                            <span data-i18n="exp-pill-et">ESTACIÓN TOTAL</span>
+                            <span data-i18n="exp-pill-control">CONTROL</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="expertise-card reveal" data-category="sig">
+                    <img class="expertise-image" src="assets/sig-mapa-optimized.jpg"
+                        alt="Sistema de información geográfica y análisis geoespacial" loading="lazy" decoding="async">
+                    <div class="expertise-content">
+                        <span class="expertise-tag" data-i18n="exp-sig-tag">SIG y análisis territorial</span>
+                        <p data-i18n="exp-sig-desc">Visualización, modelado y análisis territorial para apoyar
+                            decisiones basadas en datos.</p>
+                        <div class="expertise-pills">
+                            <span data-i18n="exp-pill-qgis">QGIS</span>
+                            <span data-i18n="exp-pill-arcgis">ARCGIS PRO</span>
+                            <span data-i18n="exp-pill-analisis">ANÁLISIS ESPACIAL</span>
+                            <span data-i18n="exp-pill-python">PYTHON</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="expertise-card reveal" data-category="sig">
+                    <img class="expertise-image" src="assets/cartografia-tematica.jpeg"
+                        alt="Cartografía temática y análisis espacial" loading="lazy" decoding="async">
+                    <div class="expertise-content">
+                        <span class="expertise-tag" data-i18n="exp-cartografia-tag">Cartografía temática</span>
+                        <p data-i18n="exp-cartografia-desc">Mapas temáticos orientados al análisis espacial y la lectura
+                            precisa del territorio.</p>
+                        <div class="expertise-pills">
+                            <span data-i18n="exp-pill-qgis">QGIS</span>
+                            <span data-i18n="exp-pill-arcgis">ARCGIS PRO</span>
+                            <span data-i18n="exp-pill-blender">BLENDER</span>
+                            <span data-i18n="exp-pill-web">MAPAS WEB</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="expertise-card reveal" data-category="teledeteccion">
+                    <img class="expertise-image" src="assets/teledeteccion.jpeg"
+                        alt="Teledetección y fotogrametría aérea" loading="lazy" decoding="async">
+                    <div class="expertise-content">
+                        <span class="expertise-tag" data-i18n="exp-tele-tag">Teledetección y fotogrametría aérea</span>
+                        <p data-i18n="exp-tele-desc">Interpretación de imágenes y productos fotogramétricos para
+                            monitoreo y análisis territorial.</p>
+                        <div class="expertise-pills">
+                            <span data-i18n="exp-pill-sentinel">SENTINEL</span>
+                            <span data-i18n="exp-pill-landsat">LANDSAT</span>
+                            <span data-i18n="exp-pill-gee">GEE</span>
+                            <span data-i18n="exp-pill-drones">DRONES</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="expertise-card reveal" data-category="catastro">
+                    <img class="expertise-image" src="assets/planificacion-urbana-optimized.jpg"
+                        alt="Planificación y ordenamiento territorial" loading="lazy" decoding="async">
+                    <div class="expertise-content">
+                        <span class="expertise-tag" data-i18n="exp-plan-tag">Planificación y ordenamiento
+                            territorial</span>
+                        <p data-i18n="exp-plan-desc">Diseño de propuestas territoriales para orientar el crecimiento
+                            urbano y rural.</p>
+                        <div class="expertise-pills">
+                            <span data-i18n="exp-pill-suelo">USO DEL SUELO</span>
+                            <span data-i18n="exp-pill-zonificacion">ZONIFICACIÓN</span>
+                            <span data-i18n="exp-pill-ptdi">PTDI</span>
+                            <span data-i18n="exp-pill-gurbana">GESTIÓN URBANA</span>
+                        </div>
+                    </div>
+                </article>
             </div>
         </section>
 

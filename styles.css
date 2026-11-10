@@ -11,6 +11,7 @@
     --accent-green: #76a5a0;
     --shadow: 0 24px 60px rgba(8, 14, 18, 0.28);
     --nav-offset: 80px;
+    --page-gutter: 5vw;
     --card-bg: rgba(43, 57, 66, 0.45);
     --card-border: rgba(255, 255, 255, 0.08);
     --card-gradient: linear-gradient(135deg, rgba(43, 57, 66, 0.8), rgba(34, 45, 52, 0.8));
@@ -18,6 +19,13 @@
     --input-border: rgba(255, 255, 255, 0.12);
     --footer-bg: rgba(31, 42, 49, 0.96);
     --map-stat-bg: rgba(34, 45, 52, 0.6);
+}
+
+@media (min-width: 981px) {
+    :root {
+        /* Keep 85% of the original 90vw content width, centered. */
+        --page-gutter: 11.75vw;
+    }
 }
 
 :root.light-theme,
@@ -153,7 +161,7 @@ button {
     align-items: center;
     justify-content: space-between;
     gap: 1.5rem;
-    padding: 0.75rem 5vw;
+    padding: 0.75rem var(--page-gutter);
     background: rgba(36, 49, 57, 0.76);
     backdrop-filter: blur(18px) saturate(180%);
     -webkit-backdrop-filter: blur(18px) saturate(180%);
@@ -341,7 +349,7 @@ button {
 }
 
 main section {
-    padding: clamp(1.4rem, 2.8vh, 2rem) 5vw;
+    padding: clamp(1.4rem, 2.8vh, 2rem) var(--page-gutter);
 }
 
 main section:first-of-type {
@@ -362,7 +370,7 @@ main section,
     align-items: center;
     /* Center elements vertically in the viewport */
     gap: 2.5rem;
-    padding: clamp(1.5rem, 4vh, 3.5rem) 5vw clamp(1rem, 2.5vh, 2rem);
+    padding: clamp(1.5rem, 4vh, 3.5rem) var(--page-gutter) clamp(1rem, 2.5vh, 2rem);
     /* Tight padding to streamline flow */
     background: transparent;
     box-sizing: border-box;
@@ -719,6 +727,20 @@ main section,
     text-wrap: balance;
 }
 
+.conferences-section .section-heading h2 {
+    white-space: normal;
+    text-wrap: balance;
+}
+
+.conference-video,
+.research-request {
+    margin-top: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
 .about-layout {
     display: grid;
     grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
@@ -1064,6 +1086,56 @@ main section,
     object-fit: cover;
     display: block;
     transition: transform 0.45s ease;
+}
+
+.gallery-carousel-slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery-carousel-slides img {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.55s ease, transform 0.45s ease;
+    pointer-events: none;
+}
+
+.gallery-carousel-slides img.is-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.gallery-carousel-dots {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 3;
+    display: flex;
+    gap: 0.4rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(15, 22, 26, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.gallery-dot {
+    width: 7px;
+    height: 7px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(245, 236, 219, 0.42);
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.gallery-dot.is-active {
+    background: var(--accent-soft);
+    transform: scale(1.25);
 }
 
 .gallery-map-frame {
@@ -1443,11 +1515,12 @@ main section,
 }
 
 .recognition-layout {
-    align-items: start;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
 }
 
 .recognition-feature {
-    padding: 2rem;
+    padding: 1.6rem;
     background: var(--card-gradient);
     border: 1px solid var(--card-border);
     box-shadow: var(--shadow);
@@ -1462,7 +1535,7 @@ main section,
 }
 
 .site-footer {
-    padding: 2.2rem 5vw 3rem;
+    padding: 2.2rem var(--page-gutter) 3rem;
     border-top: 1px solid rgba(243, 201, 138, 0.16);
     background: transparent;
 }
@@ -2705,7 +2778,7 @@ body {
 }
 
 main section {
-    padding: clamp(1.4rem, 2.8vh, 2rem) 5vw;
+    padding: clamp(1.4rem, 2.8vh, 2rem) var(--page-gutter);
     /* Ultra snug fluid section padding to ensure sequence flow */
 }
 
@@ -2780,7 +2853,6 @@ main section:first-of-type {
 
 .about-layout,
 .map-layout,
-.recognition-layout,
 .students-layout {
     gap: clamp(2rem, 4vw, 3.8rem);
 }
@@ -2788,6 +2860,7 @@ main section:first-of-type {
 .expertise-grid,
 .research-grid,
 .faq-layout,
+.recognition-layout,
 .gallery-layout,
 .recognition-list {
     gap: clamp(1rem, 2vw, 1.6rem);
@@ -2944,7 +3017,7 @@ main section:first-of-type {
 
 @media (max-width: 980px) {
     main section {
-        padding: clamp(1.2rem, 2.2vh, 1.6rem) 5vw;
+        padding: clamp(1.2rem, 2.2vh, 1.6rem) var(--page-gutter);
     }
 
     main section:first-of-type {
