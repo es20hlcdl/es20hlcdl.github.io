@@ -1939,7 +1939,7 @@ function initLightbox() {
     function openLightbox(imgEl) {
         if (!imgEl) return;
 
-        lightboxImg.src = imgEl.src;
+        lightboxImg.src = imgEl.dataset.fullSrc || imgEl.currentSrc || imgEl.src;
         lightboxImg.alt = imgEl.alt;
 
         const fig = imgEl.closest('figure');
