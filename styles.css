@@ -741,6 +741,13 @@ main section,
     gap: 0.6rem;
 }
 
+.conference-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    width: 100%;
+}
+
 .conference-video-player {
     display: block;
     width: 100%;
