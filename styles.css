@@ -741,6 +741,14 @@ main section,
     gap: 0.6rem;
 }
 
+.conference-video-player {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border: 0;
+}
+
 .about-layout {
     display: grid;
     grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
